@@ -1,5 +1,6 @@
 ---
-name: Bug report
+Name: Bug report
+About: Template for submitting issues
 ---
 
 ## Problem
