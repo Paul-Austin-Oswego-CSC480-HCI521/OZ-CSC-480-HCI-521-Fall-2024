@@ -1,10 +1,5 @@
 ---
 name: Bug report
-about: Report any issues using the template below
-title: ''
-labels: ''
-assignees: ''
-
 ---
 
 ## Problem
