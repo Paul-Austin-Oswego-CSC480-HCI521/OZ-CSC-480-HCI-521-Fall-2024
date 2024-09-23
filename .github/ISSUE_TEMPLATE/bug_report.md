@@ -1,6 +1,7 @@
+---
 name: Bug Template
 about: This template is intended to be used for guidance in submitting issues
-
+---
 ## Problem
 *A clear description of the defect or bug.*
 
