@@ -1,7 +1,5 @@
----
-Name: Bug report
-About: Template for submitting issues
----
+name: Bug Template
+about: This template is intended to be used for guidance in submitting issues
 
 ## Problem
 *A clear description of the defect or bug.*
