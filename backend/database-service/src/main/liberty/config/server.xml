@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Backend service">
+    <featureManager>
+        <feature>appSecurity-5.0</feature>
+        <feature>mpJwt-2.1</feature>
+        <feature>restfulWS-3.1</feature>
+    </featureManager>
+
+    <variable name="http.port" defaultValue="8080"/>
+    <variable name="https.port" defaultValue="8443"/>
+    <variable name="location" defaultValue="backend"/>
+
+    <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
+                  id="defaultHttpEndpoint" />
+
+    <keyStore id="defaultKeyStore" password="secret"/>
+
+    <webApplication contextRoot="/" location="${location}.war" />
+
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
+
+    <cors domain="/tasks"
+          allowedOrigins="http://localhost"
+          allowedMethods="GET"
+          allowCredentials="true"
+          allowedHeaders="*"
+    />
+</server>
