@@ -14,9 +14,9 @@ export function Login() {
         console.log('Login attempted with:', { email, password })
     }
 
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = async () => {
         // Here you would typically handle Google login logic
-        console.log('Google login attempted')
+        window.location.replace("http://localhost:9090/auth/login")
     }
 
     return (

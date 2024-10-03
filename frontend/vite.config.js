@@ -9,5 +9,8 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./"), // Do not change, needed for Shadcn import
     }
+  },
+  server: {
+    port: 80
   }
 })

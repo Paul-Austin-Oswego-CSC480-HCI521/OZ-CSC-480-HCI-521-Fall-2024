@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import { useSearchParams } from "react-router-dom";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
@@ -8,6 +9,38 @@ import {ArchiveIcon, CheckIcon} from "@radix-ui/react-icons";
 export function TaskPage() {
     const [tasks, setTasks] = useState([])
     const [newTask, setNewTask] = useState('')
+    const [jwt, setJwt] = useState('')
+    const [username, setUsername] = useState('')
+    const [loading, setLoading] = useState(true)
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    useEffect(() => {
+        const queryJwt = searchParams.get('jwt')
+        if (!queryJwt)
+            window.location.replace("/login")
+        setJwt(queryJwt)
+
+        async function fetchTasks() {
+            try {
+                const res = await fetch("https://localhost:8443/tasks", {
+                    headers: {
+                        "Authorization": `Bearer ` + queryJwt
+                    }
+                })
+                if (!res.ok)
+                    throw new Error(`Response status: ${res.status}`)
+                const json = await res.json()
+                for (const task of json.tasks)
+                    setTasks([...tasks, {id: Date.now(), text: task, done: false, archived: false}])
+                setUsername(json.user)
+            } catch(e) {
+                console.log(e.message)
+            }
+            setLoading(false)
+        }
+        fetchTasks()
+
+    }, [searchParams, setJwt, setLoading, setTasks, setUsername])
 
     const addTask = () => {
         if (newTask.trim() !== '') {
@@ -28,10 +61,13 @@ export function TaskPage() {
         ))
     }
 
+    if (loading)
+        return <h1>Loading</h1>
+
     return (
         <>
             <div className='flex flex-col items-center justify-center h-screen gap-16'>
-                <h1 className='text-center text-8xl'>Hello, World!</h1>
+                <h1 className='text-center text-8xl'>Hello, {username}!</h1>
                 <p className='text-2xl'>This uses React, Vite, Tailwind CSS, and Shadcn (JS version)</p>
 
                 <div className='flex w-full max-w-md gap-2'>
