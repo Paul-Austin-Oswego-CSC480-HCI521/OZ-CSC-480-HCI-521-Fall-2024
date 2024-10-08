@@ -61,11 +61,16 @@ export function TaskPage() {
         ))
     }
 
+    const logout = () => {
+        window.location.replace('https://localhost:9443/auth/logout')
+    }
+
     if (loading)
         return <h1>Loading</h1>
 
     return (
         <>
+            <Button onClick={logout}>Log Out</Button>
             <div className='flex flex-col items-center justify-center h-screen gap-16'>
                 <h1 className='text-center text-8xl'>Hello, {username}!</h1>
                 <p className='text-2xl'>This uses React, Vite, Tailwind CSS, and Shadcn (JS version)</p>
