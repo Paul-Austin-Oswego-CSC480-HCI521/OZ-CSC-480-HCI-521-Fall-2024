@@ -16,7 +16,7 @@ export function Login() {
 
     const handleGoogleLogin = async () => {
         // Here you would typically handle Google login logic
-        window.location.replace("http://localhost:9090/auth/login")
+        window.location.replace(`${import.meta.env.VITE_AUTH_ROOT}/auth/login`)
     }
 
     return (

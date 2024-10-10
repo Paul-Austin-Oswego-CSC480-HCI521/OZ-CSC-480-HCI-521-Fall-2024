@@ -18,8 +18,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Liberty Properties -->
         <liberty.var.http.port>9090</liberty.var.http.port>
-        <liberty.var.https.port>9443</liberty.var.https.port>
+        <liberty.var.https.port>${oz.auth.port}</liberty.var.https.port>
         <liberty.var.location>${project.artifactId}</liberty.var.location>
+        <liberty.var.frontend.root>${oz.frontend.root}</liberty.var.frontend.root>
     </properties>
 
     <dependencies>
