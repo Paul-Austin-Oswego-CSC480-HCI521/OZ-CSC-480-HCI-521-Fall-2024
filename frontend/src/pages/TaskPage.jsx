@@ -22,7 +22,7 @@ export function TaskPage() {
 
         async function fetchTasks() {
             try {
-                const res = await fetch("https://localhost:8443/tasks", {
+                const res = await fetch(`${import.meta.env.VITE_API_ROOT}/tasks`, {
                     headers: {
                         "Authorization": `Bearer ` + queryJwt
                     }
@@ -62,7 +62,7 @@ export function TaskPage() {
     }
 
     const logout = () => {
-        window.location.replace('https://localhost:9443/auth/logout')
+        window.location.replace(`${import.meta.env.VITE_AUTH_ROOT}/auth/logout`)
     }
 
     if (loading)
