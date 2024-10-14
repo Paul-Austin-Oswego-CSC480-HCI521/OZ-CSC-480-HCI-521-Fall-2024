@@ -16,7 +16,7 @@ public class NativeLoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //Get login info from json
+        //Get login info from json (believe this should be sent as a JWT? Not sure about security measures here...)
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> loginData = objectMapper.readValue(request.getInputStream(), Map.class);
         String username = loginData.get("username");
