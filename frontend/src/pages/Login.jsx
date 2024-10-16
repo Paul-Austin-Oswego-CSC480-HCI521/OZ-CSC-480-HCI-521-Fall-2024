@@ -8,15 +8,37 @@ export function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // Here you would typically handle the login logic
-        console.log('Login attempted with:', { email, password })
+        const loginData = {
+            username: email,
+            password: password,
+        };
+
+        try {
+            const response = await fetch('http://localhost:9090/auth/native-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData),
+            });
+
+            if (response.ok) {
+                const {jwt} = await response.json();
+                console.log('Logged in with:', {email, password});
+                window.location.replace(`http://localhost?jwt=${jwt}`);
+            } else {
+                console.log('Login failed:', response.statusText);
+            }
+        } catch (e) {
+            console.log(e.message);
+        }
     }
 
     const handleGoogleLogin = async () => {
         // Here you would typically handle Google login logic
-        window.location.replace("http://localhost:9090/auth/login")
+        window.location.replace(`${import.meta.env.VITE_AUTH_ROOT}/auth/login`)
     }
 
     return (

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Response;
 import logout.LogoutHandler;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -23,6 +24,10 @@ public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Inject
+    @ConfigProperty(name = "frontend.root")
+    private String frontendRoot;
+
+    @Inject
     private LogoutHandler logoutHandler;
 
     @Override
@@ -36,6 +41,6 @@ public class LogoutServlet extends HttpServlet {
             }
         }
         request.logout();
-        response.sendRedirect("http://localhost");
+        response.sendRedirect(frontendRoot);
     }
 }

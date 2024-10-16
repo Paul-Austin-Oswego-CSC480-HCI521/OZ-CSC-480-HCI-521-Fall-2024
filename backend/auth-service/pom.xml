@@ -18,8 +18,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Liberty Properties -->
         <liberty.var.http.port>9090</liberty.var.http.port>
-        <liberty.var.https.port>9443</liberty.var.https.port>
+        <liberty.var.https.port>${oz.auth.port}</liberty.var.https.port>
         <liberty.var.location>${project.artifactId}</liberty.var.location>
+        <liberty.var.frontend.root>${oz.frontend.root}</liberty.var.frontend.root>
     </properties>
 
     <dependencies>
@@ -48,6 +49,22 @@
             <version>1.0.92</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+
     </dependencies>
 
 

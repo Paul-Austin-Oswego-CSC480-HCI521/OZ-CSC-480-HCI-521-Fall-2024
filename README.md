@@ -19,25 +19,14 @@ Backend: OpenLiberty, MicroProfile, and SQLite
     - set **Authorization callback URL** to `https://localhost:9443/ibm/api/social-login/redirect/githubLogin` (again the auth-service https port)
 1. Click **Register application**
 1. Click **Generate a new client secret**
-1. Copy the client secret and store it somewhere (optionally store the client id somewhere as well for ease of use)
+1. Copy the client secret and store it somewhere
 
 ### Set GitHub environment variables
-*Note: this must be done every time you start a new terminal, I'll sort an authomated way with like .env.local asap* 
-#### Linux/MacOS
-```bash
-export GITHUB_CLIENT_ID=<your OAuth app client id>
-export GITHUB_CLIENT_SECRET=<your OAuth app client secret>
+Create a new file at `/backend/auth-service/src/main/liberty/config/server.env`
+and put
 ```
-
-#### Windows CMD
-```cmd
-set GITHUB_CLIENT_ID=<your OAuth app client id>
-set GITHUB_CLIENT_SECRET=<your OAuth app client secret>
-```
-#### Powershell
-```powershell
-$env:GITHUB_CLIENT_ID='<your OAuth app client id>'
-$env:GITHUB_CLIENT_SECRET='<your OAuth app client secret>'
+GITHUB_CLIENT_ID=<your OAuth app's client id>
+GITHUB_CLIENT_SECRET=<your OAuth app's client secret>
 ```
 
 ### Run the application
@@ -50,7 +39,7 @@ In the root directory run:
 .\start_website.bat
 ```
 
-#### Linux:
+#### Linux/Mac:
 ```shell
 .\start_website.sh
 ```
@@ -63,10 +52,20 @@ In the root directory run:
 
 #### Windows:
 ```batch
-.\start_website.bat
+.\stop_website.bat
 ```
 
-#### Linux:
+#### Linux/Mac:
 ```shell
-.\start_website.sh
+.\stop_website.sh
 ```
+### Configuration
+
+Unfortunately, OpenLiberty is allergic to .env files, so two configuration files, [/backend/pom.xml](/backend/pom.xml) and [/frontend/.env](/frontend/.env), must be used and kept in sync.
+
+*I'm really trying to find a better solution*
+
+the configuration options are
+1. auth-service port: [<oz.auth.port>](/backend/pom.xml) and [VITE_AUTH_ROOT](/frontend/.env)
+1. database-service port: [<oz.api.port>](/backend/pom.xml) and [VITE_API_ROOT](/frontend/.env)
+1. frontend port: [<oz.frontend.root>](/backend/pom.xml) and [VITE_FRONTEND_PORT](/frontend/.env)
