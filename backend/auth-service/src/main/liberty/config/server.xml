@@ -22,9 +22,10 @@
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
-                  host="*" />
+                  host="*"/>
 
-    <keyStore id="defaultKeyStore" password="secret" />
+    <keyStore id="testKeyStore" location="key.jks" password="testpw" />
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
 
     <githubLogin clientId="${github.client.id}"
                  clientSecret="${github.client.secret}" />
@@ -37,12 +38,5 @@
         </application-bnd>
     </webApplication>
 
-    <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiry="24h"/>
-
-    <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
-
-    <cors domain="auth/jwt"
-          allowedOrigins="*"
-          allowCredentials="true"
-          allowedMethods="GET"/>
+    <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiresInSeconds="15"/>
 </server>
