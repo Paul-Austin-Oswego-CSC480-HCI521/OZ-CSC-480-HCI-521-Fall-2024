@@ -47,12 +47,16 @@ public class QuoteUnquoteDatabase {
 
     public Optional<String> jwt(Long sessionId) {
         SessionData sessionData = sessionDB.get(sessionId);
-        if (sessionData == null || !sessionData.expiration.isAfter(Instant.now()))
+        if (sessionData == null || !sessionData.expiration.isAfter(Instant.now())) {
+            sessionDB.remove(sessionId);
             return Optional.empty();
+        }
         sessionData.resetExpiration();
         return Optional.of(JwtUtil.buildJwt(sessionData.user.subject, Set.of("user")));
     }
 
-
+    public void invalidateSession(Long sessionId) {
+        sessionDB.remove(sessionId);
+    }
 
 }
