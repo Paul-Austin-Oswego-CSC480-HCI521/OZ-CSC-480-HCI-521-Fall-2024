@@ -1,91 +1,107 @@
-import React, {useState} from "react";
-import {Input} from "@/components/ui/input.jsx";
-import {Button} from "@/components/ui/button.jsx";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
-import {ArchiveIcon, CheckIcon} from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button"
+import { Trash2 } from 'lucide-react'
+import { CaretSortIcon } from "@radix-ui/react-icons"
+import { Checkbox } from "@/components/ui/checkbox.jsx"
 
+
+const tasks = [
+    {
+        id: "task-1",
+        completed: false,
+        title: "Complete report",
+        project: "Office Work",
+        dueDate: "2024-10-20",
+        priority: "High"
+    },
+    {
+        id: "task-2",
+        completed: false,
+        title: "Design homepage",
+        project: "Web Development",
+        dueDate: "2024-10-22",
+        priority: "Medium"
+    },
+    {
+        id: "task-3",
+        completed: true,
+        title: "Team meeting",
+        project: "Internal",
+        dueDate: "2024-10-19",
+        priority: "Low"
+    }
+];
 
 export function TaskPage() {
-    const [tasks, setTasks] = useState([])
-    const [newTask, setNewTask] = useState('')
-
-    const addTask = () => {
-        if (newTask.trim() !== '') {
-            setTasks([...tasks, {id: Date.now(), text: newTask, done: false, archived: false}])
-            setNewTask('')
-        }
-    }
-
-    const toggleDone = (id) => {
-        setTasks(tasks.map(task =>
-            task.id === id ? {...task, done: !task.done} : task
-        ))
-    }
-
-    const archiveTask = (id) => {
-        setTasks(tasks.map(task =>
-            task.id === id ? {...task, archived: true} : task
-        ))
-    }
-
     return (
-        <>
-            <div className='flex flex-col items-center justify-center h-screen gap-16'>
-                <h1 className='text-center text-8xl'>Hello, World!</h1>
-                <p className='text-2xl'>This uses React, Vite, Tailwind CSS, and Shadcn (JS version)</p>
-
-                <div className='flex w-full max-w-md gap-2'>
-                    <Input
-                        type="text"
-                        value={newTask}
-                        onChange={(e) => setNewTask(e.target.value)}
-                        placeholder="Enter a new task"
-                        className="flex-grow"
-                    />
-                    <Button onClick={addTask}>Add Task</Button>
-                </div>
-
-                < div className='w-full max-w-2xl'>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[300px]">Task</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {tasks.filter(task => !task.archived).map(task => (
-                                <TableRow key={task.id}>
-                                    <TableCell className={task.done ? 'line-through text-gray-500' : ''}>
-                                        {task.text}
-                                    </TableCell>
-                                    <TableCell>{task.done ? 'Completed' : 'Pending'}</TableCell>
-                                    <TableCell className="text-right">
-                                        <Button
-                                            size="icon"
-                                            variant={task.done ? "default" : "outline"}
-                                            onClick={() => toggleDone(task.id)}
-                                            className="mr-2"
-                                        >
-                                            <CheckIcon className="h-4 w-4"/>
-                                        </Button>
-                                        <Button
-                                            size="icon"
-                                            variant="outline"
-                                            onClick={() => archiveTask(task.id)}
-                                        >
-                                            <ArchiveIcon className="h-4 w-4"/>
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
+        <div className="bg-white rounded-lg shadow mx-auto max-w-4xl p-6"> {/* Centered with max width */}
+            <h1 className="text-left scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                My Tasks
+            </h1>
+            <br />
+            <hr />
+            <br />
+            <div className="text-left mb-4">
+                <Button>
+                    Create New Task
+                </Button>
             </div>
-        </>
-    )
+
+            <table className="w-full">
+                <thead>
+                <tr className="border-b">
+                    <th className="px-4 py-2 text-center">
+                            <span className="flex items-center justify-center">
+                                Completed? <CaretSortIcon className="ml-1" />
+                            </span>
+                    </th>
+                    <th className="px-4 py-2 text-center">
+                            <span className="flex items-center justify-center">
+                                Task <CaretSortIcon className="ml-1" />
+                            </span>
+                    </th>
+                    <th className="px-4 py-2 text-center">
+                            <span className="flex items-center justify-center">
+                                Project <CaretSortIcon className="ml-1" />
+                            </span>
+                    </th>
+                    <th className="px-4 py-2 text-center">
+                            <span className="flex items-center justify-center">
+                                Due Date <CaretSortIcon className="ml-1" />
+                            </span>
+                    </th>
+                    <th className="px-4 py-2 text-center">
+                            <span className="flex items-center justify-center">
+                                Priority <CaretSortIcon className="ml-1" />
+                            </span>
+                    </th>
+                    <th className="px-4 py-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {tasks.map((task) => (
+                    <tr key={task.id} className="border-b last:border-b-0">
+                        <td className="px-4 py-2 text-center">
+                            <Checkbox
+                                id={`task-${task.id}`}
+                                checked={task.completed}
+                                onChange={() => {
+                                    // This can be updated with a function to toggle the completed state
+                                }}
+                            />
+                        </td>
+                        <td className="px-4 py-2 text-center">{task.title}</td>
+                        <td className="px-4 py-2 text-center">{task.project}</td>
+                        <td className="px-4 py-2 text-center">{task.dueDate}</td>
+                        <td className="px-4 py-2 text-center">{task.priority}</td>
+                        <td className="px-4 py-2 text-center">
+                            <Button variant="ghost" size="icon">
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </div>
+    );
 }
-
-
