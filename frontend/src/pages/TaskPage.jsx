@@ -1,32 +1,22 @@
 import React, {useState, useEffect} from "react";
-import { useSearchParams } from "react-router-dom";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
 import {ArchiveIcon, CheckIcon} from "@radix-ui/react-icons";
 
-
 export function TaskPage() {
     const [tasks, setTasks] = useState([])
     const [newTask, setNewTask] = useState('')
-    const [jwt, setJwt] = useState('')
     const [username, setUsername] = useState('')
     const [loading, setLoading] = useState(true)
-    const [searchParams, setSearchParams] = useSearchParams()
 
     useEffect(() => {
-        const queryJwt = searchParams.get('jwt')
-        if (!queryJwt)
-            window.location.replace("/login")
-        setJwt(queryJwt)
-
         async function fetchTasks() {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_ROOT}/tasks`, {
-                    headers: {
-                        "Authorization": `Bearer ` + queryJwt
-                    }
-                })
+                const loggedIn = await fetch('/auth')
+                if (!loggedIn.ok)
+                    window.location.replace("/login")
+                const res = await fetch('/tasks')
                 if (!res.ok)
                     throw new Error(`Response status: ${res.status}`)
                 const json = await res.json()
@@ -40,7 +30,7 @@ export function TaskPage() {
         }
         fetchTasks()
 
-    }, [searchParams, setJwt, setLoading, setTasks, setUsername])
+    }, [setLoading, setTasks, setUsername])
 
     const addTask = () => {
         if (newTask.trim() !== '') {

@@ -3,12 +3,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.HttpConstraint;
 import jakarta.servlet.annotation.ServletSecurity;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Response;
 import logout.LogoutHandler;
+import model.QuoteUnquoteDatabase;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import rest.AuthResource;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -30,6 +33,9 @@ public class LogoutServlet extends HttpServlet {
     @Inject
     private LogoutHandler logoutHandler;
 
+    @Inject
+    private QuoteUnquoteDatabase db;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -40,7 +46,24 @@ public class LogoutServlet extends HttpServlet {
                 throw new ServletException("Could not delete OAuth2 application grant");
             }
         }
+        var sessionIDCookie = getCookie(request, AuthResource.SESSION_ID_COOKIE);
+        if (sessionIDCookie != null) {
+            try {
+                db.invalidateSession(Long.parseLong(sessionIDCookie.getValue()));
+            } catch (NumberFormatException ignored) {}
+            sessionIDCookie.setValue("");
+            sessionIDCookie.setPath("/");
+            sessionIDCookie.setMaxAge(0);
+            response.addCookie(sessionIDCookie);
+        }
         request.logout();
         response.sendRedirect(frontendRoot);
+    }
+
+    private Cookie getCookie(HttpServletRequest request, String name) {
+        for (var cookie : request.getCookies())
+            if (cookie.getName().equals(name))
+                return cookie;
+        return null;
     }
 }
