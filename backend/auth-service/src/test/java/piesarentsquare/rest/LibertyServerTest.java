@@ -80,4 +80,8 @@ class LibertyServerTest {
            fail("Exception during execution: " + e.getMessage());
        }
    }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> test
