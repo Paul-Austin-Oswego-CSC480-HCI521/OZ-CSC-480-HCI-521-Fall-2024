@@ -30,33 +30,35 @@ GITHUB_CLIENT_SECRET=<your OAuth app's client secret>
 ```
 
 ### Run the application
-*I will also write some scripts to automate this*
-
 Prerequisites: make sure you have mvn and npm (or yarn/bun) installed
 
-```bash
-git clone https://github.com/Paul-Austin-Oswego-CSC480-HCI521/OZ-CSC-480-HCI-521-Fall-2024.git
-cd backend/auth-service
-mvn liberty:start
-cd ../database-service
-mvn liberty:start
-cd ../../frontend
-npm i
-npm run dev
+In the root directory run:
+
+#### Windows:
+```batch
+.\start_website.bat
+```
+
+#### Linux/Mac:
+```shell
+.\start_website.sh
 ```
 
 the webpage will be served at http://localhost
 
 ### Stopping the application
 
-First, ctrl+c Vite
-```bash
-cd ../backend/auth-service
-mvn liberty:stop
-cd ../database-service
-mvn liberty:stop
+In the root directory run:
+
+#### Windows:
+```batch
+.\stop_website.bat
 ```
 
+#### Linux/Mac:
+```shell
+.\stop_website.sh
+```
 ### Configuration
 
 Unfortunately, OpenLiberty is allergic to .env files, so two configuration files, [/backend/pom.xml](/backend/pom.xml) and [/frontend/.env](/frontend/.env), must be used and kept in sync.

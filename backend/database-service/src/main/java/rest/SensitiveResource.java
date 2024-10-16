@@ -23,6 +23,8 @@ public class SensitiveResource {
             return "{\"tasks\":[\"do something upstanding\"],\"user\":\"" + subject + "\"}";
         else if ("jhubbar4@oswego.edu".equals(subject))
             return "{\"tasks\":[\"do some smurfing\"],\"user\":\"" + subject + "\"}";
+        else if ("user@gmail.com".equals(subject))
+            return "{\"tasks\":[\"cry\"],\"user\":\"" + subject + "\"}";
         return "{\"tasks\":[],\"user\":\"" + subject + "\"}";
     }
 
