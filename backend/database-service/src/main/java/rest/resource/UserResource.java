@@ -1,14 +1,19 @@
-package com.demo;
+package rest.resource;
 
+import DAO.UserDAO;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import rest.model.User;
+
 import java.util.List;
 
 @Path("/users")
 public class UserResource {
 
-    private UserDAO userDAO = new UserDAO();
+    @Inject
+    private UserDAO userDAO;
 
     //READ users
     @GET

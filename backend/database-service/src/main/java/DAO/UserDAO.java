@@ -1,19 +1,28 @@
-package com.demo;
+package DAO;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import rest.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Startup
+@ApplicationScoped
 public class UserDAO {
 
-    private static final String DATABASE_URL = "jdbc:sqlite:C:/Users/culle/Desktop/task-tracker/users.db";
-
-    public UserDAO() {
-        createTableIfNotExists();
-    }
+    @Inject
+    @ConfigProperty(name = "database.path.users")
+    private String dbPath;
 
     //Create the users table if no exist
+    @PostConstruct
     private void createTableIfNotExists() {
+        System.out.println("attempting to construct table");
         String createTableSQL = """
                 CREATE TABLE IF NOT EXISTS users (
                     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,7 +32,7 @@ public class UserDAO {
                 );
                 """;
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
             System.out.println("Table 'users' Created or Already Exists.");
@@ -36,7 +45,7 @@ public class UserDAO {
     public void createUser(User user) {
         String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, user.getUsername());
@@ -55,7 +64,7 @@ public class UserDAO {
         String sql = "SELECT user_id, username, email, password FROM users";
         List<User> users = new ArrayList<>();
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -80,7 +89,7 @@ public class UserDAO {
         String sql = "SELECT user_id, username, email, password FROM users WHERE user_id = ?";
         User user = null;
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, userId);
@@ -105,7 +114,7 @@ public class UserDAO {
     public void updateUserEmail(int userId, String email) {
         String sql = "UPDATE users SET email = ? WHERE user_id = ?";
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, email);
@@ -122,7 +131,7 @@ public class UserDAO {
     public void deleteUser(int userId) {
         String sql = "DELETE FROM users WHERE user_id = ?";
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, userId);

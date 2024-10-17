@@ -1,14 +1,20 @@
-package com.demo;
+package rest.resource;
 
+import DAO.TaskDAO;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import rest.model.Task;
+
 import java.util.List;
 
-@Path("/tasks")  
+@Path("/tasks")
 public class TaskResource {
 
-    private TaskDAO taskDAO = new TaskDAO();
+    @Inject
+    private TaskDAO taskDAO;
 
     //Read all tasks
     @GET

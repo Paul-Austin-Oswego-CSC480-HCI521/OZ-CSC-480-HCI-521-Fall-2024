@@ -1,20 +1,28 @@
-package com.demo;
+package DAO;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import rest.model.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Startup
+@ApplicationScoped
 public class TaskDAO {
 
-    private static final String DATABASE_URL = "jdbc:sqlite:C:/Users/culle/Desktop/task-tracker/tasks.db";
-
-    //Constructor to create the table if it doesn't exist
-    public TaskDAO() {
-        createTableIfNotExists();
-    }
+    @Inject
+    @ConfigProperty(name = "database.path.tasks")
+    private String dbPath;
 
     //create the 'task_tracker' table if it doesn't exist
+    @PostConstruct
     private void createTableIfNotExists() {
+        System.out.println("attempting to construct table");
         String createTableSQL = """
                 CREATE TABLE IF NOT EXISTS task_tracker (
                     task_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,7 +32,7 @@ public class TaskDAO {
                 );
                 """;
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
             System.out.println("Table 'task_tracker' Created or Already Exists.");
@@ -37,7 +45,7 @@ public class TaskDAO {
     public void createTask(Task task) {
         String sql = "INSERT INTO task_tracker (task_name, task_desc, status) VALUES (?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, task.getName());
@@ -56,7 +64,7 @@ public class TaskDAO {
         String sql = "SELECT task_id, task_name, task_desc, status FROM task_tracker";
         List<Task> tasks = new ArrayList<>();
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -81,7 +89,7 @@ public class TaskDAO {
         String sql = "SELECT task_id, task_name, task_desc, status FROM task_tracker WHERE task_id = ?";
         Task task = null;
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, taskId);
@@ -106,7 +114,7 @@ public class TaskDAO {
     public void updateTaskStatus(int taskId, int status) {
         String sql = "UPDATE task_tracker SET status = ? WHERE task_id = ?";
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, status);  //0 for incomplete | 1 for complete
@@ -123,7 +131,7 @@ public class TaskDAO {
     public void deleteTask(int taskId) {
         String sql = "DELETE FROM task_tracker WHERE task_id = ?";
 
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, taskId);

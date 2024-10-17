@@ -1,4 +1,4 @@
-package com.demo;
+package rest.model;
 
 public class User {
     private int userId;
