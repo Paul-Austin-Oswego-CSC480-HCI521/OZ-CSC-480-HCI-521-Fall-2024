@@ -48,6 +48,8 @@ the webpage will be served at http://localhost
 
 ### Stopping the application
 
+first, ctrl+C vite
+
 In the root directory run:
 
 #### Windows:
