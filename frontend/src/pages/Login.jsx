@@ -16,21 +16,19 @@ export function Login() {
         };
 
         try {
-            const response = await fetch('http://localhost:9090/auth/native-login', {
+            const response = await fetch(`${import.meta.env.VITE_AUTH_ROOT}/auth/native-login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(loginData),
+                credentials: 'include'
             });
 
-            if (response.ok) {
-                const {jwt} = await response.json();
-                console.log('Logged in with:', {email, password});
-                window.location.replace(`http://localhost?jwt=${jwt}`);
-            } else {
+            if (response.ok)
+                window.location.href = '/'
+            else
                 console.log('Login failed:', response.statusText);
-            }
         } catch (e) {
             console.log(e.message);
         }
