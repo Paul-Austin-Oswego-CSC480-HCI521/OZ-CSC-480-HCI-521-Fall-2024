@@ -60,7 +60,7 @@ public class LogoutServlet extends HttpServlet {
         response.sendRedirect(frontendRoot);
     }
 
-    private Cookie getCookie(HttpServletRequest request, String name) {
+    static Cookie getCookie(HttpServletRequest request, String name) {
         for (var cookie : request.getCookies())
             if (cookie.getName().equals(name))
                 return cookie;
