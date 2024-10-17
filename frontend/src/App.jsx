@@ -14,6 +14,7 @@ import {Login} from "@/src/pages/Login.jsx";
 import * as PropTypes from "prop-types";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {TaskPage} from "@/src/pages/TaskPage.jsx";
+import { Register } from './pages/Registration'
 
 export default function Component() {
     return (
@@ -22,6 +23,7 @@ export default function Component() {
                 <Routes>
                     <Route path="/" element={<TaskPage />}/>
                     <Route path="/Login" element={<Login/>}/>
+                    <Route path = "/Registration" element = {<Register/>}/>
                 </Routes>
             </BrowserRouter>
         </>
