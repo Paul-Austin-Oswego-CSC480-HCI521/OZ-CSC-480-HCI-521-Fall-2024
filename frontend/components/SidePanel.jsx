@@ -1,4 +1,6 @@
-import NavButton from "./NavButton"
+// Main left-side menu/nav panel
+import NavButton from "./NavButton"  
+import ProjectAccordion from "./ProjectAccordion"
 export function SidePanel() {
     return (
         <header className= " bg-[#CBD5E1] min-w-[222px] h-screen " >
@@ -25,7 +27,11 @@ export function SidePanel() {
                     </li>
                 </ul>
             </nav>
-            <hr className="w-44 mx-auto my-3 border-neutral-400"/>
+            <hr className="w-48 mx-auto my-6 border-neutral-400"/>
+            <nav className="flex flex-col items-center">
+                <ProjectAccordion/>
+            </nav>
+            
         </header>
     )
 }
