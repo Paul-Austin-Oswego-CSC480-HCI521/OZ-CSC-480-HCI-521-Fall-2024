@@ -1,4 +1,4 @@
-// Page of completed tasks
+// Page of recently deleted tasks
 function RecentlyDeleted() {
     return (
             <div>

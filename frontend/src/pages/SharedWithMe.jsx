@@ -1,4 +1,4 @@
-// Page of completed tasks
+// Page of tasks shared with the user
 function SharedWithMe() {
     return (
             <div>
