@@ -29,6 +29,7 @@ public class TaskDAO {
                     task_name TEXT NOT NULL,
                     task_desc TEXT,
                     status INTEGER DEFAULT 0
+                    project_id INTEGER,
                 );
                 """;
 
@@ -43,7 +44,7 @@ public class TaskDAO {
 
     //CREATE a new task
     public void createTask(Task task) {
-        String sql = "INSERT INTO task_tracker (task_name, task_desc, status) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO task_tracker (task_name, task_desc, status) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -51,6 +52,7 @@ public class TaskDAO {
             pstmt.setString(1, task.getName());
             pstmt.setString(2, task.getDescription());
             pstmt.setInt(3, task.getStatus());  // 0 for incomplete | 1 for complete
+            pstmt.setInt(4, task.getProject_Id());
             pstmt.executeUpdate();
             System.out.println("Task created successfully In The 'task_tracker' Table.");
 
@@ -61,7 +63,7 @@ public class TaskDAO {
 
     //READ all tasks
     public List<Task> getAllTasks() {
-        String sql = "SELECT task_id, task_name, task_desc, status FROM task_tracker";
+        String sql = "SELECT task_id, task_name, task_desc, status, project_id FROM task_tracker";
         List<Task> tasks = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(dbPath);
@@ -74,6 +76,7 @@ public class TaskDAO {
                 task.setName(rs.getString("task_name"));
                 task.setDescription(rs.getString("task_desc"));
                 task.setStatus(rs.getInt("status"));
+                task.setProject_Id(rs.getInt("project_id"));
                 tasks.add(task);
             }
 
@@ -86,7 +89,7 @@ public class TaskDAO {
 
     //Retrieve task by ID
     public Task getTaskById(int taskId) {
-        String sql = "SELECT task_id, task_name, task_desc, status FROM task_tracker WHERE task_id = ?";
+        String sql = "SELECT task_id, task_name, task_desc, status, project_id FROM task_tracker WHERE task_id = ?";
         Task task = null;
 
         try (Connection conn = DriverManager.getConnection(dbPath);
@@ -101,6 +104,7 @@ public class TaskDAO {
                 task.setName(rs.getString("task_name"));
                 task.setDescription(rs.getString("task_desc"));
                 task.setStatus(rs.getInt("status"));
+                task.setProject_Id(rs.getInt("project_id"));
             }
 
         } catch (SQLException e) {
