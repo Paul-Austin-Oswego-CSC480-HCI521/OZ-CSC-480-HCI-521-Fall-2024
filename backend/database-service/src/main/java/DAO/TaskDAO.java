@@ -28,8 +28,8 @@ public class TaskDAO {
                     task_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     task_name TEXT NOT NULL,
                     task_desc TEXT,
-                    status INTEGER DEFAULT 0
-                    project_id INTEGER,
+                    status INTEGER DEFAULT 0,
+                    project_id INTEGER
                 );
                 """;
 
