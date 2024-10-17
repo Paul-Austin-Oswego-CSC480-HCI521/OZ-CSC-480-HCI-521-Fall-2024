@@ -51,7 +51,7 @@
 
     <!--More Cors bs-->
     <cors domain="/auth/native-login"
-          allowedOrigins="http://localhost"
+          allowedOrigins="${frontend.root}"
           allowCredentials="true"
           allowedMethods="POST, OPTIONS"/>
 </server>
