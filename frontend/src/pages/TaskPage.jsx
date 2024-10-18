@@ -45,10 +45,11 @@ const initialTasks = [
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
+    const [currentTaskTitle, setCurrentTaskTitle] = useState("Test Title")
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                if (!await fetch('/auth').ok)
+                if (!(await fetch('/auth')).ok)
                     window.location.replace('/login')
 
 
@@ -88,9 +89,10 @@ export function TaskPage() {
     }, []);
 
     const addNewTask = async () => {
+        
         const newTask = {
-            name: 'Complete report',
-            description: 'some stuff',
+            name: currentTaskTitle,
+            description: document.getElementById('descriptionBox').value,
             status: 1,
             project_id: 7,
         }
@@ -121,6 +123,16 @@ export function TaskPage() {
         }
     };
 
+    const deleteTask = async (taskId) => {
+        try {
+            const response = await fetch(`/tasks/${taskId}`, { method: 'DELETE' })
+            if (!response.ok)
+                return console.log(`error deleting task ${taskId}`)
+            setTasks(prevTasks => prevTasks.filter(task => task.id != taskId))
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
 
     const handleSort = (key) => {
         let direction = "asc";
@@ -175,7 +187,7 @@ export function TaskPage() {
     return (
         <>
             <div>
-                <Sidebar title={"Test Title"}>
+                <Sidebar title={currentTaskTitle} setTitleInParent={setCurrentTaskTitle}>
                     <select
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
@@ -224,10 +236,11 @@ export function TaskPage() {
                         spellCheck='false'
                         style={{resize: 'none'}}
                         className="flex w-full h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
+                        id="descriptionBox"
                     >
                </textarea>
                     <div className="flex justify-end mb-4">
-                        <Button variant="default2">Save Changes</Button>
+                        <Button variant="default2" onClick={addNewTask}>Save Changes</Button>
                     </div>
 
                 </Sidebar>
@@ -240,7 +253,7 @@ export function TaskPage() {
                 <hr/>
                 <br/>
                 <div className="text-left mb-4">
-                    <Button onClick={addNewTask}>Create New Task</Button>
+                    <Button>Create New Task</Button>
                 </div>
 
                 <table className="w-full">
@@ -288,7 +301,7 @@ export function TaskPage() {
                             <td className="px-4 py-2 text-center">{task.priority}</td>
                             <td className="px-4 py-2 text-center">
                                 <Button variant="ghost" size="icon">
-                                    <Trash2 className="h-4 w-4"/>
+                                    <Trash2 className="h-4 w-4" onClick={() => deleteTask(task.id)}/>
                                 </Button>
                             </td>
                         </tr>
