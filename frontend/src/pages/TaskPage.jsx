@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
@@ -41,9 +41,86 @@ const initialTasks = [
     },
 ];
 
+
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                if (!await fetch('/auth').ok)
+                    window.location.replace('/login')
+
+
+                const response = await fetch(`/tasks`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Fetched tasks:', data);
+
+                    // CUSTOM THING;
+                    // I added this so that it properly matches with the database we currently have
+                    // We'll have to remove it later - SL
+                    const formattedTasks = data.map(task => ({
+                        id: task.id,
+                        completed: task.status === 1,
+                        title: task.name,
+                        project: `Project ${task.project_id}`,
+                        dueDate: task.dueDate || 'No Due Date',
+                        priority: task.priority || 'Medium',
+                    }));
+                    setTasks(formattedTasks);
+                } else {
+                    console.error('Failed to fetch tasks:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        };
+
+        fetchTasks();
+    }, []);
+
+    const addNewTask = async () => {
+        const newTask = {
+            name: 'Complete report',
+            description: 'some stuff',
+            status: 1,
+            project_id: 7,
+        }
+        try {
+            const response = await fetch('/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTask),
+            });
+
+            if (response.ok) {
+                const createdTask = await response.json();
+                // Add the new task to the tasks list
+                const formattedTask = {
+                    id: createdTask.id,
+                    completed: createdTask.status === 1,
+                    title: createdTask.name,
+                    project: `Project ${createdTask.project_id}`,
+                    dueDate: "TBD",
+                    priority: "Medium",
+                };
+                setTasks((prevTasks) => [...prevTasks, formattedTask]);
+            }
+        } catch (error) {
+            console.error('Error adding new task:', error);
+        }
+    };
+
 
     const handleSort = (key) => {
         let direction = "asc";
@@ -163,7 +240,7 @@ export function TaskPage() {
                 <hr/>
                 <br/>
                 <div className="text-left mb-4">
-                    <Button>Create New Task</Button>
+                    <Button onClick={addNewTask}>Create New Task</Button>
                 </div>
 
                 <table className="w-full">
