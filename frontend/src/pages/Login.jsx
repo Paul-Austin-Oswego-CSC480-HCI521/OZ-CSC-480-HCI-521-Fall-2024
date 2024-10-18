@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [reveal_pw, reveal_password] = useState('false')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -41,14 +44,27 @@ export function Login() {
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">Password</Label>
+                            <div className='flex items-center'>
                                 <Input
                                     id="password"
-                                    type="password"
+                                    type={reveal_pw ? 'password' : 'text'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
+                                    className = "flex-grow"
                                 />
+                                <div>
+                                <Button
+                                    type = "button"
+                                    onClick = {() => reveal_password(!reveal_pw)}
+                                    value = "words"
+                                    className = "ml-2"
+                                >
+                                     <FontAwesomeIcon icon={reveal_pw ? faEyeSlash : faEye} />
+                                </Button>
+                                </div>
                             </div>
+                         </div>
                         </div>
                         <Button className="w-full mt-6" type="submit">
                             Log in
@@ -56,16 +72,15 @@ export function Login() {
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col">
-                    <div className="relative w-full mb-6">
-                        <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t"/>
-                        </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-                        </div>
+                <div className="relative w-full mb-3">
+                     <div className="flex items-center">
+                         <span className="flex-grow border-t border-muted-foreground" />
+                             <span className="px-2 text-xs uppercase text-muted-foreground">
+                                     Or continue with
+                             </span>
+                         <span className="flex-grow border-t border-muted-foreground" />
                     </div>
+                </div>
                     <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
                         <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab"
                              data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
@@ -90,6 +105,7 @@ export function Login() {
                     </Button>
                 </CardFooter>
 
+
                 <div className="relative w-full mb-6">
           <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
@@ -101,3 +117,5 @@ export function Login() {
         </div>
     )
 }
+
+
