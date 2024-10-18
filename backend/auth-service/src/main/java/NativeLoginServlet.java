@@ -43,6 +43,7 @@ public class NativeLoginServlet extends HttpServlet {
             sessionCookie.setPath(frontendRoot);
             sessionCookie.setSecure(true);
             sessionCookie.setHttpOnly(true);
+            sessionCookie.setAttribute("SameSite", "None");
             response.addCookie(sessionCookie);
             System.out.println(frontendRoot);
         } else {

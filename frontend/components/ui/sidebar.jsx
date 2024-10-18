@@ -5,7 +5,7 @@ import { Button } from './button';
 import { CheckIcon } from '@radix-ui/react-icons';
 
 
-export function Sidebar({ title, children }) {
+export function Sidebar({ title, setTitleInParent, children }) {
      const [is_editing, edit_mode] = useState(false);
     const [newTitle, set_title] = useState(title);
 
@@ -19,6 +19,7 @@ export function Sidebar({ title, children }) {
         }else{
             set_title(newTitle)
         }
+        setTitleInParent(newTitle)
         edit_mode(false);
     };
 

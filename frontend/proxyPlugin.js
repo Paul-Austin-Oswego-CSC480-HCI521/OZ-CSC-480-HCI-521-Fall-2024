@@ -37,7 +37,7 @@ function handleRequestError(error, res) {
 function proxyGet(endpoint) {
     return async (req, res) => {
         try {
-            const response = await instance.get(API_ROOT + endpoint, { headers: {  'Authorization': 'Bearer ' + await getJwt(req) } })
+            const response = await instance.get(API_ROOT + endpoint, { headers: await authHeaders(req) })
             res.send(response.data).end()
         } catch (error) {
             handleRequestError(error, res)
@@ -48,11 +48,12 @@ function proxyGet(endpoint) {
 function proxyPost(endpoint) {
     return async (req, res) => {
         try {
-            const response = await instance.post(API_ROOT + endpoint, req.body, { headers: {
-                'Authorization': 'Bearer ' + await getJwt(req),
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }})
+            const response = await instance.post(API_ROOT + endpoint, req.body, {
+                headers: await authHeaders(req, {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                })
+            })
             res.send(response.data).end()
         } catch (error) {
             handleRequestError(error, res)
@@ -70,6 +71,20 @@ app.get('/auth', async (req, res) => {
         res.sendStatus(401)
     }
 })
+app.delete('/tasks/:taskId', async (req, res) => {
+    try {
+        const response = await instance.delete(API_ROOT + '/tasks/' + req.params.taskId, { headers: await authHeaders(req) })
+        res.send(response.data).end()
+    } catch (error) {
+        handleRequestError(error, res)
+    }
+})
+
+async function authHeaders(req, headers) {
+    headers = headers ? headers : {}
+    headers['Authorization'] = 'Bearer ' + await getJwt(req)
+    return headers
+}
 
 export default function proxyPlugin(authRoot, apiRoot) {
     AUTH_ROOT = authRoot
