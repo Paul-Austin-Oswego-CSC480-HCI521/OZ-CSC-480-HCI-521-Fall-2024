@@ -48,6 +48,10 @@ export function TaskPage() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
+                if (!await fetch('/auth').ok)
+                    window.location.replace('/login')
+
+
                 const response = await fetch(`/tasks`, {
                     method: 'GET',
                     headers: {
@@ -82,6 +86,40 @@ export function TaskPage() {
 
         fetchTasks();
     }, []);
+
+    const addNewTask = async () => {
+        const newTask = {
+            name: 'Complete report',
+            description: 'some stuff',
+            status: 1,
+            project_id: 7,
+        }
+        try {
+            const response = await fetch('/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTask),
+            });
+
+            if (response.ok) {
+                const createdTask = await response.json();
+                // Add the new task to the tasks list
+                const formattedTask = {
+                    id: createdTask.id,
+                    completed: createdTask.status === 1,
+                    title: createdTask.name,
+                    project: `Project ${createdTask.project_id}`,
+                    dueDate: "TBD",
+                    priority: "Medium",
+                };
+                setTasks((prevTasks) => [...prevTasks, formattedTask]);
+            }
+        } catch (error) {
+            console.error('Error adding new task:', error);
+        }
+    };
 
 
     const handleSort = (key) => {
@@ -202,7 +240,7 @@ export function TaskPage() {
                 <hr/>
                 <br/>
                 <div className="text-left mb-4">
-                    <Button>Create New Task</Button>
+                    <Button onClick={addNewTask}>Create New Task</Button>
                 </div>
 
                 <table className="w-full">
