@@ -7,6 +7,7 @@ import PageLayout from './pages/Layout'
 import {CompletedPage} from './pages/CompletedPage'
 import {RecentlyDeleted} from './pages/RecentlyDeleted'
 import SharedWithMe from './pages/SharedWithMe'
+import ProjectPage from './pages/ProjectPage';
 
 export default function Component() {
     return (
@@ -18,6 +19,9 @@ export default function Component() {
                         <Route path="completed" element={<CompletedPage/>}/>
                         <Route path="deleted" element={<RecentlyDeleted/>}/>
                         <Route path="shared" element={<SharedWithMe/>}/>
+                        {/* Project 1 and Project 2 pages just for demo. Can remove later */}
+                        <Route path="project-1" element={<ProjectPage/>}/>
+                        <Route path="project-2" element={<ProjectPage/>}/>
                      </Route>
                     <Route path="/Login" element={<Login/>}/>
                     <Route path = "/Registration" element = {<Register/>}/>

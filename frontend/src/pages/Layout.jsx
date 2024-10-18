@@ -11,8 +11,8 @@ function PageLayout() {
           <Outlet />
 
           {/* Place right-hand panel here instead of this div */}
-          <div className='h-screen bg-gray-200 w-56'>
-            Right Panel Goes Here!!!
+          <div className='h-screen bg-[#F1F6F9] w-[250px]'>
+           
           </div>
 
       </main>
