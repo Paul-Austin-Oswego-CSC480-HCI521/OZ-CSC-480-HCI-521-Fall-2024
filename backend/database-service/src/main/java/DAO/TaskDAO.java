@@ -44,7 +44,7 @@ public class TaskDAO {
 
     //CREATE a new task
     public void createTask(Task task) {
-        String sql = "INSERT INTO task_tracker (task_name, task_desc, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO task_tracker (task_name, task_desc, status, project_id) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
