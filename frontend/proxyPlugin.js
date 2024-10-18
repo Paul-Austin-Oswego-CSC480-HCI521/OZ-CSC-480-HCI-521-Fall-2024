@@ -7,7 +7,7 @@ let AUTH_ROOT = ''
 let API_ROOT = ''
 
 const app = express()
-app.use(cookieParser())
+app.use(cookieParser(), express.json())
 
 const instance = axios.create({
     httpsAgent: new https.Agent({ rejectUnauthorized: false })
@@ -22,7 +22,8 @@ async function getJwt(req) {
 
 function handleRequestError(error, res) {
     if (error.response) {       
-        console.log(`response error ${error.response.status}:`, error.response.data)
+        console.log(`response error ${error.response.status}:`)
+        console.log(error.response.data)
         res.status(error.response.status).send(error.response.data)
     } else if (error.request) {
         console.log('request error')
@@ -33,10 +34,10 @@ function handleRequestError(error, res) {
     }
 }
 
-function secureProxy(endpoint) {
+function proxyGet(endpoint) {
     return async (req, res) => {
         try {
-            const response = await instance.get(API_ROOT + endpoint, { headers: {  "Authorization": 'Bearer ' + await getJwt(req) } })
+            const response = await instance.get(API_ROOT + endpoint, { headers: {  'Authorization': 'Bearer ' + await getJwt(req) } })
             res.send(response.data).end()
         } catch (error) {
             handleRequestError(error, res)
@@ -44,7 +45,23 @@ function secureProxy(endpoint) {
     }
 }
 
-app.get('/tasks', secureProxy('/tasks'))
+function proxyPost(endpoint) {
+    return async (req, res) => {
+        try {
+            const response = await instance.post(API_ROOT + endpoint, req.body, { headers: {
+                'Authorization': 'Bearer ' + await getJwt(req),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }})
+            res.send(response.data).end()
+        } catch (error) {
+            handleRequestError(error, res)
+        }
+    }
+}
+
+app.get('/tasks', proxyGet('/tasks'))
+app.post('/tasks', proxyPost('/tasks'))
 app.get('/auth', async (req, res) => {
     try {
         await getJwt(req)

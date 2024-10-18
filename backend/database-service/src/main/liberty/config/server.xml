@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <server description="Backend service">
     <featureManager>
+        <feature>jakartaee-10.0</feature>
         <feature>appSecurity-5.0</feature>
         <feature>mpJwt-2.1</feature>
         <feature>restfulWS-3.1</feature>
