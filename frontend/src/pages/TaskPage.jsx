@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
@@ -41,9 +41,48 @@ const initialTasks = [
     },
 ];
 
+
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const response = await fetch(`/tasks`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Fetched tasks:', data);
+
+                    // CUSTOM THING;
+                    // I added this so that it properly matches with the database we currently have
+                    // We'll have to remove it later - SL
+                    const formattedTasks = data.map(task => ({
+                        id: task.id,
+                        completed: task.status === 1,
+                        title: task.name,
+                        project: `Project ${task.project_id}`,
+                        dueDate: task.dueDate || 'No Due Date',
+                        priority: task.priority || 'Medium',
+                    }));
+                    setTasks(formattedTasks);
+                } else {
+                    console.error('Failed to fetch tasks:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        };
+
+        fetchTasks();
+    }, []);
+
 
     const handleSort = (key) => {
         let direction = "asc";
