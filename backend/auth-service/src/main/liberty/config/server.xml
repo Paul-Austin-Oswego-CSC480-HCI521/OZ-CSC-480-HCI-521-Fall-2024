@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Authentication service">
+    <featureManager>
+        <feature>restfulWS-3.1</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>jsonp-2.1</feature>
+        <feature>cdi-4.0</feature>
+
+        <feature>socialLogin-1.0</feature>
+        <feature>appSecurity-5.0</feature>
+        <feature>servlet-6.0</feature>
+        <feature>mpJwt-2.1</feature>
+        <feature>jwt-1.0</feature>
+        <feature>mpConfig-3.1</feature>
+        <feature>mpRestClient-3.0</feature>
+    </featureManager>
+
+    <variable name="http.port" defaultValue="9090"/>
+    <variable name="https.port" defaultValue="8443"/>
+    <variable name="location" defaultValue="auth-service"/>
+    <variable name="frontend.root" defaultValue="http://localhost:80"/>
+
+    <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
+                  id="defaultHttpEndpoint"
+                  host="*"/>
+
+    <keyStore id="testKeyStore" location="key.jks" password="testpw" />
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
+
+    <githubLogin clientId="${github.client.id}"
+                 clientSecret="${github.client.secret}" />
+
+    <webApplication contextRoot="/" location="${location}.war">
+        <application-bnd>
+            <security-role name="user">
+                <special-subject type="ALL_AUTHENTICATED_USERS"/>
+            </security-role>
+        </application-bnd>
+        <security-constraint>
+            <web-resource-collection>
+                <web-resource-name>NativeLogin</web-resource-name>
+                <url-pattern>/auth/native-login</url-pattern>
+            </web-resource-collection>
+            <auth-constraint>
+                <role-name>user</role-name>
+            </auth-constraint>
+        </security-constraint>
+    </webApplication>
+
+    <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiresInSeconds="15"/>
+
+    <!--More Cors bs-->
+    <cors domain="/auth/native-login"
+          allowedOrigins="${frontend.root}"
+          allowCredentials="true"
+          allowedMethods="POST, OPTIONS"/>
+</server>
