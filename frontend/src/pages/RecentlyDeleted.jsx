@@ -2,7 +2,7 @@ export function RecentlyDeleted() {
     return (
         <div>
             <h1 className={'text-center text-5xl'} >
-                Shared With Me Page
+                Recently Deleted Page
             </h1>
         </div>
 )

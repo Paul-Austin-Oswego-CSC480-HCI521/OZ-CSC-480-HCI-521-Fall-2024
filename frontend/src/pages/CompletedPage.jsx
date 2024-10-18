@@ -1,4 +1,4 @@
-function CompletedPage() {
+export function CompletedPage() {
     return (
         <div>
             <h1 className={'text-center text-5xl'} >
