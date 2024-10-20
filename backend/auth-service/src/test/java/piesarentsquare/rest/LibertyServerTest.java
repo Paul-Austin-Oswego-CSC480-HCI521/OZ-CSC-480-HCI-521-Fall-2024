@@ -13,6 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class LibertyServerTest {
+
+    //this is a test to check push permission
+
+
    // Store process to terminate it later
    private Process frontendProcess;
 
@@ -80,8 +84,4 @@ class LibertyServerTest {
            fail("Exception during execution: " + e.getMessage());
        }
    }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> test
