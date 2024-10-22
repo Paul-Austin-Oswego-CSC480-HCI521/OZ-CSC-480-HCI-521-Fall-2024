@@ -49,7 +49,7 @@ export function TaskPage() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                if (!(await fetch('/auth').ok)) {
+                if (!(await fetch('/auth')).ok) {
                     window.location.replace('/login')
                     return
                 }

@@ -15,7 +15,6 @@ const instance = axios.create({
 
 async function getJwt(req) {
     if (req.cookies.sessionID == undefined) {
-        console.log(req.cookies)
         throw { response: { status: 401, data: 'no sessionID cookie' } }
     }
 
