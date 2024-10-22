@@ -49,17 +49,12 @@ export function TaskPage() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                if (!(await fetch('/auth')).ok)
+                if (!(await fetch('/auth').ok)) {
                     window.location.replace('/login')
+                    return
+                }
 
-
-                const response = await fetch(`/tasks`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    // credentials: 'include',
-                });
+                const response = await fetch(`/tasks`);
 
                 if (response.ok) {
                     const data = await response.json();

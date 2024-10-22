@@ -14,13 +14,16 @@ const instance = axios.create({
 })
 
 async function getJwt(req) {
-    if (req.cookies.sessionID == undefined)
+    if (req.cookies.sessionID == undefined) {
+        console.log(req.cookies)
         throw { response: { status: 401, data: 'no sessionID cookie' } }
+    }
 
     return (await instance.get(AUTH_ROOT + '/auth/jwt', { headers: { 'Oz-Session-Id': req.cookies.sessionID } })).data
 }
 
-function handleRequestError(error, res) {
+function handleRequestError(error, res, context) {
+    console.log(context)
     if (error.response) {       
         console.log(`response error ${error.response.status}:`)
         console.log(error.response.data)
@@ -40,7 +43,7 @@ function proxyGet(endpoint) {
             const response = await instance.get(API_ROOT + endpoint, { headers: await authHeaders(req) })
             res.send(response.data).end()
         } catch (error) {
-            handleRequestError(error, res)
+            handleRequestError(error, res, 'get: ' + endpoint)
         }
     }
 }
@@ -56,7 +59,7 @@ function proxyPost(endpoint) {
             })
             res.send(response.data).end()
         } catch (error) {
-            handleRequestError(error, res)
+            handleRequestError(error, res, 'post: ' + endpoint)
         }
     }
 }
@@ -76,7 +79,7 @@ app.delete('/tasks/:taskId', async (req, res) => {
         const response = await instance.delete(API_ROOT + '/tasks/' + req.params.taskId, { headers: await authHeaders(req) })
         res.send(response.data).end()
     } catch (error) {
-        handleRequestError(error, res)
+        handleRequestError(error, res, 'delete: /tasks/:taskId')
     }
 })
 
