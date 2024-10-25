@@ -1,11 +1,11 @@
-package DAO;
+package dao;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import model.Task;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import rest.model.Task;
 
 import java.sql.*;
 import java.util.ArrayList;

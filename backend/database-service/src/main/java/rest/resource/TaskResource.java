@@ -1,11 +1,11 @@
 package rest.resource;
 
-import DAO.TaskDAO;
+import dao.TaskDAO;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import rest.model.Task;
+import model.Task;
 
 import java.util.List;
 

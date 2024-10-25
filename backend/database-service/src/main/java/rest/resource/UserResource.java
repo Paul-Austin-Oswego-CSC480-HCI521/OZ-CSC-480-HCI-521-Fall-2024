@@ -1,11 +1,11 @@
 package rest.resource;
 
-import DAO.UserDAO;
+import dao.UserDAO;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import rest.model.User;
+import model.User;
 
 import java.util.List;
 

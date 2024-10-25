@@ -1,4 +1,4 @@
-package rest.model;
+package model;
 
 public class Task {
     private int id;
