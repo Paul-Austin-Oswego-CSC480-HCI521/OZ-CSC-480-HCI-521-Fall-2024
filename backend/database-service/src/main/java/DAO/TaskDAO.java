@@ -92,6 +92,7 @@ public class TaskDAO {
                 task.setProjectName(rs.getString("project_name"));
                 task.setProjectDescription(rs.getString("project_desc"));
                 task.setProjectStatus(rs.getInt("project_status"));
+
                 tasks.add(task);
             }
 
@@ -101,14 +102,13 @@ public class TaskDAO {
 
         return tasks;
     }
-
     // Update task details by project_id and user_id
     public void updateTaskDetailsByUserAndProject(int userId, int projectId, int taskId, String taskName, String taskDescription) {
         String sql = "UPDATE task_tracker SET task_name = ?, task_desc = ? WHERE user_id = ? AND project_id = ? AND task_id = ?";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+          
             pstmt.setString(1, taskName);
             pstmt.setString(2, taskDescription);
             pstmt.setInt(3, userId);

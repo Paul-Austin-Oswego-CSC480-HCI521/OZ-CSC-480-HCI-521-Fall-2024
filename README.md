@@ -46,7 +46,12 @@ In the root directory run:
 
 the webpage will be served at http://localhost
 
+**WARNING: the website does not work on safari**
+*we will attepmt to fix it at a later date*
+
 ### Stopping the application
+
+first, ctrl+C vite
 
 In the root directory run:
 
