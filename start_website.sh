@@ -1,8 +1,7 @@
 #!/bin/bash
 
 mvnRun() {
-if [$2==dev]
-then
+if [ $# -ge 2 -a $2==dev ]; then
     mvn -pl $1 liberty:dev > /dev/null 2>&1 &
 else
     mvn -pl $1 liberty:run > /dev/null 2>&1 &
@@ -10,7 +9,7 @@ fi
 }
 
 cd backend || exit
-mvn install
+mvn install -DskipTests
 
 # Starting authorization service
 echo "Starting authorization service..."
