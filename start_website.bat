@@ -18,12 +18,8 @@ goto:eof
 
 REM start the server in either dev mode or normal depending on the command line argument
 :mvnRun
-if "%~2"=="dev" (
+if "%~2"=="dev"
     start mvn -pl %1 liberty:dev
-) else (
-    call mvn -pl %1 liberty:create
-    call mvn -pl %1 liberty:install-feature
-    call mvn -pl %1 liberty:deploy
-    call mvn -pl %1 liberty:start
-)
+else
+    start /b mvn -pl %1 liberty:run < nul >nul 2>&1
 goto:eof

@@ -1,15 +1,23 @@
 #!/bin/bash
 
+mvnRun() {
+if [$2==dev]
+then
+    mvn -pl $1 liberty:dev &
+else
+    mvn -pl $1 liberty:run &
+}
+
 cd backend || exit
 mvn install
 
 # Starting authorization service
 echo "Starting authorization service..."
-mvn -pl auth-service liberty:run &
+mvnRun auth-service $1
 
 # Starting database service
 echo "Starting database service..."
-mvn -pl auth-service liberty:run &
+mvnRun database-service $1
 
 # Installing dependencies and starting frontend server
 echo "Installing dependencies... Starting frontend server..."
