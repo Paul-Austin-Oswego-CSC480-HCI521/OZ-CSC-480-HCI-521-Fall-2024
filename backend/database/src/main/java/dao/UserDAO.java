@@ -16,7 +16,7 @@ import java.util.List;
 public class UserDAO {
 
     @Inject
-    @ConfigProperty(name = "database.path.users")
+    @ConfigProperty(name = "database.path.tasks")
     private String dbPath;
 
     //Create the users table if no exist
@@ -26,6 +26,7 @@ public class UserDAO {
         String createTableSQL = """
                 CREATE TABLE IF NOT EXISTS users (
                     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    session_id TEXT,
                     username TEXT NOT NULL,
                     email TEXT NOT NULL,
                     password TEXT NOT NULL
