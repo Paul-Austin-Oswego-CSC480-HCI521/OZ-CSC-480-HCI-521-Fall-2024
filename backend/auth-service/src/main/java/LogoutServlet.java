@@ -1,3 +1,4 @@
+import dao.UserDAO;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.HttpConstraint;
@@ -9,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Response;
 import logout.LogoutHandler;
-import model.QuoteUnquoteDatabase;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import rest.AuthResource;
 
@@ -34,7 +34,7 @@ public class LogoutServlet extends HttpServlet {
     private LogoutHandler logoutHandler;
 
     @Inject
-    private QuoteUnquoteDatabase db;
+    private UserDAO userDAO;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -49,7 +49,7 @@ public class LogoutServlet extends HttpServlet {
         var sessionIDCookie = getCookie(request, AuthResource.SESSION_ID_COOKIE);
         if (sessionIDCookie != null) {
             try {
-                db.invalidateSession(Long.parseLong(sessionIDCookie.getValue()));
+                userDAO.invalidateSession(sessionIDCookie.getValue());
             } catch (NumberFormatException ignored) {}
             sessionIDCookie.setValue("");
             sessionIDCookie.setPath("/");

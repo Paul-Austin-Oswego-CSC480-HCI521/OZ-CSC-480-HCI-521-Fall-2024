@@ -5,12 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import model.QuoteUnquoteDatabase;
 import model.User;
 import util.JwtUtil;
-
-import java.util.Optional;
-import java.util.Set;
 
 @Path("/jwt")
 public class AuthResource {
@@ -27,6 +23,14 @@ public class AuthResource {
         if (sessionId == null || (user = userDAO.getUserBySessionId(sessionId)) == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         else
-            return Response.ok(JwtUtil.buildJwt(user.getEmail(), Set.of("user"))).build();
+            return Response.ok(JwtUtil.buildJwt(user.getEmail())).build();
+    }
+
+    // TODO: FOR TESTING PURPOSES ONLY, WILL BE REPLACED WITH REGISTRATION
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createUser(User user) {
+        userDAO.createUser(user);
+        return Response.ok().build();
     }
 }

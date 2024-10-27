@@ -8,8 +8,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import model.User;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,7 +42,7 @@ public class UserDAO {
     }
 
     //CREATE new user
-    private void createUser(User user) {
+    public void createUser(User user) {
         String sql = "INSERT INTO users (email, username, password) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
@@ -72,7 +70,25 @@ public class UserDAO {
         return sessionId.toString();
     }
 
-    // public Optional<String> nativeLogin(String email, String password)
+     public Optional<String> nativeLogin(String email, String password) {
+         User user = getUserByEmail(email);
+         if (user == null) {
+             // Probably want to indicate that user was not found
+             return Optional.empty();
+         } else if (user.getPassword() == null || !user.getPassword().equals(password)) {
+             // Probably want to specify password is incorrect
+             return Optional.empty();
+         }
+         UUID sessionId = UUID.randomUUID();
+         setSessionId(email, sessionId);
+         return Optional.of(sessionId.toString());
+     }
+
+     public void invalidateSession(String sessionId) {
+        User user = getUserBySessionId(sessionId);
+        if (user != null)
+            setSessionId(user.getEmail(), null);
+     }
 
     //READ all users
 //    public List<User> getAllUsers() {
@@ -97,32 +113,6 @@ public class UserDAO {
 //        }
 //
 //        return users;
-//    }
-
-    //get a user by ID
-//    public User getUserById(int userId) {
-//        String sql = "SELECT user_id, username, email, password FROM users WHERE user_id = ?";
-//        User user = null;
-//
-//        try (Connection conn = DriverManager.getConnection(dbPath);
-//             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//
-//            pstmt.setInt(1, userId);
-//            ResultSet rs = pstmt.executeQuery();
-//
-//            if (rs.next()) {
-//                user = new User();
-//                user.setUserEmail(rs.getInt("user_id"));
-//                user.setUsername(rs.getString("username"));
-//                user.setEmail(rs.getString("email"));
-//                user.setPassword(rs.getString("password"));
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return user;
 //    }
 
     //get a user by ID
@@ -177,32 +167,16 @@ public class UserDAO {
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, sessionId.toString());
+            String ses = sessionId != null ? sessionId.toString() : null;
+            pstmt.setString(1, ses);
             pstmt.setString(2, email);
             pstmt.executeUpdate();
-            System.out.println("User '" + email + "' given sessionId: " + sessionId.toString());
+            System.out.println("User '" + email + "' given sessionId: " + ses);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-    //UPDATE a USER email
-//    public void updateUserEmail(int userId, String email) {
-//        String sql = "UPDATE users SET email = ? WHERE user_id = ?";
-//
-//        try (Connection conn = DriverManager.getConnection(dbPath);
-//             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//
-//            pstmt.setString(1, email);
-//            pstmt.setInt(2, userId);
-//            pstmt.executeUpdate();
-//            System.out.println("User with ID " + userId + " updated successfully.");
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
 
     //DELETE a user by ID
 //    public void deleteUser(int userId) {
