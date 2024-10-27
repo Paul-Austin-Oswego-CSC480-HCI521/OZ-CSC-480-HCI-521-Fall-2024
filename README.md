@@ -51,7 +51,7 @@ the webpage will be served at http://localhost
 
 ### Stopping the application
 
-🔥🚀🎉 ***NEW!*** 🔥🚀🎉 just d q+enter in the vite terminal, we'll auto shutdown the backend
+🔥🚀🎉 ***NEW!*** 🔥🚀🎉 just do q+enter in the vite terminal, we'll auto shutdown the backend
 
 if you ctrl+c out of habit you can still run:
 #### Windows:
