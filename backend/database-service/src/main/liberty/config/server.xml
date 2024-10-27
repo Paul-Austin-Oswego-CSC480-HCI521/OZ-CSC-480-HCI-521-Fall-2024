@@ -15,8 +15,6 @@
     <variable name="https.port" defaultValue="8443"/>
     <variable name="location" defaultValue="backend"/>
     <variable name="frontend.root" defaultValue="http://localhost:80"/>
-    <variable name="database.path.users" defaultValue="jdbc:sqlite:users.db"/>
-    <variable name="database.path.tasks" defaultValue="jdbc:sqlite:tasks.db"/>
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"

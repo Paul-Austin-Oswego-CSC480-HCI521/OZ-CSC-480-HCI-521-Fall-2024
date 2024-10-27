@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export OZ_DATABASE_PATH=jdbc:sqlite:$(pwd)/tasks.db
+
 mvnRun() {
 if [ $# -ge 2 -a $2==dev ]; then
     mvn -pl $1 liberty:dev > /dev/null 2>&1 &
@@ -24,3 +26,6 @@ echo "Installing dependencies... Starting frontend server..."
 cd ../frontend || exit
 npm install
 npm run dev
+
+cd..
+./stop_website.sh

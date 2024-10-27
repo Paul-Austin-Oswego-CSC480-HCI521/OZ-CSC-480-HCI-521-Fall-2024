@@ -22,9 +22,6 @@
         <oz.auth.port>9443</oz.auth.port>
         <oz.api.port>8443</oz.api.port>
         <liberty.var.frontend.root>http://localhost:2080</liberty.var.frontend.root>
-        <!-- db paths -->
-        <liberty.var.database.path.users>jdbc:sqlite:users.db</liberty.var.database.path.users>
-        <liberty.var.database.path.tasks>jdbc:sqlite:tasks.db</liberty.var.database.path.tasks>
     </properties>
 
 </project>
