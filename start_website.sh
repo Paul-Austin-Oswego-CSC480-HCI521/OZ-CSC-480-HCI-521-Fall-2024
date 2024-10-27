@@ -4,9 +4,9 @@ export OZ_DATABASE_PATH=jdbc:sqlite:$(pwd)/tasks.db
 
 mvnRun() {
 if [ $# -ge 2 -a $2==dev ]; then
-    mvn -pl $1 liberty:dev > /dev/null 2>&1 &
+    mvn -pl $1 liberty:dev < /dev/null &
 else
-    mvn -pl $1 liberty:run > /dev/null 2>&1 &
+    mvn -pl $1 liberty:run < /dev/null > /dev/null 2>&1 &
 fi
 }
 

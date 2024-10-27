@@ -51,10 +51,9 @@ the webpage will be served at http://localhost
 
 ### Stopping the application
 
-first, ctrl+C vite
+🔥🚀🎉 ***NEW!*** 🔥🚀🎉 just d q+enter in the vite terminal, we'll auto shutdown the backend
 
-In the root directory run:
-
+if you ctrl+c out of habit you can still run:
 #### Windows:
 ```batch
 .\stop_website.bat
