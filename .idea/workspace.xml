@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f27af3f0-0518-406b-aaf1-371f0ea83d0c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Registration.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Registration.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/SidePanel.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/SidePanel.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/sidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/TaskPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/TaskPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +50,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

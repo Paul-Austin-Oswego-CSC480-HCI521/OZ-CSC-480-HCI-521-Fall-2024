@@ -45,7 +45,8 @@ const initialTasks = [
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
-    const [currentTaskTitle, setCurrentTaskTitle] = useState("Test Title")
+    const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title")
+    const [editMode, isEditMode] = useState(false);
     useEffect(() => {
         const fetchTasks = async () => {
             try {
@@ -83,8 +84,18 @@ export function TaskPage() {
         fetchTasks();
     }, []);
 
+    const resetTaskFields = async () => {
+        isEditMode(true);
+        setCurrentTaskTitle('');        // Clear task title
+        document.getElementById("projects-option").value = "option1"
+        document.getElementById("date-option").value = "";
+        document.getElementById("priority-option").value = "Low"
+        document.getElementById("repeat-option").value = "Never"
+        document.getElementById("descriptionBox").value = ""
+    }
+
     const addNewTask = async () => {
-        
+
         const newTask = {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
@@ -120,7 +131,7 @@ export function TaskPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`/tasks/${taskId}`, { method: 'DELETE' })
+            const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'})
             if (!response.ok)
                 return console.log(`error deleting task ${taskId}`)
             setTasks(prevTasks => prevTasks.filter(task => task.id != taskId))
@@ -182,8 +193,15 @@ export function TaskPage() {
     return (
         <>
             <div>
-                <Sidebar title={currentTaskTitle} setTitleInParent={setCurrentTaskTitle}>
+                <Sidebar
+                    id="title-option"
+                    title={currentTaskTitle}
+                    setTitleInParent={setCurrentTaskTitle}
+                    editMode={editMode}
+                    isEditMode={isEditMode}
+                >
                     <select
+                        id="projects-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
                         <option value="option1">Project 1</option>
@@ -193,6 +211,7 @@ export function TaskPage() {
                     </select>
 
                     <input
+                        id="date-option"
                         type="date"
                         className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300 mb-4"
                     >
@@ -200,38 +219,33 @@ export function TaskPage() {
 
 
                     <select
+                        id="repeat-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-                        <option value="option1">Repeats Never</option>
+                        <option value="Never">Repeats Never</option>
                         <option value="option2">To be determined</option>
                         <option value="option3">To be determined</option>
                         <option value="option1">To be determined</option>
                     </select>
 
-
-                    <Input
-                        className='mb-4'
-                        placeholder="Enter tags separated by commas">
-                    </Input>
-
-
                     <select
+                        id="priority-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-                        <option value="option1">Low</option>
-                        <option value="option2">Medium</option>
-                        <option value="option3">High</option>
-                        <option value="option1">No Priority</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="None">No Priority</option>
                     </select>
 
 
                     <Label htmlFor="password"><b>Task Description</b></Label>
                     <textarea
+                        id="descriptionBox"
                         placeholder="Describe your task here..."
                         spellCheck='false'
                         style={{resize: 'none'}}
                         className="flex w-full h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
-                        id="descriptionBox"
                     >
                </textarea>
                     <div className="flex justify-end mb-4">
@@ -248,7 +262,7 @@ export function TaskPage() {
                 <hr/>
                 <br/>
                 <div className="text-left mb-4">
-                    <Button>Create New Task</Button>
+                    <Button onClick={resetTaskFields}>Create New Task</Button>
                 </div>
 
                 <table className="w-full">
