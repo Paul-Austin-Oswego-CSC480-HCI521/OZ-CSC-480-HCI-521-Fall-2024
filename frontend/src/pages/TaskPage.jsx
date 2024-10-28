@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input.jsx";
-import { Button } from "@/components/ui/button.jsx";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.jsx";
-import { Sidebar } from "@/components/ui/sidebar";
-import { Label } from "@radix-ui/react-label";
-import { Trash2 } from "lucide-react";
-import { ArchiveIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { Checkbox } from "@/components/ui/checkbox.jsx";
-import { Dialog } from "@radix-ui/react-dialog";
-import { DialogDemo } from "@/components/Dialog.jsx";
+import React, {useEffect, useState} from "react";
+import {Input} from "@/components/ui/input.jsx";
+import {Button} from "@/components/ui/button.jsx";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
+import {Sidebar} from "@/components/ui/sidebar";
+import {Label} from "@radix-ui/react-label";
+import {Trash2} from "lucide-react";
+import {ArchiveIcon, CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
+import {Checkbox} from "@/components/ui/checkbox.jsx";
+import {Dialog} from "@radix-ui/react-dialog";
+import {DialogDemo} from "@/components/Dialog.jsx";
 
 const priorityOrder = {
     Low: 1,
@@ -45,13 +45,13 @@ const initialTasks = [
 
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
-    const [deletePopup, setDeletePopup] = useState({ isOpen: false, taskId: null });
+    const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
 
     const handleDeletePopup = (action, taskId) => {
-        setDeletePopup({ isOpen: false, taskId: null }); // Close dialog after action
+        setDeletePopup({isOpen: false, taskId: null}); // Close dialog after action
         if (action === "delete") {
             deleteTask(taskId);
         }
@@ -64,7 +64,6 @@ export function TaskPage() {
                     window.location.replace('/login');
                     return;
                 }
-
                 const response = await fetch(`/tasks`);
                 if (response.ok) {
                     const data = await response.json();
@@ -133,7 +132,7 @@ export function TaskPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
+            const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'});
             if (response.ok) {
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
             } else {
@@ -146,18 +145,50 @@ export function TaskPage() {
 
     const handleSort = (key) => {
         let direction = "asc";
+
+        // Toggle direction if the same key is being sorted
         if (sortConfig.key === key && sortConfig.direction === "asc") {
             direction = "desc";
         }
-        setSortConfig({ key, direction });
+
+        setSortConfig({key, direction});
 
         const sortedTasks = [...tasks].sort((a, b) => {
             if (key === "priority") {
-                return direction === "asc"
-                    ? priorityOrder[a.priority] - priorityOrder[b.priority]
-                    : priorityOrder[b.priority] - priorityOrder[a.priority];
+                if (direction === "asc") {
+                    if (priorityOrder[a.priority] < priorityOrder[b.priority]) {
+                        return -1;
+                    }
+                    if (priorityOrder[a.priority] > priorityOrder[b.priority]) {
+                        return 1;
+                    }
+                } else {
+                    if (priorityOrder[a.priority] > priorityOrder[b.priority]) {
+                        return -1;
+                    }
+                    if (priorityOrder[a.priority] < priorityOrder[b.priority]) {
+                        return 1;
+                    }
+                }
+                return 0;
             }
-            return direction === "asc" ? (a[key] < b[key] ? -1 : 1) : (a[key] > b[key] ? -1 : 1);
+
+            if (direction === "asc") {
+                if (a[key] < b[key]) {
+                    return -1;
+                }
+                if (a[key] > b[key]) {
+                    return 1;
+                }
+            } else {
+                if (a[key] > b[key]) {
+                    return -1;
+                }
+                if (a[key] < b[key]) {
+                    return 1;
+                }
+            }
+            return 0;
         });
         setTasks(sortedTasks);
     };
@@ -203,7 +234,6 @@ export function TaskPage() {
                         <option value="option3">To be determined</option>
                         <option value="option1">To be determined</option>
                     </select>
-
                     <select
                         id="priority-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
@@ -233,9 +263,9 @@ export function TaskPage() {
                 <h1 className="text-left scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                     My Tasks
                 </h1>
-                <br />
-                <hr />
-                <br />
+                <br/>
+                <hr/>
+                <br/>
                 <div className="text-left mb-4">
                     <Button onClick={resetTaskFields}>Create New Task</Button>
                 </div>
@@ -244,24 +274,30 @@ export function TaskPage() {
                     <thead>
                     <tr className="border-b">
                         <th className="px-4 py-2 text-center">Completed?</th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("title")}>Task <CaretSortIcon /></th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("project")}>Project <CaretSortIcon /></th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("dueDate")}>Due Date <CaretSortIcon /></th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("priority")}>Priority <CaretSortIcon /></th>
+                        <th className="px-4 py-2 text-center" onClick={() => handleSort("title")}>Task <CaretSortIcon/>
+                        </th>
+                        <th className="px-4 py-2 text-center"
+                            onClick={() => handleSort("project")}>Project <CaretSortIcon/></th>
+                        <th className="px-4 py-2 text-center" onClick={() => handleSort("dueDate")}>Due
+                            Date <CaretSortIcon/></th>
+                        <th className="px-4 py-2 text-center"
+                            onClick={() => handleSort("priority")}>Priority <CaretSortIcon/></th>
                         <th className="px-4 py-2"></th>
                     </tr>
                     </thead>
                     <tbody>
                     {tasks.map((task) => (
                         <tr key={task.id} className="border-b last:border-b-0">
-                            <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`} checked={task.completed} /></td>
+                            <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
+                                                                            checked={task.completed}/></td>
                             <td className="px-4 py-2 text-center">{task.title}</td>
                             <td className="px-4 py-2 text-center">{task.project}</td>
                             <td className="px-4 py-2 text-center">{task.dueDate}</td>
                             <td className="px-4 py-2 text-center">{task.priority}</td>
                             <td className="px-4 py-2 text-center">
-                                <Button variant="ghost" size="icon" onClick={() => setDeletePopup({ isOpen: true, taskId: task.id })}>
-                                    <Trash2 className="h-4 w-4" />
+                                <Button variant="ghost" size="icon"
+                                        onClick={() => setDeletePopup({isOpen: true, taskId: task.id})}>
+                                    <Trash2 className="h-4 w-4"/>
                                 </Button>
                             </td>
                         </tr>
