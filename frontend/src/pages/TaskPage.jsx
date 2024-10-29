@@ -67,7 +67,7 @@ export function TaskPage() {
                         id: task.id,
                         completed: task.status === 1,
                         title: task.name,
-                        project: `Project ${task.project_id}`,
+                        project: task.projectName,
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
@@ -89,7 +89,7 @@ export function TaskPage() {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
             status: 1,
-            project_id: 7,
+            projectName: "TODO: Change project name",
         }
         try {
             const response = await fetch('/tasks', {
@@ -107,7 +107,7 @@ export function TaskPage() {
                     id: createdTask.id,
                     completed: createdTask.status === 1,
                     title: createdTask.name,
-                    project: `Project ${createdTask.project_id}`,
+                    project: createdTask.projectName,
                     dueDate: "TBD",
                     priority: "Medium",
                 };

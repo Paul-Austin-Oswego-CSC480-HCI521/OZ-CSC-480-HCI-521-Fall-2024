@@ -1,15 +1,15 @@
-package rest.model;
+package model;
 
 public class User {
-    private int userId;
     private String username;
     private String email;
     private String password;
 
-    //Getters and setters
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public User() {}
+    public User(String email) { this.email = email; }
+    public User(String email, String password) { this.email = email; this.password = password; }
 
+    //Getters and setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 

@@ -1,11 +1,11 @@
-package DAO;
+package dao;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import model.Task;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import rest.model.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 public class TaskDAO {
 
     @Inject
-    @ConfigProperty(name = "database.path.tasks")
+    @ConfigProperty(name = "oz.database.path")
     private String dbPath;
 
     @PostConstruct
@@ -24,7 +24,7 @@ public class TaskDAO {
         System.out.println("attempting to construct table");
         String createTableSQL = """
         CREATE TABLE task_tracker (
-            user_id INTEGER, 
+            user_email TEXT NOT NULL,
             project_id INTEGER,
             task_id INTEGER,
             project_name TEXT NOT NULL,
@@ -34,7 +34,7 @@ public class TaskDAO {
             task_desc TEXT,
             task_status INTEGER,
             PRIMARY KEY (project_id, task_id),
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            FOREIGN KEY (user_email) REFERENCES users(email)
         );
         """;
 
@@ -49,13 +49,13 @@ public class TaskDAO {
 
     //Create task
     public void createTask(Task task) {
-        String sql = "INSERT INTO task_tracker (user_id, project_id, task_name, task_desc, task_status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO task_tracker (user_email, project_name, task_name, task_desc, task_status) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, task.getUserId());
-            pstmt.setInt(2, task.getProjectId());
+            pstmt.setString(1, task.getUserEmail());
+            pstmt.setString(2, task.getProjectName());
             pstmt.setString(3, task.getName());
             pstmt.setString(4, task.getDescription());
             pstmt.setInt(5, task.getStatus());
@@ -68,18 +68,18 @@ public class TaskDAO {
     }
 
     // Get tasks by user_id and project_id
-    public List<Task> getTasksByUserAndProject(int userId, int projectId) {
+    public List<Task> getTasksByUserAndProject(String userEmail, int projectId) {
         String sql = """
             SELECT task_id, task_name, task_desc, task_status, project_name, project_desc, project_status 
             FROM task_tracker 
-            WHERE user_id = ? AND project_id = ?
+            WHERE user_email = ? AND project_id = ?
         """;
         List<Task> tasks = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, userId);
+            pstmt.setString(1, userEmail);
             pstmt.setInt(2, projectId);
             ResultSet rs = pstmt.executeQuery();
 
@@ -102,16 +102,52 @@ public class TaskDAO {
 
         return tasks;
     }
+
+    // Get all tasks by user_id
+    public List<Task> getAllUserTasks(String userEmail) {
+        String sql = """
+            SELECT task_id, task_name, task_desc, task_status, project_name, project_desc, project_status 
+            FROM task_tracker 
+            WHERE user_email = ?
+        """;
+        List<Task> tasks = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(dbPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, userEmail);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Task task = new Task();
+                task.setId(rs.getInt("task_id"));
+                task.setName(rs.getString("task_name"));
+                task.setDescription(rs.getString("task_desc"));
+                task.setStatus(rs.getInt("task_status"));
+                task.setProjectName(rs.getString("project_name"));
+                task.setProjectDescription(rs.getString("project_desc"));
+                task.setProjectStatus(rs.getInt("project_status"));
+
+                tasks.add(task);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return tasks;
+    }
+
     // Update task details by project_id and user_id
-    public void updateTaskDetailsByUserAndProject(int userId, int projectId, int taskId, String taskName, String taskDescription) {
-        String sql = "UPDATE task_tracker SET task_name = ?, task_desc = ? WHERE user_id = ? AND project_id = ? AND task_id = ?";
+    public void updateTaskDetailsByUserAndProject(String userEmail, int projectId, int taskId, String taskName, String taskDescription) {
+        String sql = "UPDATE task_tracker SET task_name = ?, task_desc = ? WHERE user_email = ? AND project_id = ? AND task_id = ?";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
           
             pstmt.setString(1, taskName);
             pstmt.setString(2, taskDescription);
-            pstmt.setInt(3, userId);
+            pstmt.setString(3, userEmail);
             pstmt.setInt(4, projectId);
             pstmt.setInt(5, taskId);
             pstmt.executeUpdate();
@@ -123,13 +159,13 @@ public class TaskDAO {
     }
 
     // Delete task by project_id and user_id
-    public void deleteTaskByUserAndProject(int userId, int projectId, int taskId) {
-        String sql = "DELETE FROM task_tracker WHERE user_id = ? AND project_id = ? AND task_id = ?";
+    public void deleteTaskByUserAndProject(String userEmail, int projectId, int taskId) {
+        String sql = "DELETE FROM task_tracker WHERE user_email = ? AND project_id = ? AND task_id = ?";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, userId);
+            pstmt.setString(1, userEmail);
             pstmt.setInt(2, projectId);
             pstmt.setInt(3, taskId);
             pstmt.executeUpdate();
