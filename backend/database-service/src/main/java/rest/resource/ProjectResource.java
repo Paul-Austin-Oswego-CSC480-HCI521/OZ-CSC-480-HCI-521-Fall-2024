@@ -1,25 +1,36 @@
 package rest.resource;
 
-import DAO.ProjectDAO;
+import dao.ProjectDAO;
+import dao.UserDAO;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import rest.model.Project;
+import model.Project;
+import model.User;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import java.util.List;
-
+@RequestScoped
 @Path("/projects")
 public class ProjectResource {
 
     @Inject
     private ProjectDAO projectDAO;
+    @Inject
+    private UserDAO userDAO;
+
+    @Inject
+    private JsonWebToken jwt;
 
     // Read all projects
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Project> getProjects() {
-        return projectDAO.getAllProjects();
+    public Response getProjects() {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.ok(projectDAO.getAllUserProjects(user.getEmail())).build();
     }
 
     // Create a new project
@@ -27,8 +38,24 @@ public class ProjectResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createProject(Project project) {
-        projectDAO.createProject(project);
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        project.setUserEmail(user.getEmail());
+        project = projectDAO.createProject(project);
         return Response.status(Response.Status.CREATED).entity(project).build();
+    }
+
+    @PUT
+    @Path("/{project_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProject(Project updated, @PathParam("project_id") int projectId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        projectDAO.updateProject(projectId, updated, user.getEmail());
+        return Response.ok(updated).build();
     }
 
     // Delete a project
@@ -36,7 +63,10 @@ public class ProjectResource {
     @Path("/{project_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteProject(@PathParam("project_id") int project_id) {
-        projectDAO.deleteProject(project_id);
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        projectDAO.deleteProject(project_id, user.getEmail());
         return Response.noContent().build();
     }
 
@@ -45,7 +75,10 @@ public class ProjectResource {
     @Path("/{project_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProjectById(@PathParam("project_id") int project_id) {
-        Project project = projectDAO.getProjectById(project_id);
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        Project project = projectDAO.getProjectById(project_id, user.getEmail());
         if (project != null) {
             return Response.ok().entity(project).build();
         } else {

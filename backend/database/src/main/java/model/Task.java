@@ -1,11 +1,12 @@
-package rest.model;
+package model;
 
 public class Task {
     private int id;
     private String name;
     private String description;
     private int status;  // 0 for incomplete | 1 for complete
-    private String projectName;
+    private int projectId;
+    private String userEmail;
 
     // Getters and setters
     public int getId() { return id; }
@@ -20,6 +21,9 @@ public class Task {
     public int getStatus() { return status; }
     public void setStatus(int status) { this.status = status; }
 
-    public String getProjectName() { return projectName; }
-    public void setProjectName(String projectName) { this.projectName = projectName; }
+    public int getProjectId() { return projectId; }
+    public void setProjectId(int projectId) { this.projectId = projectId; }
+
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 }
