@@ -1,11 +1,11 @@
-package dao;
+package DAO;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import model.Task;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import rest.model.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,197 +16,137 @@ import java.util.List;
 public class TaskDAO {
 
     @Inject
-    @ConfigProperty(name = "oz.database.path")
+    @ConfigProperty(name = "database.path")
     private String dbPath;
 
+    // Create the task_tracker table if it doesn't exist
     @PostConstruct
     private void createTableIfNotExists() {
-        System.out.println("attempting to construct table");
+        System.out.println("Attempting to construct 'task_tracker' table");
         String createTableSQL = """
-        CREATE TABLE task_tracker (
-            user_email TEXT NOT NULL,
-            project_id INTEGER,
-            task_id INTEGER,
-            project_name TEXT NOT NULL,
-            project_desc TEXT,
-            project_status INTEGER,
-            task_name TEXT NOT NULL,
-            task_desc TEXT,
-            task_status INTEGER,
-            PRIMARY KEY (project_id, task_id),
-            FOREIGN KEY (user_email) REFERENCES users(email)
-        );
-        """;
+            CREATE TABLE IF NOT EXISTS task_tracker (
+                task_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                task_name TEXT NOT NULL,
+                task_desc TEXT,
+                status INTEGER DEFAULT 0,
+                project_name TEXT,
+                FOREIGN KEY (project_name) REFERENCES Projects(project_name)
+            );
+            """;
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
-            System.out.println("Table 'task_tracker' Created or Already Exists.");
+            System.out.println("Table 'task_tracker' created or already exists.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    //Create task
+    // Create a new task
     public void createTask(Task task) {
-        String sql = "INSERT INTO task_tracker (user_email, project_name, task_name, task_desc, task_status) VALUES (?, ?, ?, ?, ?)";
+        String insertTaskSql = "INSERT INTO task_tracker (task_name, task_desc, status, project_name) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmtInsert = conn.prepareStatement(insertTaskSql)) {
 
-            pstmt.setString(1, task.getUserEmail());
-            pstmt.setString(2, task.getProjectName());
-            pstmt.setString(3, task.getName());
-            pstmt.setString(4, task.getDescription());
-            pstmt.setInt(5, task.getStatus());
-            pstmt.executeUpdate();
-            System.out.println("Task created successfully in 'task_tracker' Table.");
+            // Insert the new task
+            pstmtInsert.setString(1, task.getName());
+            pstmtInsert.setString(2, task.getDescription());
+            pstmtInsert.setInt(3, task.getStatus());  // 0 for incomplete | 1 for complete
+            pstmtInsert.setString(4, task.getProjectName());
+            pstmtInsert.executeUpdate();
+
+            System.out.println("Task created successfully.");
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error creating task: " + e.getMessage());
         }
     }
 
-    // Get tasks by user_id and project_id
-    public List<Task> getTasksByUserAndProject(String userEmail, int projectId) {
-        String sql = """
-            SELECT task_id, task_name, task_desc, task_status, project_name, project_desc, project_status 
-            FROM task_tracker 
-            WHERE user_email = ? AND project_id = ?
-        """;
+    // Read all tasks
+    public List<Task> getAllTasks() {
+        String sql = "SELECT task_id, task_name, task_desc, status, project_name FROM task_tracker";
         List<Task> tasks = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(dbPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, userEmail);
-            pstmt.setInt(2, projectId);
-            ResultSet rs = pstmt.executeQuery();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Task task = new Task();
                 task.setId(rs.getInt("task_id"));
                 task.setName(rs.getString("task_name"));
                 task.setDescription(rs.getString("task_desc"));
-                task.setStatus(rs.getInt("task_status"));
+                task.setStatus(rs.getInt("status"));
                 task.setProjectName(rs.getString("project_name"));
-                task.setProjectDescription(rs.getString("project_desc"));
-                task.setProjectStatus(rs.getInt("project_status"));
-
                 tasks.add(task);
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error retrieving tasks: " + e.getMessage());
         }
 
         return tasks;
     }
 
-    // Get all tasks by user_id
-    public List<Task> getAllUserTasks(String userEmail) {
-        String sql = """
-            SELECT task_id, task_name, task_desc, task_status, project_name, project_desc, project_status 
-            FROM task_tracker 
-            WHERE user_email = ?
-        """;
-        List<Task> tasks = new ArrayList<>();
+    // Retrieve task by ID
+    public Task getTaskById(int taskId) {
+        String sql = "SELECT task_id, task_name, task_desc, status, project_name FROM task_tracker WHERE task_id = ?";
+        Task task = null;
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, userEmail);
+            pstmt.setInt(1, taskId);
             ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                Task task = new Task();
+            if (rs.next()) {
+                task = new Task();
                 task.setId(rs.getInt("task_id"));
                 task.setName(rs.getString("task_name"));
                 task.setDescription(rs.getString("task_desc"));
-                task.setStatus(rs.getInt("task_status"));
+                task.setStatus(rs.getInt("status"));
                 task.setProjectName(rs.getString("project_name"));
-                task.setProjectDescription(rs.getString("project_desc"));
-                task.setProjectStatus(rs.getInt("project_status"));
-
-                tasks.add(task);
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error retrieving task: " + e.getMessage());
         }
 
-        return tasks;
+        return task;
     }
 
-    // Update task details by project_id and user_id
-    public void updateTaskDetailsByUserAndProject(String userEmail, int projectId, int taskId, String taskName, String taskDescription) {
-        String sql = "UPDATE task_tracker SET task_name = ?, task_desc = ? WHERE user_email = ? AND project_id = ? AND task_id = ?";
+    // Update a task's status
+    public void updateTaskStatus(int taskId, int status) {
+        String sql = "UPDATE task_tracker SET status = ? WHERE task_id = ?";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-          
-            pstmt.setString(1, taskName);
-            pstmt.setString(2, taskDescription);
-            pstmt.setString(3, userEmail);
-            pstmt.setInt(4, projectId);
-            pstmt.setInt(5, taskId);
+
+            pstmt.setInt(1, status);  // 0 for incomplete | 1 for complete
+            pstmt.setInt(2, taskId);
             pstmt.executeUpdate();
             System.out.println("Task with ID " + taskId + " updated successfully.");
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error updating task status: " + e.getMessage());
         }
     }
 
-    // Delete task by project_id and user_id
-    public void deleteTaskByUserAndProject(String userEmail, int projectId, int taskId) {
-        String sql = "DELETE FROM task_tracker WHERE user_email = ? AND project_id = ? AND task_id = ?";
+    // Delete a task by ID
+    public void deleteTask(int taskId) {
+        String sql = "DELETE FROM task_tracker WHERE task_id = ?";
 
         try (Connection conn = DriverManager.getConnection(dbPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, userEmail);
-            pstmt.setInt(2, projectId);
-            pstmt.setInt(3, taskId);
+            pstmt.setInt(1, taskId);
             pstmt.executeUpdate();
             System.out.println("Task with ID " + taskId + " deleted successfully.");
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    // Update project details
-    public void updateProjectDetails(int projectId, String projectName, String projectDescription) {
-        String sql = "UPDATE task_tracker SET project_name = ?, project_desc = ? WHERE project_id = ?";
-
-        try (Connection conn = DriverManager.getConnection(dbPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, projectName);
-            pstmt.setString(2, projectDescription);
-            pstmt.setInt(3, projectId);
-            pstmt.executeUpdate();
-            System.out.println("Project with ID " + projectId + " updated successfully.");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    // Delete all tasks under a specific project
-    public void deleteProject(int projectId) {
-        String sql = "DELETE FROM task_tracker WHERE project_id = ?";
-
-        try (Connection conn = DriverManager.getConnection(dbPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, projectId);
-            pstmt.executeUpdate();
-            System.out.println("Project with ID " + projectId + " and its tasks deleted successfully.");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error deleting task: " + e.getMessage());
         }
     }
 }
