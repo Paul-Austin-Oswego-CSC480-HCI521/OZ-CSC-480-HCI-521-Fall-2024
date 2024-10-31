@@ -1,9 +1,10 @@
-package rest.model;
+package model;
 
 public class Project {
     private int id;
     private String name;
     private String description;
+    private String userEmail;
 
     // Getters and setters
     public int getId() { return id; }
@@ -14,4 +15,7 @@ public class Project {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 }
