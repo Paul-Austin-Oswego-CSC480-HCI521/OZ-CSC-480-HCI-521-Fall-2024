@@ -1,7 +1,8 @@
 // Sidebar.js
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Pencil1Icon, CheckIcon} from '@radix-ui/react-icons';
 
+// eslint-disable-next-line react/prop-types
 export function Sidebar({title, setTitleInParent, editMode, isEditMode, children}) {
     const [newTitle, set_title] = useState(title);
 
