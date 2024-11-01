@@ -19,9 +19,7 @@ export default function Component() {
                         <Route path="completed" element={<CompletedPage/>}/>
                         <Route path="deleted" element={<RecentlyDeleted/>}/>
                         <Route path="shared" element={<SharedWithMe/>}/>
-                        {/* Project 1 and Project 2 pages just for demo. Can remove later */}
-                        <Route path="project-1" element={<ProjectPage/>}/>
-                        <Route path="project-2" element={<ProjectPage/>}/>
+                        <Route path="project" element={<ProjectPage/>}/>
                      </Route>
                     <Route path="/Login" element={<Login/>}/>
                     <Route path = "/Registration" element = {<Register/>}/>
