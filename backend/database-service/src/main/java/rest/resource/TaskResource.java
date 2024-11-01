@@ -2,7 +2,6 @@ package rest.resource;
 
 import dao.TaskDAO;
 import dao.UserDAO;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -11,10 +10,6 @@ import model.Task;
 import model.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@RequestScoped
 @Path("/tasks")
 public class TaskResource {
 
@@ -26,88 +21,80 @@ public class TaskResource {
     @Inject
     private JsonWebToken jwt;
 
-    //Get all tasks in the system
+    //Read all tasks
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Task> getTasks() {
-        System.out.println("user: " + jwt.getSubject());
+    public Response getTasks() {
         User user = userDAO.getUserByEmail(jwt.getSubject());
-        // TODO: should be some form of error
-        if (user == null) {
-            System.out.println("user is null");
-            return new ArrayList<>();
-        }
-        return taskDAO.getAllUserTasks(user.getEmail());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.ok(taskDAO.getAllUserTasks(user.getEmail())).build();
     }
 
     //Create a new task
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)  // Ensure this line exists to tell the API to expect JSON
     @Produces(MediaType.APPLICATION_JSON)
     public Response createTask(Task task) {
-        task.setUserEmail(jwt.getSubject());
-        taskDAO.createTask(task);
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        task.setUserEmail(user.getEmail());
+        task = taskDAO.createTask(task);
         return Response.status(Response.Status.CREATED).entity(task).build();
     }
 
-    //Update the status of a task by task ID
-//    @PUT
-//    @Path("/{taskId}")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response updateTaskStatus(@PathParam("taskId") int taskId, Task task) {
-//        taskDAO.updateTaskStatus(taskId, task.getStatus());
-//        return Response.ok().entity(task).build();
-//    }
 
-    //Update task details by user ID project ID and task ID
+    //Update the status of a task
     @PUT
-    @Path("/project/{projectId}/task/{taskId}/details")
+    @Path("/{taskId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTaskDetailsByUserAndProject(
-        @PathParam("projectId") int projectId,
-        @PathParam("taskId") int taskId,
-        Task task) {
-        taskDAO.updateTaskDetailsByUserAndProject(jwt.getSubject(), projectId, taskId, task.getName(), task.getDescription());
+    public Response updateTask(@PathParam("taskId") int taskId, Task task) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        taskDAO.updateTask(taskId, task, user.getEmail());
         return Response.ok().entity(task).build();
     }
 
-    //Delete a task by user ID project ID and task ID
+    //Delete a task
     @DELETE
-    @Path("/project/{projectId}/task/{taskId}")
+    @Path("/{taskId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteTaskByUserAndProject(
-        @PathParam("projectId") int projectId,
-        @PathParam("taskId") int taskId) {
-        taskDAO.deleteTaskByUserAndProject(jwt.getSubject(), projectId, taskId);
+    public Response deleteTask(@PathParam("taskId") int taskId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        taskDAO.deleteTask(taskId, user.getEmail());
         return Response.noContent().build();
     }
 
-    //Get tasks associated with a specific user and project
+    //Read a task by its ID
     @GET
-    @Path("/project/{projectId}")
+    @Path("/{taskId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Task> getTasksByUserAndProject(@PathParam("projectId") int projectId) {
-        return taskDAO.getTasksByUserAndProject(jwt.getSubject(), projectId);
+    public Response getTaskById(@PathParam("taskId") int taskId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        Task task = taskDAO.getTaskById(taskId, user.getEmail());
+        if (task != null) {
+            return Response.ok().entity(task).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
-    //Update project details by project ID
-    @PUT
-    @Path("/project/{projectId}/details")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProjectDetails(@PathParam("projectId") int projectId, Task task) {
-        taskDAO.updateProjectDetails(projectId, task.getProjectName(), task.getProjectDescription());
-        return Response.ok().entity(task).build();
+    public Response getAllProjectTasks(@PathParam("projectId") int projectId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.ok(taskDAO.getAllProjectTasks(projectId, user.getEmail())).build();
     }
 
-    //Delete a project and all associated tasks by project ID
-    @DELETE
-    @Path("/project/{projectId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteProject(@PathParam("projectId") int projectId) {
-        taskDAO.deleteProject(projectId);
-        return Response.noContent().build();
-    }
+
 }

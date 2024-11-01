@@ -1,65 +1,34 @@
 package rest.resource;
 
 import dao.UserDAO;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import model.User;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import java.util.List;
-
-@Path("/users")
+@Path("/user")
+@RequestScoped
 public class UserResource {
 
     @Inject
     private UserDAO userDAO;
 
-    //READ users
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<User> getUsers() {
-//        return userDAO.getAllUsers();
-//    }
+    @Inject
+    private JsonWebToken jwt;
 
-    //CREATE user
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response createUser(User user) {
-//        userDAO.createUser(user);
-//        return Response.status(Response.Status.CREATED).entity(user).build();
-//    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser() {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        user.setPassword("");
+        return Response.ok(user).build();
+    }
 
-    //UPDATE  a users email
-//    @PUT
-//    @Path("/{userId}/email")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response updateUserEmail(@PathParam("userId") int userId, User user) {
-//        userDAO.updateUserEmail(userId, user.getEmail());
-//        return Response.ok().entity(user).build();
-//    }
-
-    //DELETE a user
-//    @DELETE
-//    @Path("/{userId}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response deleteUser(@PathParam("userId") int userId) {
-//        userDAO.deleteUser(userId);
-//        return Response.noContent().build();
-//    }
-
-    //read specific user by email
-//    @GET
-//    @Path("/{userId}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getUserById(@PathParam("userId") int userId) {
-//        User user = userDAO.getUserById(userId);
-//        if (user != null) {
-//            return Response.ok().entity(user).build();
-//        } else {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
-//    }
 }

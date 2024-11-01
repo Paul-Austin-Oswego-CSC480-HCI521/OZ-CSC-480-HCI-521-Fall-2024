@@ -126,10 +126,8 @@ app.delete('/projects/:projectId', proxyDelete())
 // ****** task routes ******
 // get all accessable tasks
 app.get('/tasks', proxyGet())
-// get all tasks in a project
-app.get('/tasks/projects/:projectId', proxyGet())
-// create a new task in a project
-app.post('/tasks/projects/:projectId', proxyPost())
+// create a new task
+app.post('/tasks', proxyPost())
 // get a specific task
 app.get('/tasks/:taskId', proxyGet())
 // update a given task
