@@ -16,15 +16,20 @@ import {TaskTable} from '@/components/TaskTable'
 import { taskColumns } from "@/components/TaskColumns";
 
 // Initial tasks for test data
-// TODO swap TaskTable data to data fetched from DB
+const priorityOrder = {
+    Low: 1,
+    Medium: 2,
+    High: 3,
+};
+
 const initialTasks = [
     {
         id: "task-1",
         completed: false,
         title: "Complete report",
-        project: "1",
+        projectId: "1",
         dueDate: "2024-10-20",
-        priority: "High",
+        priority: 0,
     }
 ];
 
@@ -38,7 +43,6 @@ const initialProjects = [
 
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
-
     const [projects, setProjects] = useState(initialProjects);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
@@ -46,7 +50,7 @@ export function TaskPage() {
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
 
     const handleDeletePopup = (action, taskId) => {
-        setDeletePopup({isOpen: false, taskId: null}); // Close dialog after action
+        setDeletePopup({isOpen: false, taskId: null});
         if (action === "delete") {
             deleteTask(taskId);
         }
@@ -82,7 +86,7 @@ export function TaskPage() {
                         id: task.id,
                         completed: task.status === 1,
                         title: task.name,
-                        project: task.project_id,
+                        project: task.projectId,
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
@@ -115,9 +119,9 @@ export function TaskPage() {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
             status: 1,
-            project_id: +document.getElementById('projects-option').value,
+            projectId: +document.getElementById('projects-option').value,
             dueDate: document.getElementById('date-option').value,
-            priority: document.getElementById('priority-option').value,
+            priority: +document.getElementById('priority-option').value,
         };
         console.log(newTask);
         try {
@@ -135,7 +139,7 @@ export function TaskPage() {
                     id: createdTask.id,
                     completed: createdTask.status === 1,
                     title: createdTask.name,
-                    project: createdTask.project_id,
+                    project: createdTask.projectId,
                     dueDate: createdTask.dueDate,
                     priority: createdTask.priority,
                 };
@@ -180,8 +184,11 @@ export function TaskPage() {
 
     return (
         <>
-                {/* Right side bar */}
-                <Sidebar
+            <DialogDemo
+                onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
+                isOpen={deletePopup.isOpen}
+            />
+            <Sidebar
                     id="title-option"
                     title={currentTaskTitle}
                     setTitleInParent={setCurrentTaskTitle}
@@ -222,9 +229,9 @@ export function TaskPage() {
                         id="priority-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
+                        <option value="0">Low</option>
+                        <option value="1">Medium</option>
+                        <option value="2">High</option>
                         <option value="None">No Priority</option>
                     </select>
 

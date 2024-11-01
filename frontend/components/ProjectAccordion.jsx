@@ -12,6 +12,8 @@ import {PlusIcon} from "@radix-ui/react-icons";
 function ProjectAccordion() {
     const [projects, setProjects] = useState([]);
 
+
+
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -29,6 +31,19 @@ function ProjectAccordion() {
 
         fetchProjects();
     }, []);
+
+    const deleteProject = async (projectID) => {
+        try {
+            const response = await fetch(`/projects/${projectID}`, {method: 'DELETE'});
+            if (response.ok) {
+                setProjects(prevTasks => prevTasks.filter(projects => projects.id !== projectID));
+            } else {
+                console.log(`Error deleting task ${projectID}`);
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
+    };
 
     const addProject = async () => {
         const projectName = document.getElementById("project-name").value;
@@ -77,8 +92,9 @@ function ProjectAccordion() {
                 <AccordionContent className="">
                     <ul className="flex flex-col gap-1 -mx-2 -mb-2">
                         {projects.map((project) => (
-                            <li key={project.id} className="flex flex-col">
-                                <NavButton href={`/project-${project.id}`}>
+                                <li key={project.id} className="grid grid-cols-[70%_30%]">
+                                    {/*TODO: USE THIS TO SEND PARAMETERS TO PROJECTS-PAGE*/}
+                                <NavButton href={`/project`}>
                                     <span className="flex items-center justify-between w-full pr-4">
                                         <span>{project.name}</span>
                                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
@@ -89,6 +105,9 @@ function ProjectAccordion() {
                                         </svg>
                                     </span>
                                 </NavButton>
+                                    {/*<Button>*/}
+                                    {/*    <Trash2Icon onClick={deleteProject(project.id)} />*/}
+                                    {/*</Button>*/}
                             </li>
                         ))}
                     </ul>
