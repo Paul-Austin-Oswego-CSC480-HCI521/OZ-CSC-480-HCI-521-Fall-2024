@@ -5,39 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f27af3f0-0518-406b-aaf1-371f0ea83d0c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/resource/ProjectResource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/database/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/database/src/main/java/DAO/ProjectDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/database/src/main/java/dao/TaskDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/database/src/main/java/model/Project.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/LoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/LogoutServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/LogoutServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/NativeLoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/NativeLoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/model/QuoteUnquoteDatabase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/rest/AuthResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/rest/AuthResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/util/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/liberty/config/server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/liberty/config/server.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/java/DAO/TaskDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/java/DAO/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/src/main/java/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/SensitiveResource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/model/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/src/main/java/model/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/src/main/java/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/resource/TaskResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/resource/TaskResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/resource/UserResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database-service/src/main/java/rest/resource/UserResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database-service/src/main/liberty/config/server.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/components/ProjectAccordion.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ProjectAccordion.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/components/ui/sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/sidebar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/proxyPlugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/proxyPlugin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/ProjectPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/ProjectPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/TaskPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/TaskPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/start_website.bat" beforeDir="false" afterPath="$PROJECT_DIR$/start_website.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/start_website.sh" beforeDir="false" afterPath="$PROJECT_DIR$/start_website.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +43,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging gui-init",
+    "git-widget-placeholder": "gui-init",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/survive/Desktop/EEATO/24Fall/CSC480/OZ-CSC-480-HCI-521-Fall-2024/backend/database-service/src/main/liberty/config/resources",
     "node.js.detected.package.eslint": "true",
@@ -109,7 +82,7 @@
       <workItem from="1729920032169" duration="6069000" />
       <workItem from="1730080559557" duration="3000" />
       <workItem from="1730129750773" duration="2107000" />
-      <workItem from="1730425853929" duration="5165000" />
+      <workItem from="1730425853929" duration="8543000" />
     </task>
     <servers />
   </component>

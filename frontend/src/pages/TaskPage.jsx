@@ -82,10 +82,11 @@ export function TaskPage() {
                         id: task.id,
                         completed: task.status === 1,
                         title: task.name,
-                        project: `Project ${task.project_id}`,
+                        project: task.project_id,
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
+                    console.log(formattedTasks);
                     setTasks(formattedTasks);
                 } else {
                     console.error('Failed to fetch tasks:', response.statusText);
@@ -114,8 +115,11 @@ export function TaskPage() {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
             status: 1,
-            project_id: document.getElementById('projects-option').value,
+            project_id: +document.getElementById('projects-option').value,
+            dueDate: document.getElementById('date-option').value,
+            priority: document.getElementById('priority-option').value,
         };
+        console.log(newTask);
         try {
             const response = await fetch('/tasks', {
                 method: 'POST',
@@ -132,9 +136,10 @@ export function TaskPage() {
                     completed: createdTask.status === 1,
                     title: createdTask.name,
                     project: createdTask.project_id,
-                    dueDate: "TBD",
-                    priority: "Medium",
+                    dueDate: createdTask.dueDate,
+                    priority: createdTask.priority,
                 };
+                console.log(createdTask);
                 setTasks((prevTasks) => [...prevTasks, formattedTask]);
             }
         } catch (error) {
@@ -191,13 +196,13 @@ export function TaskPage() {
                         id="projects-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-
                         {projects.map((project) => (
-                            <option key={project.id} className="flex flex-col">
+                            <option key={project.id} value={project.id} className="flex flex-col">
                                 {project.name}
                             </option>
                         ))}
                     </select>
+
 
                     <input
                         id="date-option"
