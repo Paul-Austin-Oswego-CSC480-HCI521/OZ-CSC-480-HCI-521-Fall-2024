@@ -11,6 +11,7 @@
     <modules>
         <module>database-service</module>
         <module>auth-service</module>
+        <module>database</module>
     </modules>
 
     <properties>
@@ -18,9 +19,9 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- port config -->
-        <oz.frontend.root>http://localhost:2080</oz.frontend.root>
         <oz.auth.port>9443</oz.auth.port>
         <oz.api.port>8443</oz.api.port>
+        <liberty.var.frontend.root>http://localhost:2080</liberty.var.frontend.root>
     </properties>
 
 </project>

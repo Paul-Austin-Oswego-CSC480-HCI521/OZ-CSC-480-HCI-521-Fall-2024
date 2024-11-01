@@ -64,22 +64,76 @@ export function TaskPage() {
                     window.location.replace('/login');
                     return;
                 }
-
-                const response = await fetch(`/tasks`);
+                
+                let response = await fetch('/projects', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: "My First Project",
+                        description: "This is my first project",
+                    })
+                })
+                let project = undefined
                 if (response.ok) {
-                    const data = await response.json();
-                    const formattedTasks = data.map(task => ({
-                        id: task.id,
-                        completed: task.status === 1,
-                        title: task.name,
-                        project: `Project ${task.project_id}`,
-                        dueDate: task.dueDate || 'No Due Date',
-                        priority: task.priority || 'Medium',
-                    }));
-                    setTasks(formattedTasks);
+                    project = await response.json()
+                    console.log(project)
+
+//                 const response = await fetch(`/tasks`);
+//                 if (response.ok) {
+//                     const data = await response.json();
+//                     const formattedTasks = data.map(task => ({
+//                         id: task.id,
+//                         completed: task.status === 1,
+//                         title: task.name,
+//                         project: `Project ${task.project_id}`,
+//                         dueDate: task.dueDate || 'No Due Date',
+//                         priority: task.priority || 'Medium',
+//                     }));
+//                     setTasks(formattedTasks);
                 } else {
-                    console.error('Failed to fetch tasks:', response.statusText);
+                    console.log('POST /projects failed to respond')
                 }
+                
+                response = await fetch('/projects')
+                console.log(response.ok ? await response.json() : 'GET /projects failed to respond')
+                
+                response = await fetch('/projects/' + project.id)
+                console.log(response.ok ? await response.json() : 'GET /projects/:id failed to respond')
+                
+                response = await fetch('/projects/' + project.id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: "Not my first rodeo",
+                        description: "this description just got updated",
+                    })
+                })
+                console.log(response.ok ? await response.json() : 'PUT /projects/:id failed to respond')
+                
+                // const response = await fetch(`/tasks`);
+                
+                // if (response.ok) {
+                //     const data = await response.json();
+                //     console.log('Fetched tasks:', data);
+
+                //     // CUSTOM THING;
+                //     // I added this so that it properly matches with the database we currently have
+                //     // We'll have to remove it later - SL
+                //     const formattedTasks = data.map(task => ({
+                //         id: task.id,
+                //         completed: task.status === 1,
+                //         title: task.name,
+                //         project: task.projectName,
+                //         dueDate: task.dueDate || 'No Due Date',
+                //         priority: task.priority || 'Medium',
+                //     }));
+                //     setTasks(formattedTasks);
+                // } else {
+                //     console.error('Failed to fetch tasks:', response.statusText);
+                // }
+
+
+
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }
@@ -103,8 +157,12 @@ export function TaskPage() {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
             status: 1,
-            project_id: 7,
-        };
+            projectName: "TODO: Change project name",
+        }
+// =======
+//             project_id: 7,
+//         };
+// >>>>>>> gui-init
         try {
             const response = await fetch('/tasks', {
                 method: 'POST',
@@ -120,7 +178,7 @@ export function TaskPage() {
                     id: createdTask.id,
                     completed: createdTask.status === 1,
                     title: createdTask.name,
-                    project: `Project ${createdTask.project_id}`,
+                    project: createdTask.projectName,
                     dueDate: "TBD",
                     priority: "Medium",
                 };
