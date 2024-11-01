@@ -12,12 +12,11 @@ import {DialogDemo} from "@/components/Dialog.jsx";
 import {AccordionContent} from "@/components/ui/accordion.jsx";
 import NavButton from "@/components/NavButton.jsx";
 
-const priorityOrder = {
-    Low: 1,
-    Medium: 2,
-    High: 3,
-};
+import {TaskTable} from '@/components/TaskTable'
+import { taskColumns } from "@/components/TaskColumns";
 
+// Initial tasks for test data
+// TODO swap TaskTable data to data fetched from DB
 const initialTasks = [
     {
         id: "task-1",
@@ -39,6 +38,7 @@ const initialProjects = [
 
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
+
     const [projects, setProjects] = useState(initialProjects);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
@@ -180,11 +180,7 @@ export function TaskPage() {
 
     return (
         <>
-            <div>
-                <DialogDemo
-                    onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
-                    isOpen={deletePopup.isOpen}
-                />
+                {/* Right side bar */}
                 <Sidebar
                     id="title-option"
                     title={currentTaskTitle}
@@ -246,9 +242,10 @@ export function TaskPage() {
                         <Button variant="default2" onClick={addNewTask}>Save Changes</Button>
                     </div>
                 </Sidebar>
-            </div>
+
+            {/* Main Content */}
             <div className="bg-white rounded-lg shadow mx-auto max-w-4xl p-6">
-                <h1 className="text-left scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                <h1 className="text-left pb-4 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                     My Tasks
                 </h1>
                 <br/>
