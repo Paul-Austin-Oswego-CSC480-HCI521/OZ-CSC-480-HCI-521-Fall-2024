@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/auth-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/database-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/database-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/database/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/database/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

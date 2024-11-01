@@ -36,7 +36,7 @@
                 <special-subject type="ALL_AUTHENTICATED_USERS"/>
             </security-role>
         </application-bnd>
-        <security-constraint>
+        <!-- <security-constraint>
             <web-resource-collection>
                 <web-resource-name>NativeLogin</web-resource-name>
                 <url-pattern>/auth/native-login</url-pattern>
@@ -44,7 +44,7 @@
             <auth-constraint>
                 <role-name>user</role-name>
             </auth-constraint>
-        </security-constraint>
+        </security-constraint> -->
     </webApplication>
 
     <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiresInSeconds="15"/>

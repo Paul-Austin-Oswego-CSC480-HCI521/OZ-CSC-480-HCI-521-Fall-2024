@@ -9,6 +9,8 @@ import {ArchiveIcon, CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
 import {Checkbox} from "@/components/ui/checkbox.jsx";
 import {Dialog} from "@radix-ui/react-dialog";
 import {DialogDemo} from "@/components/Dialog.jsx";
+import {AccordionContent} from "@/components/ui/accordion.jsx";
+import NavButton from "@/components/NavButton.jsx";
 
 const priorityOrder = {
     Low: 1,
@@ -21,30 +23,23 @@ const initialTasks = [
         id: "task-1",
         completed: false,
         title: "Complete report",
-        project: "Office Work",
+        project: "1",
         dueDate: "2024-10-20",
         priority: "High",
-    },
+    }
+];
+
+const initialProjects = [
     {
-        id: "task-2",
-        completed: false,
-        title: "Design homepage",
-        project: "Web Development",
-        dueDate: "2024-10-22",
-        priority: "Medium",
-    },
-    {
-        id: "task-3",
-        completed: true,
-        title: "Team meeting",
-        project: "Internal",
-        dueDate: "2024-10-19",
-        priority: "Low",
-    },
+        description: "this description just got updated",
+        id: 1,
+        name: "Not my first rodeo"
+    }
 ];
 
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
+    const [projects, setProjects] = useState(initialProjects);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
@@ -58,12 +53,28 @@ export function TaskPage() {
     };
 
     useEffect(() => {
+        // Fetching all projects
+        const fetchProjects = async () => {
+            try {
+                const response = await fetch('/projects');
+                if (response.ok) {
+                    const projectData = await response.json();
+                    setProjects(projectData);
+                } else {
+                    console.error("Failed to fetch projects:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            }
+        };
+
         const fetchTasks = async () => {
             try {
                 if (!(await fetch('/auth')).ok) {
                     window.location.replace('/login');
                     return;
                 }
+
                 const response = await fetch(`/tasks`);
                 if (response.ok) {
                     const data = await response.json();
@@ -85,12 +96,13 @@ export function TaskPage() {
         };
 
         fetchTasks();
+        fetchProjects();
     }, []);
 
     const resetTaskFields = async () => {
         isEditMode(true);
         setCurrentTaskTitle('');
-        document.getElementById("projects-option").value = "option1";
+        document.getElementById("projects-option").value = "1";
         document.getElementById("date-option").value = "";
         document.getElementById("priority-option").value = "Low";
         document.getElementById("repeat-option").value = "Never";
@@ -102,7 +114,7 @@ export function TaskPage() {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
             status: 1,
-            project_id: 7,
+            project_id: document.getElementById('projects-option').value,
         };
         try {
             const response = await fetch('/tasks', {
@@ -119,7 +131,7 @@ export function TaskPage() {
                     id: createdTask.id,
                     completed: createdTask.status === 1,
                     title: createdTask.name,
-                    project: `Project ${createdTask.project_id}`,
+                    project: createdTask.project_id,
                     dueDate: "TBD",
                     priority: "Medium",
                 };
@@ -145,50 +157,18 @@ export function TaskPage() {
 
     const handleSort = (key) => {
         let direction = "asc";
-
-        // Toggle direction if the same key is being sorted
         if (sortConfig.key === key && sortConfig.direction === "asc") {
             direction = "desc";
         }
-
         setSortConfig({key, direction});
 
         const sortedTasks = [...tasks].sort((a, b) => {
             if (key === "priority") {
-                if (direction === "asc") {
-                    if (priorityOrder[a.priority] < priorityOrder[b.priority]) {
-                        return -1;
-                    }
-                    if (priorityOrder[a.priority] > priorityOrder[b.priority]) {
-                        return 1;
-                    }
-                } else {
-                    if (priorityOrder[a.priority] > priorityOrder[b.priority]) {
-                        return -1;
-                    }
-                    if (priorityOrder[a.priority] < priorityOrder[b.priority]) {
-                        return 1;
-                    }
-                }
-                return 0;
+                return direction === "asc"
+                    ? priorityOrder[a.priority] - priorityOrder[b.priority]
+                    : priorityOrder[b.priority] - priorityOrder[a.priority];
             }
-
-            if (direction === "asc") {
-                if (a[key] < b[key]) {
-                    return -1;
-                }
-                if (a[key] > b[key]) {
-                    return 1;
-                }
-            } else {
-                if (a[key] > b[key]) {
-                    return -1;
-                }
-                if (a[key] < b[key]) {
-                    return 1;
-                }
-            }
-            return 0;
+            return direction === "asc" ? (a[key] < b[key] ? -1 : 1) : (a[key] > b[key] ? -1 : 1);
         });
         setTasks(sortedTasks);
     };
@@ -211,10 +191,12 @@ export function TaskPage() {
                         id="projects-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-                        <option value="option1">Project 1</option>
-                        <option value="option2">Project 2</option>
-                        <option value="option3">Project 3</option>
-                        <option value="option1">No Project</option>
+
+                        {projects.map((project) => (
+                            <option key={project.id} className="flex flex-col">
+                                {project.name}
+                            </option>
+                        ))}
                     </select>
 
                     <input
@@ -234,6 +216,7 @@ export function TaskPage() {
                         <option value="option3">To be determined</option>
                         <option value="option1">To be determined</option>
                     </select>
+
                     <select
                         id="priority-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
@@ -245,7 +228,7 @@ export function TaskPage() {
                     </select>
 
 
-                    <Label htmlFor="password"><b>Task Description</b></Label>
+                    <Label htmlFor="descriptionBox"><b>Task Description</b></Label>
                     <textarea
                         id="descriptionBox"
                         placeholder="Describe your task here..."
