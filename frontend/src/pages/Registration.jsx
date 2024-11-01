@@ -1,8 +1,8 @@
-import {useState} from 'react'
-import {Button} from "@/components/ui/button"
-import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
-import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card"
+import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function Register() {
     const [email, setEmail] = useState('')
@@ -10,18 +10,16 @@ export function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        // Here you would typically handle the logic
-        console.log('Registration attempted with:', {email, password})
+        console.log('Registration attempted with:', { email, password })
     }
 
     const handleGoogleRegistration = () => {
-        // Here you would typically handle Google logic
         console.log('Google Registration attempted')
     }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <Card className="w-[350px] h-[560px]">
+            <Card className="w-[350px] h-[525px]">
                 <CardHeader>
                     <CardTitle className="flex items-center justify-center">Sign up to continue</CardTitle>
                 </CardHeader>
@@ -57,7 +55,6 @@ export function Register() {
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col">
-
                     <div className="relative w-full mb-6">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-20 border-t"></span>
