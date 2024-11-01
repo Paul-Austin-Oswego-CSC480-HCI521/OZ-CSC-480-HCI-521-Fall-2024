@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input.jsx";
-import { Button } from "@/components/ui/button.jsx";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.jsx";
-import { Sidebar } from "@/components/ui/sidebar";
-import { Label } from "@radix-ui/react-label";
-import { Trash2 } from "lucide-react";
-import { ArchiveIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { Checkbox } from "@/components/ui/checkbox.jsx";
-import { Dialog } from "@radix-ui/react-dialog";
-import { DialogDemo } from "@/components/Dialog.jsx";
+import React, {useEffect, useState} from "react";
+import {Input} from "@/components/ui/input.jsx";
+import {Button} from "@/components/ui/button.jsx";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
+import {Sidebar} from "@/components/ui/sidebar";
+import {Label} from "@radix-ui/react-label";
+import {Trash2} from "lucide-react";
+import {ArchiveIcon, CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
+import {Checkbox} from "@/components/ui/checkbox.jsx";
+import {Dialog} from "@radix-ui/react-dialog";
+import {DialogDemo} from "@/components/Dialog.jsx";
+import {AccordionContent} from "@/components/ui/accordion.jsx";
+import NavButton from "@/components/NavButton.jsx";
 
 const priorityOrder = {
     Low: 1,
@@ -21,131 +23,87 @@ const initialTasks = [
         id: "task-1",
         completed: false,
         title: "Complete report",
-        project: "Office Work",
+        project: "1",
         dueDate: "2024-10-20",
         priority: "High",
-    },
+    }
+];
+
+const initialProjects = [
     {
-        id: "task-2",
-        completed: false,
-        title: "Design homepage",
-        project: "Web Development",
-        dueDate: "2024-10-22",
-        priority: "Medium",
-    },
-    {
-        id: "task-3",
-        completed: true,
-        title: "Team meeting",
-        project: "Internal",
-        dueDate: "2024-10-19",
-        priority: "Low",
-    },
+        description: "this description just got updated",
+        id: 1,
+        name: "Not my first rodeo"
+    }
 ];
 
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [projects, setProjects] = useState(initialProjects);
+    const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
-    const [deletePopup, setDeletePopup] = useState({ isOpen: false, taskId: null });
+    const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
 
     const handleDeletePopup = (action, taskId) => {
-        setDeletePopup({ isOpen: false, taskId: null }); // Close dialog after action
+        setDeletePopup({isOpen: false, taskId: null}); // Close dialog after action
         if (action === "delete") {
             deleteTask(taskId);
         }
     };
 
     useEffect(() => {
+        // Fetching all projects
+        const fetchProjects = async () => {
+            try {
+                const response = await fetch('/projects');
+                if (response.ok) {
+                    const projectData = await response.json();
+                    setProjects(projectData);
+                } else {
+                    console.error("Failed to fetch projects:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            }
+        };
+
         const fetchTasks = async () => {
             try {
                 if (!(await fetch('/auth')).ok) {
                     window.location.replace('/login');
                     return;
                 }
-                
-                let response = await fetch('/projects', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: "My First Project",
-                        description: "This is my first project",
-                    })
-                })
-                let project = undefined
+
+                const response = await fetch(`/tasks`);
                 if (response.ok) {
-                    project = await response.json()
-                    console.log(project)
-
-//                 const response = await fetch(`/tasks`);
-//                 if (response.ok) {
-//                     const data = await response.json();
-//                     const formattedTasks = data.map(task => ({
-//                         id: task.id,
-//                         completed: task.status === 1,
-//                         title: task.name,
-//                         project: `Project ${task.project_id}`,
-//                         dueDate: task.dueDate || 'No Due Date',
-//                         priority: task.priority || 'Medium',
-//                     }));
-//                     setTasks(formattedTasks);
+                    const data = await response.json();
+                    const formattedTasks = data.map(task => ({
+                        id: task.id,
+                        completed: task.status === 1,
+                        title: task.name,
+                        project: task.project_id,
+                        dueDate: task.dueDate || 'No Due Date',
+                        priority: task.priority || 'Medium',
+                    }));
+                    console.log(formattedTasks);
+                    setTasks(formattedTasks);
                 } else {
-                    console.log('POST /projects failed to respond')
+                    console.error('Failed to fetch tasks:', response.statusText);
                 }
-                
-                response = await fetch('/projects')
-                console.log(response.ok ? await response.json() : 'GET /projects failed to respond')
-                
-                response = await fetch('/projects/' + project.id)
-                console.log(response.ok ? await response.json() : 'GET /projects/:id failed to respond')
-                
-                response = await fetch('/projects/' + project.id, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: "Not my first rodeo",
-                        description: "this description just got updated",
-                    })
-                })
-                console.log(response.ok ? await response.json() : 'PUT /projects/:id failed to respond')
-                
-                // const response = await fetch(`/tasks`);
-                
-                // if (response.ok) {
-                //     const data = await response.json();
-                //     console.log('Fetched tasks:', data);
-
-                //     // CUSTOM THING;
-                //     // I added this so that it properly matches with the database we currently have
-                //     // We'll have to remove it later - SL
-                //     const formattedTasks = data.map(task => ({
-                //         id: task.id,
-                //         completed: task.status === 1,
-                //         title: task.name,
-                //         project: task.projectName,
-                //         dueDate: task.dueDate || 'No Due Date',
-                //         priority: task.priority || 'Medium',
-                //     }));
-                //     setTasks(formattedTasks);
-                // } else {
-                //     console.error('Failed to fetch tasks:', response.statusText);
-                // }
-
-
-
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }
         };
 
         fetchTasks();
+        fetchProjects();
     }, []);
 
     const resetTaskFields = async () => {
         isEditMode(true);
         setCurrentTaskTitle('');
-        document.getElementById("projects-option").value = "option1";
+        document.getElementById("projects-option").value = "1";
         document.getElementById("date-option").value = "";
         document.getElementById("priority-option").value = "Low";
         document.getElementById("repeat-option").value = "Never";
@@ -157,12 +115,11 @@ export function TaskPage() {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
             status: 1,
-            projectName: "TODO: Change project name",
-        }
-// =======
-//             project_id: 7,
-//         };
-// >>>>>>> gui-init
+            project_id: +document.getElementById('projects-option').value,
+            dueDate: document.getElementById('date-option').value,
+            priority: document.getElementById('priority-option').value,
+        };
+        console.log(newTask);
         try {
             const response = await fetch('/tasks', {
                 method: 'POST',
@@ -178,10 +135,11 @@ export function TaskPage() {
                     id: createdTask.id,
                     completed: createdTask.status === 1,
                     title: createdTask.name,
-                    project: createdTask.projectName,
-                    dueDate: "TBD",
-                    priority: "Medium",
+                    project: createdTask.project_id,
+                    dueDate: createdTask.dueDate,
+                    priority: createdTask.priority,
                 };
+                console.log(createdTask);
                 setTasks((prevTasks) => [...prevTasks, formattedTask]);
             }
         } catch (error) {
@@ -191,7 +149,7 @@ export function TaskPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
+            const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'});
             if (response.ok) {
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
             } else {
@@ -207,7 +165,7 @@ export function TaskPage() {
         if (sortConfig.key === key && sortConfig.direction === "asc") {
             direction = "desc";
         }
-        setSortConfig({ key, direction });
+        setSortConfig({key, direction});
 
         const sortedTasks = [...tasks].sort((a, b) => {
             if (key === "priority") {
@@ -238,11 +196,13 @@ export function TaskPage() {
                         id="projects-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-                        <option value="option1">Project 1</option>
-                        <option value="option2">Project 2</option>
-                        <option value="option3">Project 3</option>
-                        <option value="option1">No Project</option>
+                        {projects.map((project) => (
+                            <option key={project.id} value={project.id} className="flex flex-col">
+                                {project.name}
+                            </option>
+                        ))}
                     </select>
+
 
                     <input
                         id="date-option"
@@ -273,7 +233,7 @@ export function TaskPage() {
                     </select>
 
 
-                    <Label htmlFor="password"><b>Task Description</b></Label>
+                    <Label htmlFor="descriptionBox"><b>Task Description</b></Label>
                     <textarea
                         id="descriptionBox"
                         placeholder="Describe your task here..."
@@ -291,9 +251,9 @@ export function TaskPage() {
                 <h1 className="text-left scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                     My Tasks
                 </h1>
-                <br />
-                <hr />
-                <br />
+                <br/>
+                <hr/>
+                <br/>
                 <div className="text-left mb-4">
                     <Button onClick={resetTaskFields}>Create New Task</Button>
                 </div>
@@ -302,24 +262,30 @@ export function TaskPage() {
                     <thead>
                     <tr className="border-b">
                         <th className="px-4 py-2 text-center">Completed?</th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("title")}>Task <CaretSortIcon /></th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("project")}>Project <CaretSortIcon /></th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("dueDate")}>Due Date <CaretSortIcon /></th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("priority")}>Priority <CaretSortIcon /></th>
+                        <th className="px-4 py-2 text-center" onClick={() => handleSort("title")}>Task <CaretSortIcon/>
+                        </th>
+                        <th className="px-4 py-2 text-center"
+                            onClick={() => handleSort("project")}>Project <CaretSortIcon/></th>
+                        <th className="px-4 py-2 text-center" onClick={() => handleSort("dueDate")}>Due
+                            Date <CaretSortIcon/></th>
+                        <th className="px-4 py-2 text-center"
+                            onClick={() => handleSort("priority")}>Priority <CaretSortIcon/></th>
                         <th className="px-4 py-2"></th>
                     </tr>
                     </thead>
                     <tbody>
                     {tasks.map((task) => (
                         <tr key={task.id} className="border-b last:border-b-0">
-                            <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`} checked={task.completed} /></td>
+                            <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
+                                                                            checked={task.completed}/></td>
                             <td className="px-4 py-2 text-center">{task.title}</td>
                             <td className="px-4 py-2 text-center">{task.project}</td>
                             <td className="px-4 py-2 text-center">{task.dueDate}</td>
                             <td className="px-4 py-2 text-center">{task.priority}</td>
                             <td className="px-4 py-2 text-center">
-                                <Button variant="ghost" size="icon" onClick={() => setDeletePopup({ isOpen: true, taskId: task.id })}>
-                                    <Trash2 className="h-4 w-4" />
+                                <Button variant="ghost" size="icon"
+                                        onClick={() => setDeletePopup({isOpen: true, taskId: task.id})}>
+                                    <Trash2 className="h-4 w-4"/>
                                 </Button>
                             </td>
                         </tr>

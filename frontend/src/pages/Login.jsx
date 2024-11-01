@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
@@ -48,7 +48,6 @@ export function Login() {
                 <CardHeader>
                     <CardTitle className="flex items-center justify-center">Log in</CardTitle>
                 </CardHeader>
-
                 <CardContent>
                     <form onSubmit={handleSubmit}>
                         <div className="grid w-full items-center gap-4">
@@ -63,7 +62,6 @@ export function Login() {
                                     required
                                 />
                             </div>
-
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">Password</Label>
 
@@ -92,7 +90,6 @@ export function Login() {
                         </Button>
                     </form>
                 </CardContent>
-
                 <CardFooter className="flex flex-col">
                     <div className="relative w-full mb-3">
                         <div className="flex items-center">
@@ -138,6 +135,7 @@ export function Login() {
                             Don&apos;t have an account?  <u><a href='/Registration'>Sign Up </a></u>
                     </span>
                 </CardFooter>
+
             </Card>
         </div>
     )
