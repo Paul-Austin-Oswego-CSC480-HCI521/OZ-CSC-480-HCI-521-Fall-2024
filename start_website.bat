@@ -2,6 +2,11 @@
 
 set OZ_DATABASE_PATH=jdbc:sqlite:%CD%\tasks.db
 
+@REM will be replaced with compitent config once the frontend is hosted properly
+set VITE_FRONTEND_PORT=2080
+set VITE_AUTH_ROOT=https://localhost:9443
+set VITE_API_ROOT=https://localhost:8443
+
 cd backend
 call mvn install -DskipTests
 
