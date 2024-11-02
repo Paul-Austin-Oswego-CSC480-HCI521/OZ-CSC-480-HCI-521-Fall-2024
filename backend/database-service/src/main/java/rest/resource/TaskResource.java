@@ -104,7 +104,7 @@ public class TaskResource {
         User user = userDAO.getUserByEmail(jwt.getSubject());
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
-        taskDAO.moveTask(taskId, user.getEmail());
+        taskDAO.trashTask(taskId, user.getEmail());
         return Response.noContent().build();
     }
 
