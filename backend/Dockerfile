@@ -30,4 +30,9 @@ RUN features.sh
 
 COPY --chown=1001:0 --from=build /${SERVICE}/target/*.war /config/apps
 
+USER root
+RUN mkdir /usr/share/checkmate
+RUN chown 1001:0 /usr/share/checkmate
+USER 1001:0
+
 RUN configure.sh

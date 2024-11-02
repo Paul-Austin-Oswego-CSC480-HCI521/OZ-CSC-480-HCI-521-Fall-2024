@@ -18,10 +18,13 @@ public class ProjectDAO {
     @Inject
     @ConfigProperty(name = "oz.database.path")
     private String dbPath;
+    private String sqlPath;
 
     // Create the Projects table if it doesn't exist
     @PostConstruct
     private void createProjectTableIfNotExists() {
+        sqlPath = "jdbc:sqlite:" + dbPath;
+
         System.out.println("Attempting to construct 'Projects' table");
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS projects (
@@ -33,7 +36,7 @@ public class ProjectDAO {
             );
             """;
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
             System.out.println("Table 'projects' created or already exists.");
@@ -46,7 +49,7 @@ public class ProjectDAO {
     public Project createProject(Project project) {
         String sql = "INSERT INTO projects (name, description, user_email) VALUES (?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, project.getName());
@@ -71,7 +74,7 @@ public class ProjectDAO {
         String sql = "SELECT id, name, user_email, description FROM projects WHERE user_email = ?";
         List<Project> projects = new ArrayList<>();
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, userEmail);
             ResultSet rs = pstmt.executeQuery();
@@ -98,7 +101,7 @@ public class ProjectDAO {
         String sql = "SELECT id, name, description, user_email FROM projects WHERE id = ? AND user_email = ?";
         Project project = null;
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, projectId);
@@ -124,7 +127,7 @@ public class ProjectDAO {
     public void deleteProject(int projectId, String userEmail) {
         String sql = "DELETE FROM projects WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, projectId);
@@ -140,7 +143,7 @@ public class ProjectDAO {
     public void updateProject(int project_id, Project updated, String userEmail) {
         String sql = "UPDATE projects SET name = ?, description = ? WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, updated.getName());

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export OZ_DATABASE_PATH=jdbc:sqlite:$(pwd)/tasks.db
+export OZ_DATABASE_PATH=$(pwd)/tasks.db
 
 # will be replaced with compitent config once the frontend is hosted properly
 export VITE_FRONTEND_PORT=2080

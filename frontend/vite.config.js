@@ -14,7 +14,7 @@ export default defineConfig(({command, mode}) => {
       }
     },
     server: {
-      port: env.VITE_FRONTEND_PORT
+      port: env.VITE_FRONTEND_PORT || 2080
     }
   }
 })
