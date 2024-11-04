@@ -29,12 +29,17 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String domain = frontendRoot.split(":\\/\\/")[1].split(":")[0];
+        System.out.println(domain);
+
         String email = request.getRemoteUser();
         String sessionId = userDAO.ssoLogin(email);
         Cookie sessionCookie = new Cookie(AuthResource.SESSION_ID_COOKIE, sessionId);
         sessionCookie.setPath("/");
-        sessionCookie.setSecure(true);
+        sessionCookie.setDomain(domain);
+        // sessionCookie.setSecure(true);
         sessionCookie.setHttpOnly(true);
+        // sessionCookie.setAttribute("SameSite", "None");
         response.addCookie(sessionCookie);
         response.sendRedirect(frontendRoot);
     }
