@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export function Register() {
     const [email, setEmail] = useState('')
@@ -11,6 +13,7 @@ export function Register() {
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [checkPasswordClass, setCheckPasswordClass] = useState('bg-white');
     const [isCheckPasswordDirty, setIsCheckPasswordDirty] = useState(false);
+    const [reveal_pw, reveal_password] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -64,28 +67,51 @@ export function Register() {
                                     required
                                 />
                             </div>
-                            <div className="flex flex-col space-y-1.5">
+                            <div >
                                 <Label htmlFor="password">Password</Label>
+                                <div className="flex items-center">
+                                {/* TODO add checkmark or some status signifier that's not color-based */}
                                 <Input
                                     id="password"
-                                    type="password"
+                                    type={reveal_pw ? 'text' : 'password'}
                                     placeholder="Create your password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
+                                <Button
+                                    type = "button"
+                                    onClick = {() => reveal_password(!reveal_pw)}
+                                    value = "words"
+                                    className = "ml-2"
+                                >
+                                    <FontAwesomeIcon icon={reveal_pw ? faEye : faEyeSlash} />
+                                </Button>
+                                </div>
+                                
                             </div>
                             <div>
                                 <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <div className="flex items-center">
                                 <Input 
                                     id="=confirmPassword" 
-                                    type="password" 
+                                    type={reveal_pw ? 'text' : 'password'}
                                     placeholder="Confirm your password" 
                                     value={checkPassword} 
                                     onChange={handleCheckPassword} 
                                     className={checkPasswordClass}/>
-                                {showErrorMessage && isCheckPasswordDirty ? <p className='text-sm'> Passwords do not match </p> : <p className='text-sm'> Passwords match! </p>}
+                                <Button
+                                    type = "button"
+                                    onClick = {() => reveal_password(!reveal_pw)}
+                                    value = "words"
+                                    className = "ml-2"
+                                >
+                                    <FontAwesomeIcon icon={reveal_pw ? faEye : faEyeSlash} />
+                                </Button>
+                                </div>
+                                
                             </div>
+                            {showErrorMessage && isCheckPasswordDirty ? <p className='text-sm'> Passwords do not match </p> : ''}
                         </div>
                         <Button className="w-full mt-6" type="submit">
                             Sign Up
