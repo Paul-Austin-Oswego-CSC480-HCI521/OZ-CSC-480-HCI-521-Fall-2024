@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -7,15 +7,42 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 export function Register() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [checkPassword, setCheckPassword] = useState('');
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [checkPasswordClass, setCheckPasswordClass] = useState('bg-white');
+    const [isCheckPasswordDirty, setIsCheckPasswordDirty] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log('Registration attempted with:', { email, password })
+        if(password === checkPassword) {
+            // Passwords match, ok to submit
+            console.log('Registration attempted with:', { email, password })
+        }
+        else {
+            console.log('Cannot submit: Passwords do not match')
+        }
     }
 
     const handleGithubRegistration = () => {
         console.log('GitHub Registration attempted')
     }
+
+    const handleCheckPassword = (e) => {
+        setCheckPassword(e.target.value);
+        setIsCheckPasswordDirty(true);
+    }
+
+    useEffect(() => {
+        if (isCheckPasswordDirty) {
+            if (password === checkPassword) {
+                setShowErrorMessage(false);
+                setCheckPasswordClass('border-green-500')
+            } else {
+                setShowErrorMessage(true)
+                setCheckPasswordClass('border-red-500')
+            }
+        }
+    }, [checkPassword])
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -47,6 +74,17 @@ export function Register() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
+                            </div>
+                            <div>
+                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Input 
+                                    id="=confirmPassword" 
+                                    type="password" 
+                                    placeholder="Confirm your password" 
+                                    value={checkPassword} 
+                                    onChange={handleCheckPassword} 
+                                    className={checkPasswordClass}/>
+                                {showErrorMessage && isCheckPasswordDirty ? <p className='text-sm'> Passwords do not match </p> : <p className='text-sm'> Passwords match! </p>}
                             </div>
                         </div>
                         <Button className="w-full mt-6" type="submit">
