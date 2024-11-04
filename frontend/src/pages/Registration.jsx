@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function Register() {
     const [email, setEmail] = useState('')
@@ -61,13 +61,11 @@ export function Register() {
                             {/*</div>*/}
                             {/*<div className="relative flex justify-center text-xs uppercase">*/}
                             <span className="px-3 justify-center text-xs uppercase">
-                                Or register with
+                                Or Sign up with
                             </span>
                             <span className="w-20 border-t"></span>
                         </div>
                     </div>
-
-
                     <Button variant="outline" className="w-full" onClick={handleGoogleRegistration}>
                         <svg className="mr-2" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -76,20 +74,6 @@ export function Register() {
                             </path>
                         </svg>
                         Sign up with GitHub
-                    </Button>
-                    <br/>
-                    <Button variant="outline" className="w-full" onClick={handleGoogleRegistration}>
-                        <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab"
-                             data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
-                        </svg>
-                        Placeholder
-                    </Button>
-                    <br/>
-                    <Button variant="outline" className="w-full" onClick={handleGoogleRegistration}>
-                        <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab"
-                             data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
-                        </svg>
-                        Placeholder
                     </Button>
                 </CardFooter>
                 <div className="relative w-full mb-6">
