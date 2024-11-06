@@ -13,7 +13,6 @@ export function SidePanel() {
                     <h1 className="text-2xl font-bold">Checkmate</h1>
                 </div>
             </div>
-
             <nav className="">
                 <ul className="flex flex-col">
                     <li className="flex flex-col">
