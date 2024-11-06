@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f27af3f0-0518-406b-aaf1-371f0ea83d0c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/components/ProjectAccordion.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ProjectAccordion.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/ProjectPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/ProjectPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +84,7 @@
       <workItem from="1730484118204" duration="2000" />
       <workItem from="1730852304046" duration="4938000" />
       <workItem from="1730862857305" duration="4452000" />
-      <workItem from="1730911080415" duration="78000" />
+      <workItem from="1730911080415" duration="604000" />
     </task>
     <servers />
   </component>

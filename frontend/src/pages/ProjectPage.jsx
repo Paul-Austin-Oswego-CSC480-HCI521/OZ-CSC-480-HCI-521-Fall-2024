@@ -41,6 +41,7 @@ export default function ProjectPage() {
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({ isOpen: false, taskId: null });
+    const [currentProject, setCurrentProject] = useState(null);
     let { projectID } = useParams();
     projectID = +projectID;
 
@@ -89,6 +90,11 @@ export default function ProjectPage() {
         fetchProjects();
         fetchTasks();
     }, [projectID]);
+
+    useEffect(() => {
+        const selectedProject = projects.find(project => project.id === projectID);
+        setCurrentProject(selectedProject || { name: "Unknown Project" });
+    }, [projects, projectID]);
 
 
     const handleDeletePopup = (action, taskId) => {
@@ -245,7 +251,7 @@ export default function ProjectPage() {
             {/* Main Content */}
             <div className="bg-white rounded-lg shadow mx-auto max-w-4xl p-6">
                 <h1 className="text-left pb-4 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                    My Tasks
+                    {currentProject?.name }
                 </h1>
                 <br />
                 <hr />
