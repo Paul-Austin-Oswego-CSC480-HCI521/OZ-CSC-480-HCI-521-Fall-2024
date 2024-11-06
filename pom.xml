@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>oz</groupId>
+    <artifactId>oz-parent</artifactId> 
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Liberty Properties -->
+        <liberty.maven.plugin.version>3.3.4</liberty.maven.plugin.version>
+        <oz.frontend.root>http://localhost:2080</oz.frontend.root>
+        <oz.auth.port>9443</oz.auth.port>
+        <oz.api.port>8443</oz.api.port>
+    </properties>
+
+    <modules>
+        <module>backend</module> 
+        <module>frontend</module>
+        <module>database-service</module> 
+        <module>auth-service</module> 
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-api</artifactId>
+                <version>10.0.0</version>
+                <scope>provided</scope>
+            </dependency>
+  
+        </dependencies>
+    </dependencyManagement>
+</project>

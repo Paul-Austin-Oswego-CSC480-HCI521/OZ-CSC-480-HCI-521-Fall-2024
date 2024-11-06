@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Frontend React Service">
+
+    <featureManager>
+        <feature>servlet-4.0</feature> <!-- Enables static file serving for React -->
+        <feature>jakartaee-10.0</feature> <!-- Jakarta EE -->
+        <feature>jsp-2.3</feature> <!-- Optional, if needed for server-side rendering or JSP -->
+        <feature>jaxrs-2.1</feature> <!-- Optional, if your frontend communicates with a RESTful service -->
+        <feature>mpRestClient-3.0</feature> <!-- Optional, if your frontend uses MicroProfile RestClient -->
+    </featureManager>
+
+    <!-- HTTP Endpoint Configuration -->
+    <httpEndpoint httpPort="2080" httpsPort="8443" id="defaultHttpEndpoint" host="*" />
+
+    <!-- SSL Configuration (optional, only if HTTPS is needed) -->
+    <keyStore id="testKeyStore" location="key.jks" password="testpw" />
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
+
+    <!-- Frontend React Application -->
+    <!-- Serving static files directly from the 'frontend/dist' folder -->
+    <!-- Update this location to where your Vite build output (dist folder) is stored -->
+    <webApplication contextRoot="/" location="frontend/target/frontend.war" />
+
+    <!-- Optionally, you could also deploy a WAR file if you decide to package it that way -->
+    <!-- <webApplication contextRoot="/" location="frontend/target/frontend.war" /> -->
+
+</server>
