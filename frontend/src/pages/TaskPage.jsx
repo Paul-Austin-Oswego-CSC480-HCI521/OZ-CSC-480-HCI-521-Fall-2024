@@ -49,6 +49,12 @@ export function TaskPage() {
     const [editMode, isEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
 
+    const getProjectName = (projectId) => {
+        const project = projects.find(project => project.id === projectId);
+        return project ? project.name : 'Unknown Project';
+    };
+
+
     const handleDeletePopup = (action, taskId) => {
         setDeletePopup({isOpen: false, taskId: null});
         if (action === "delete") {
@@ -283,7 +289,7 @@ export function TaskPage() {
                             <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
                                                                             checked={task.completed}/></td>
                             <td className="px-4 py-2 text-center">{task.title}</td>
-                            <td className="px-4 py-2 text-center">{task.project}</td>
+                            <td className="px-4 py-2 text-center">{getProjectName(task.project)}</td>
                             <td className="px-4 py-2 text-center">{task.dueDate}</td>
                             <td className="px-4 py-2 text-center">{task.priority}</td>
                             <td className="px-4 py-2 text-center">

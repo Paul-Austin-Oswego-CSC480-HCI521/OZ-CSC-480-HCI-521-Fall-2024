@@ -72,7 +72,7 @@ export default function ProjectPage() {
                         id: task.id,
                         completed: task.status === 1,
                         title: task.name,
-                        project: task.projectId,
+                        projectId: task.projectId, // Fixed here
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
@@ -85,6 +85,7 @@ export default function ProjectPage() {
                 console.error('Error fetching tasks:', error);
             }
         };
+
 
         fetchTasks();
         fetchProjects();

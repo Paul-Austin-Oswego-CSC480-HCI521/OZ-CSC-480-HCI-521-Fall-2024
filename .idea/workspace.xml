@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f27af3f0-0518-406b-aaf1-371f0ea83d0c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/styles/dropdown.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/components/ProjectAccordion.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ProjectAccordion.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/ProjectPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/ProjectPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/TaskPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/TaskPage.jsx" afterDir="false" />
     </list>
@@ -83,7 +80,10 @@
       <workItem from="1730080559557" duration="3000" />
       <workItem from="1730129750773" duration="2107000" />
       <workItem from="1730425853929" duration="9325000" />
-      <workItem from="1730462752162" duration="3828000" />
+      <workItem from="1730462752162" duration="3905000" />
+      <workItem from="1730475236219" duration="2601000" />
+      <workItem from="1730484118204" duration="2000" />
+      <workItem from="1730852304046" duration="418000" />
     </task>
     <servers />
   </component>
