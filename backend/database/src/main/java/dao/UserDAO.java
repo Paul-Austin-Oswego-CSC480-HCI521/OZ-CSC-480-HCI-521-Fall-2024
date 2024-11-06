@@ -44,7 +44,13 @@ public class UserDAO {
     }
 
     //CREATE new user
-    public void createUser(User user) {
+    public boolean createUser(User user) {
+        if (getUserByEmail(user.getEmail()) != null) {
+            System.out.println("Email already exists. Cannot create user.");
+            return false;
+        }
+
+
         String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
@@ -56,8 +62,10 @@ public class UserDAO {
             pstmt.executeUpdate();
             System.out.println("User created successfully in the 'users' table.");
 
+            return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return false;
         }
     }
 

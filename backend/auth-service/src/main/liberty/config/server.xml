@@ -51,6 +51,12 @@
     <!--More Cors bs-->
     <cors domain="/auth/native-login"
           allowedOrigins="${frontend.root}"
-          allowCredentials="true"
-          allowedMethods="POST, OPTIONS"/>
+          allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
+          allowedHeaders="*"
+          allowCredentials="true"/>
+    <cors domain="/auth/create-user"
+          allowedOrigins="${frontend.root}"
+          allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
+          allowedHeaders="*"
+          allowCredentials="true"/>
 </server>

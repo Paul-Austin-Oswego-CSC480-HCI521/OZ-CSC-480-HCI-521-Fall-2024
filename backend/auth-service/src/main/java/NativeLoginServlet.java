@@ -47,14 +47,4 @@ public class NativeLoginServlet extends HttpServlet {
             response.getWriter().write("Invalid credentials");
         }
     }
-
-    //Handle that CORS BS
-    @Override
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setHeader("Access-Control-Allow-Origin", frontendRoot);
-        response.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
 }
