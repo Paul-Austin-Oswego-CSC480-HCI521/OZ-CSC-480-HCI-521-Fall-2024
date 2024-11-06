@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
-import {Button} from "@/components/ui/button.jsx";
-import {Sidebar} from "@/components/ui/sidebar";
-import {Label} from "@radix-ui/react-label";
-import {Trash2} from "lucide-react";
-import {CaretSortIcon} from "@radix-ui/react-icons";
-import {Checkbox} from "@/components/ui/checkbox.jsx";
+import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button.jsx";
+import { Sidebar } from "@/components/ui/sidebar";
+import { Label } from "@radix-ui/react-label";
+import { Trash2 } from "lucide-react";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { Checkbox } from "@/components/ui/checkbox.jsx";
 import '../styles/dropdown.css';
-import {DialogDemo} from "@/components/Dialog.jsx";
+import { DialogDemo } from "@/components/Dialog.jsx";
+import { useParams } from "react-router-dom";
 
 const priorityOrder = {
     Low: 1,
@@ -40,10 +41,10 @@ export default function ProjectPage() {
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({ isOpen: false, taskId: null });
-    const [selectedProjectId, setSelectedProjectId] = useState(null);
+    let { projectID } = useParams();
+    projectID = +projectID;
 
     useEffect(() => {
-        // Fetching all projects
         const fetchProjects = async () => {
             try {
                 const response = await fetch('/projects');
@@ -72,11 +73,10 @@ export default function ProjectPage() {
                         id: task.id,
                         completed: task.status === 1,
                         title: task.name,
-                        projectId: task.projectId, // Fixed here
+                        projectId: task.projectId,
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
-                    console.log(formattedTasks);
                     setTasks(formattedTasks);
                 } else {
                     console.error('Failed to fetch tasks:', response.statusText);
@@ -86,10 +86,10 @@ export default function ProjectPage() {
             }
         };
 
-
-        fetchTasks();
         fetchProjects();
-    }, []);
+        fetchTasks();
+    }, [projectID]);
+
 
     const handleDeletePopup = (action, taskId) => {
         setDeletePopup({ isOpen: false, taskId: null });
@@ -175,27 +175,11 @@ export default function ProjectPage() {
         setTasks(sortedTasks);
     };
 
-    const handleFilter = (projectId) => {
-        setSelectedProjectId(projectId);
-    };
-
-    const filteredTasks = selectedProjectId
-        ? tasks.filter(task => task.projectId === selectedProjectId)
-        : tasks;
-
+    const filteredTasks = tasks.filter(task => task.projectId === projectID);
+    console.log(projectID)
+    console.log(filteredTasks)
     return (
         <>
-            <div className="dropdown">
-                <button className="dropbtn">Projects List</button>
-                <div className="dropdown-content">
-                    {projects.map((project) => (
-                        <a key={project.id} onClick={() => handleFilter(project.id)}>
-                            {project.name}
-                        </a>
-                    ))}
-                </div>
-            </div>
-
             <DialogDemo
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
@@ -218,14 +202,12 @@ export default function ProjectPage() {
                     ))}
                 </select>
 
-
                 <input
                     id="date-option"
                     type="date"
                     className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300 mb-4"
                 >
                 </input>
-
 
                 <select
                     id="repeat-option"
@@ -247,16 +229,14 @@ export default function ProjectPage() {
                     <option value="None">No Priority</option>
                 </select>
 
-
                 <Label htmlFor="descriptionBox"><b>Task Description</b></Label>
                 <textarea
                     id="descriptionBox"
                     placeholder="Describe your task here..."
-                    spellCheck='false'
+                    spellCheck="false"
                     style={{resize: 'none'}}
                     className="flex w-full h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
-                >
-               </textarea>
+                />
                 <div className="flex justify-end mb-4">
                     <Button variant="default2" onClick={addNewTask}>Save Changes</Button>
                 </div>
@@ -303,7 +283,7 @@ export default function ProjectPage() {
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => setDeletePopup({isOpen: true, taskId: task.id})}
+                                    onClick={() => setDeletePopup({ isOpen: true, taskId: task.id })}
                                 >
                                     <Trash2 className="h-4 w-4" />
                                 </Button>

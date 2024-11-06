@@ -94,7 +94,9 @@ function ProjectAccordion() {
                         {projects.map((project) => (
                                 <li key={project.id} className="grid grid-cols-[70%_30%]">
                                     {/*TODO: USE THIS TO SEND PARAMETERS TO PROJECTS-PAGE*/}
-                                <NavButton href={`/project`}>
+                                    <NavButton
+                                        href={`/project/${project.id}`}
+                                    >
                                     <span className="flex items-center justify-between w-full pr-4">
                                         <span>{project.name}</span>
                                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
