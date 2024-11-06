@@ -8,10 +8,33 @@ export function Register() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // Here you would typically handle the logic
-        console.log('Registration attempted with:', {email, password})
+        const loginData = {
+            email: email,
+            password: password,
+        };
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_AUTH_ROOT}/auth/create-user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                window.location.href = '/login'
+            }
+
+            else
+                //Handle more visual error logging here for duplicate email
+                console.log('Registration failed:', response.statusText);
+        } catch (e) {
+            console.log(e.message);
+        }
     }
 
     const handleGoogleRegistration = () => {
