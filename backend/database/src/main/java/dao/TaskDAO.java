@@ -36,9 +36,24 @@ public class TaskDAO {
             );
             """;
 
+        // TODO: a horrible way of doing things
+        String createTrashTableSQL = """
+            CREATE TABLE IF NOT EXISTS trash (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                desc TEXT,
+                status INTEGER DEFAULT 0,
+                project_id INTEGER,
+                user_email TEXT,
+                FOREIGN KEY (project_id) REFERENCES projects(id),
+                FOREIGN KEY (user_email) REFERENCES users(email)
+            );
+            """;
+
         try (Connection conn = DriverManager.getConnection(dbPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
+            stmt.execute(createTrashTableSQL);
             System.out.println("Table 'tasks' created or already exists.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -204,21 +219,37 @@ public class TaskDAO {
 
     // Trash a task by ID
     public void trashTask(int taskId, String userEmail) {
-        String sql = "INSERT INTO trash FROM tasks WHERE id = ? AND user_email = ?";
+        String insertSql = """
+            INSERT INTO trash (id, name, desc, status, project_id, user_email)
+                SELECT id, name, desc, status, project_id, user_email
+                FROM tasks
+                WHERE id = ? AND user_email = ?;
+            """;
+        String deleteSql = "DELETE FROM tasks WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DriverManager.getConnection(dbPath)) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+                 PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
 
-            pstmt.setInt(1, taskId);
-            pstmt.setString(2, userEmail);
-            pstmt.executeUpdate();
-            System.out.println("Task with ID " + taskId + " trashed.");
+                insertStmt.setInt(1, taskId);
+                insertStmt.setString(2, userEmail);
+                insertStmt.executeUpdate();
 
+                deleteStmt.setInt(1, taskId);
+                deleteStmt.setString(2, userEmail);
+                deleteStmt.executeUpdate();
+
+                conn.commit();
+                System.out.println("Task with ID " + taskId + " trashed.");
+
+            } catch (SQLException e) {
+                conn.rollback();
+                System.out.println("Transaction rolled back due to: " + e.getMessage());
+            }
         } catch (SQLException e) {
             System.out.println("Error trashing task: " + e.getMessage());
         }
-
-        deleteTask(taskId, userEmail);
     }
 
     // Delete a task by ID
