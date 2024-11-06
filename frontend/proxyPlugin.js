@@ -138,8 +138,10 @@ app.delete('/tasks/:taskId', proxyDelete())
 // get all completed tasks
 app.get('/tasks/completed', proxyGet())
 // get all trashed tasks
-app.get('/tasks/trashed', proxyGet())
-// get all past due tasks
+app.get('/tasks/trash', proxyGet())
+// move a task to the trash
+app.put('/tasks/trash/:taskId', proxyPut())
+// get all past due tasks **NOT IMPLEMENTED YET**
 app.get('/tasks/past-due', proxyGet())
 
 export default function proxyPlugin(authRoot, apiRoot) {
