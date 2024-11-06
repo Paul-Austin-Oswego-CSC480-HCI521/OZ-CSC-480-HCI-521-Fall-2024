@@ -17,8 +17,6 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Liberty Properties -->
-        <liberty.var.http.port>8080</liberty.var.http.port>
-        <liberty.var.https.port>${oz.api.port}</liberty.var.https.port>
         <liberty.var.location>${project.artifactId}</liberty.var.location>
     </properties>
 

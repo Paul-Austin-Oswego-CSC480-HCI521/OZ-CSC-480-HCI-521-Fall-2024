@@ -1,6 +1,11 @@
 #!/bin/bash
 
-export OZ_DATABASE_PATH=jdbc:sqlite:$(pwd)/tasks.db
+export OZ_DATABASE_PATH=$(pwd)/tasks.db
+
+# will be replaced with compitent config once the frontend is hosted properly
+export VITE_FRONTEND_PORT=2080
+export VITE_AUTH_ROOT=https://localhost:9443
+export VITE_API_ROOT=https://localhost:8443
 
 mvnRun() {
 if [ $# -ge 2 -a $2==dev ]; then

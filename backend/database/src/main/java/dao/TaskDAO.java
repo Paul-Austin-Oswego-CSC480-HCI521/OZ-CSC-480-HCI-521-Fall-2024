@@ -18,10 +18,13 @@ public class TaskDAO {
     @Inject
     @ConfigProperty(name = "oz.database.path")
     private String dbPath;
+    private String sqlPath;
 
     // Create the task_tracker table if it doesn't exist
     @PostConstruct
     private void createTableIfNotExists() {
+        sqlPath = "jdbc:sqlite:" + dbPath;
+
         System.out.println("Attempting to construct 'task_tracker' table");
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS tasks (
@@ -50,7 +53,7 @@ public class TaskDAO {
             );
             """;
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
             stmt.execute(createTrashTableSQL);
@@ -64,7 +67,7 @@ public class TaskDAO {
     public Task createTask(Task task) {
         String insertTaskSql = "INSERT INTO tasks (name, desc, status, project_id, user_email) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmtInsert = conn.prepareStatement(insertTaskSql)) {
 
             // Insert the new task
@@ -91,7 +94,7 @@ public class TaskDAO {
     // Read all tasks
     public List<Task> getAllUserTasks(String userEmail) {
         String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE user_email = ?";
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, userEmail);
@@ -124,7 +127,7 @@ public class TaskDAO {
     // Read all trashed tasks
     public List<Task> getTrashedUserTasks(String userEmail) {
         String sql = "SELECT id, name, desc, status, project_id, user_email FROM trash WHERE user_email = ?";
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, userEmail);
@@ -160,7 +163,7 @@ public class TaskDAO {
     // Retrieve task by ID
     public Task getTaskById(int taskId, String userEmail) {
         String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE id = ? AND user_email = ?";
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, taskId);
@@ -200,7 +203,7 @@ public class TaskDAO {
     public void updateTask(int taskId, Task updated, String userEmail) {
         String sql = "UPDATE tasks SET name = ?, desc = ?, status = ?, project_id = ? WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, updated.getName());
@@ -273,13 +276,13 @@ public class TaskDAO {
     public void deleteTrashTask(int taskId, String userEmail) {
         String sql = "DELETE FROM trash WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, taskId);
             pstmt.setString(2, userEmail);
             pstmt.executeUpdate();
-            System.out.println("Task with ID " + taskId + " deleted successfully.");
+            System.out.println("Task with ID " + taskId + " deleted from active tasks.");
 
         } catch (SQLException e) {
             System.out.println("Error deleting task: " + e.getMessage());

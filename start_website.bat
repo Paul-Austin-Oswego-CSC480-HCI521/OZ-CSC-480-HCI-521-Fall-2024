@@ -1,6 +1,11 @@
 @echo off
 
-set OZ_DATABASE_PATH=jdbc:sqlite:%CD%\tasks.db
+set OZ_DATABASE_PATH=%CD%\tasks.db
+
+@REM will be replaced with compitent config once the frontend is hosted properly
+set VITE_FRONTEND_PORT=2080
+set VITE_AUTH_ROOT=https://localhost:9443
+set VITE_API_ROOT=https://localhost:8443
 
 cd backend
 call mvn install -DskipTests
@@ -30,7 +35,7 @@ goto:eof
 REM start the server in either dev mode or normal depending on the command line argument
 :mvnRun
 if "%~2"=="dev" (
-    start /min mvn -pl %1 liberty:dev ^&^& exit
+    start mvn -pl %1 liberty:dev ^&^& exit
 ) else (
     start /b mvn -pl %1 liberty:run < nul >nul 2>&1 ^&^& exit
 )
