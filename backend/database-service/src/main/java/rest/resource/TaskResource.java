@@ -6,9 +6,12 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import model.Project;
 import model.Task;
 import model.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import java.security.interfaces.RSAPrivateCrtKey;
 
 @Path("/tasks")
 public class TaskResource {
@@ -33,8 +36,9 @@ public class TaskResource {
 
     //Read all completed tasks
     @GET
+    @Path("/completed")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTasks() {
+    public Response getCompletedTasks() {
         User user = userDAO.getUserByEmail(jwt.getSubject());
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -118,5 +122,15 @@ public class TaskResource {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         taskDAO.deleteTrashTask(taskId, user.getEmail());
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/trash")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTrashedTasks() {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.ok(taskDAO.getTrashedUserTasks(user.getEmail())).build();
     }
 }
