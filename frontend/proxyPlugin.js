@@ -15,11 +15,11 @@ const instance = axios.create({
 })
 
 async function getJwt(req) {
-    if (req.cookies.sessionID == undefined) {
+    if (req.cookies.ozSessionID == undefined) {
+        console.log('no cookie')
         throw { response: { status: 401, data: 'no sessionID cookie' } }
     }
-
-    return (await instance.get(AUTH_ROOT + '/auth/jwt', { headers: { 'Oz-Session-Id': req.cookies.sessionID } })).data
+    return (await instance.get(AUTH_ROOT + '/auth/jwt', { headers: { 'Oz-Session-Id': req.cookies.ozSessionID } })).data
 }
 
 async function authHeaders(req, headers) {
@@ -104,8 +104,8 @@ app.get('/auth', async (req, res) => {
     try {
         await getJwt(req)
         res.send()
-    } catch {
-        res.sendStatus(401)
+    } catch (error) {
+        res.status(401).send(error.message)
     }
 })
 // get user details (may subsume /auth's functionality)
@@ -138,8 +138,10 @@ app.delete('/tasks/:taskId', proxyDelete())
 // get all completed tasks
 app.get('/tasks/completed', proxyGet())
 // get all trashed tasks
-app.get('/tasks/trashed', proxyGet())
-// get all past due tasks
+app.get('/tasks/trash', proxyGet())
+// move a task to the trash
+app.put('/tasks/trash/:taskId', proxyPut())
+// get all past due tasks **NOT IMPLEMENTED YET**
 app.get('/tasks/past-due', proxyGet())
 
 export default function proxyPlugin(authRoot, apiRoot) {

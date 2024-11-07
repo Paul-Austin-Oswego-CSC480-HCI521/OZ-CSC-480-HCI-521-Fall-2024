@@ -92,11 +92,10 @@ export function TaskPage() {
                         id: task.id,
                         completed: task.status === 1,
                         title: task.name,
-                        project: task.projectId,
+                        project: task.projectName,
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
-                    console.log(formattedTasks);
                     setTasks(formattedTasks);
                 } else {
                     console.error('Failed to fetch tasks:', response.statusText);
@@ -159,16 +158,24 @@ export function TaskPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'});
-            if (response.ok) {
+            const trashResponse = await fetch(`/task/trash/${taskId}`, { method: 'PUT' });
+            if (!trashResponse.ok) {
+                console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
+                return;
+            }
+            const deleteResponse = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
+            if (deleteResponse.ok) {
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
             } else {
-                console.log(`Error deleting task ${taskId}`);
+                console.error(`Error deleting task ${taskId}: ${deleteResponse.statusText}`);
             }
         } catch (e) {
-            console.error(e.message);
+            console.error(`Error processing task deletion for ${taskId}: ${e.message}`);
         }
     };
+
+
+
 
     const handleSort = (key) => {
         let direction = "asc";

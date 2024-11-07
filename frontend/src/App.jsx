@@ -5,16 +5,15 @@ import {TaskPage} from "@/src/pages/TaskPage.jsx";
 import {Register} from './pages/Registration'
 import PageLayout from './pages/Layout'
 import {CompletedPage} from './pages/CompletedPage'
-import {RecentlyDeleted} from './pages/RecentlyDeleted'
 import SharedWithMe from './pages/SharedWithMe'
 import ProjectPage from './pages/ProjectPage';
 import {SidePanel} from "@/components/SidePanel.jsx";
 import {Sidebar} from "@/components/ui/sidebar.jsx";
+import RecentlyDeleted from "@/src/pages/RecentlyDeleted.jsx";
 
 export default function Component() {
     return (
         <>
-            <Sidebar/>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<PageLayout/>}>

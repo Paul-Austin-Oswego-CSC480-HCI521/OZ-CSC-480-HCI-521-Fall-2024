@@ -16,9 +16,8 @@
     </featureManager>
 
     <variable name="http.port" defaultValue="9090"/>
-    <variable name="https.port" defaultValue="8443"/>
-    <variable name="location" defaultValue="auth-service"/>
-    <variable name="frontend.root" defaultValue="http://localhost:80"/>
+    <variable name="https.port" defaultValue="9443"/>
+    <variable name="frontend.root" defaultValue="http://localhost:2080"/>
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
@@ -30,7 +29,7 @@
     <githubLogin clientId="${github.client.id}"
                  clientSecret="${github.client.secret}" />
 
-    <webApplication contextRoot="/" location="${location}.war">
+    <webApplication contextRoot="/" location="auth-service.war">
         <application-bnd>
             <security-role name="user">
                 <special-subject type="ALL_AUTHENTICATED_USERS"/>

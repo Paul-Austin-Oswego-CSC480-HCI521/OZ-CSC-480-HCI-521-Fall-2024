@@ -18,10 +18,12 @@ public class UserDAO {
     @Inject
     @ConfigProperty(name = "oz.database.path")
     private String dbPath;
+    private String sqlPath;
 
     //Create the users table if no exist
     @PostConstruct
     private void createTableIfNotExists() {
+        sqlPath = "jdbc:sqlite:" + dbPath;
         System.out.println("attempting to construct table");
         String createTableSQL = """
                 CREATE TABLE IF NOT EXISTS users (
@@ -32,7 +34,7 @@ public class UserDAO {
                 );
                 """;
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
             System.out.println("Table 'users' Created or Already Exists.");
@@ -45,7 +47,7 @@ public class UserDAO {
     public void createUser(User user) {
         String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, user.getUsername());
@@ -64,7 +66,7 @@ public class UserDAO {
         String sql = "SELECT username, email, password FROM users WHERE email = ?";
         User user = null;
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, email);
@@ -117,7 +119,9 @@ public class UserDAO {
         String sql = "SELECT username, email, password FROM users WHERE session_id = ?";
         User user = null;
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        System.out.println("getting user by session id");
+
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, sessionId);
             ResultSet rs = pstmt.executeQuery();
@@ -127,6 +131,8 @@ public class UserDAO {
                 user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
+            } else {
+                System.out.println("user not found");
             }
 
         } catch (SQLException e) {
@@ -137,7 +143,7 @@ public class UserDAO {
 
     private void setSessionId(String email, UUID sessionId) {
         String sql = "UPDATE users SET session_id = ? WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             String ses = sessionId != null ? sessionId.toString() : null;
             pstmt.setString(1, ses);

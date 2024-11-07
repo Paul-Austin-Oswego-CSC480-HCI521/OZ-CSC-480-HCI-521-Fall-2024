@@ -13,8 +13,6 @@
 
     <variable name="http.port" defaultValue="8080"/>
     <variable name="https.port" defaultValue="8443"/>
-    <variable name="location" defaultValue="backend"/>
-    <variable name="frontend.root" defaultValue="http://localhost:80"/>
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
@@ -23,5 +21,5 @@
     <keyStore id="testKeyStore" location="key.jks" password="testpw" />
     <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
 
-    <webApplication contextRoot="/" location="${location}.war" />
+    <webApplication contextRoot="/" location="database-service.war" />
 </server>

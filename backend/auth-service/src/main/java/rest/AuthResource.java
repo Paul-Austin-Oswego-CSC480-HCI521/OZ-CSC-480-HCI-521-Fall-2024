@@ -12,7 +12,7 @@ import util.JwtUtil;
 @Path("/")
 public class AuthResource {
 
-    public static final String SESSION_ID_COOKIE = "sessionID", SESSION_ID_HEADER = "Oz-Session-Id", JWT_COOKIE = "jwt";
+    public static final String SESSION_ID_COOKIE = "ozSessionID", SESSION_ID_HEADER = "Oz-Session-Id", JWT_COOKIE = "jwt";
 
     @Inject
     private UserDAO userDAO;
