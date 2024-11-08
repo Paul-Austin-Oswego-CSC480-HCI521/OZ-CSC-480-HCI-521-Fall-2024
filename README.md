@@ -46,10 +46,14 @@ In the root directory run:
 
 the webpage will be served at http://localhost
 
+**WARNING: the website does not work on safari**
+*we will attepmt to fix it at a later date*
+
 ### Stopping the application
 
-In the root directory run:
+🔥🚀🎉 ***NEW!*** 🔥🚀🎉 just do q+enter in the vite terminal, we'll auto shutdown the backend
 
+if you ctrl+c out of habit you can still run:
 #### Windows:
 ```batch
 .\stop_website.bat

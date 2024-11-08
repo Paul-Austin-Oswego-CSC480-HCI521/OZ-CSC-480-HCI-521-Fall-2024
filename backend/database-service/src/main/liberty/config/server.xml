@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <server description="Backend service">
     <featureManager>
+        <feature>jakartaee-10.0</feature>
         <feature>appSecurity-5.0</feature>
         <feature>mpJwt-2.1</feature>
         <feature>restfulWS-3.1</feature>
         <feature>mpConfig-3.1</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>jsonp-2.1</feature>
+        <feature>cdi-4.0</feature>
     </featureManager>
 
     <variable name="http.port" defaultValue="8080"/>
     <variable name="https.port" defaultValue="8443"/>
-    <variable name="location" defaultValue="backend"/>
-    <variable name="frontend.root" defaultValue="http://localhost:80"/>
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
                   host="*" />
 
-    <keyStore id="defaultKeyStore" password="secret" />
+    <keyStore id="testKeyStore" location="key.jks" password="testpw" />
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
 
-    <webApplication contextRoot="/" location="${location}.war" />
-
-    <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
-
-    <cors domain="/tasks"
-          allowedOrigins="${frontend.root}"
-          allowedMethods="GET"
-          allowCredentials="true"
-          allowedHeaders="*"
-    />
+    <webApplication contextRoot="/" location="database-service.war" />
 </server>
