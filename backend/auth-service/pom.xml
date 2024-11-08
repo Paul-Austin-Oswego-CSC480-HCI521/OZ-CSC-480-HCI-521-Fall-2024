@@ -27,24 +27,7 @@
             <artifactId>database</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>5.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.26.0</version>
-        </dependency>
-        <!-- Database -->
-        <dependency>
-            <groupId>oz</groupId>
-            <artifactId>database</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
+             
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
@@ -70,6 +53,8 @@
             <version>1.0.92</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Testing -->
         <dependency>
            <groupId>org.testng</groupId>
            <artifactId>testng</artifactId>
@@ -92,20 +77,34 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.15.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>2.15.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>2.15.2</version>
+            <scope>test</scope>
         </dependency>
-
+         
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.26.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
 
     <build>
         <finalName>${project.artifactId}</finalName>
