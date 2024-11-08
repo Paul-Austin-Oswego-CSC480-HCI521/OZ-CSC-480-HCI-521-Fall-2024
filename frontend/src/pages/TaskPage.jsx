@@ -158,21 +158,43 @@ export function TaskPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const trashResponse = await fetch(`/task/trash/${taskId}`, { method: 'PUT' });
+            const trashResponse = await fetch(`/tasks/trash/${taskId}`, { method: 'PUT' });
+            console.log("trash passed")
             if (!trashResponse.ok) {
                 console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
                 return;
             }
-            const deleteResponse = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
-            if (deleteResponse.ok) {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-            } else {
-                console.error(`Error deleting task ${taskId}: ${deleteResponse.statusText}`);
-            }
+
+            // UN-COMMENT THIS OUT IF YOU WANT TO TEST IF DELETION WORKS; - SL
+
+            // const deleteResponse = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
+            // console.log("trash deleted")
+            // if (deleteResponse.ok) {
+            //     setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+            // } else {
+            //     console.error(`Error deleting task ${taskId}: ${deleteResponse.statusText}`);
+            // }
+
+            // END OF DELETE COMMENT
         } catch (e) {
             console.error(`Error processing task deletion for ${taskId}: ${e.message}`);
         }
     };
+
+    // const deleteTask = async (taskId) => {
+    //     try {
+    //         const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'});
+    //         if (response.ok) {
+    //             console.log(response)
+    //             setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    //         } else {
+    //             console.log(`Error deleting task ${taskId}`);
+    //         }
+    //     } catch (e) {
+    //         console.error(e.message);
+    //     }
+    // };
+
 
 
 
