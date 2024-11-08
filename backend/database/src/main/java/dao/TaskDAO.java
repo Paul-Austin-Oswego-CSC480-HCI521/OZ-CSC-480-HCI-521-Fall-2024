@@ -255,6 +255,41 @@ public class TaskDAO {
         }
     }
 
+    // Restore a task by ID
+    public void restoreTask(int taskId, String userEmail) {
+        String insertSql = """
+            INSERT INTO tasks (id, name, desc, status, project_id, user_email)
+                SELECT id, name, desc, status, project_id, user_email
+                FROM trash
+                WHERE id = ? AND user_email = ?;
+            """;
+        String deleteSql = "DELETE FROM trash WHERE id = ? AND user_email = ?";
+
+        try (Connection conn = DriverManager.getConnection(dbPath)) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+                 PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+
+                insertStmt.setInt(1, taskId);
+                insertStmt.setString(2, userEmail);
+                insertStmt.executeUpdate();
+
+                deleteStmt.setInt(1, taskId);
+                deleteStmt.setString(2, userEmail);
+                deleteStmt.executeUpdate();
+
+                conn.commit();
+                System.out.println("Task with ID " + taskId + " restored.");
+
+            } catch (SQLException e) {
+                conn.rollback();
+                System.out.println("Transaction rolled back due to: " + e.getMessage());
+            }
+        } catch (SQLException e) {
+            System.out.println("Error restoring task: " + e.getMessage());
+        }
+    }
+
     // Delete a task by ID
     private void deleteTask(int taskId, String userEmail) {
         String sql = "DELETE FROM tasks WHERE id = ? AND user_email = ?";
