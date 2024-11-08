@@ -164,13 +164,18 @@ export function TaskPage() {
                 console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
                 return;
             }
-            const deleteResponse = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
-            console.log("trash deleted")
-            if (deleteResponse.ok) {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-            } else {
-                console.error(`Error deleting task ${taskId}: ${deleteResponse.statusText}`);
-            }
+
+            // UN-COMMENT THIS OUT IF YOU WANT TO TEST IF DELETION WORKS; - SL
+
+            // const deleteResponse = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
+            // console.log("trash deleted")
+            // if (deleteResponse.ok) {
+            //     setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+            // } else {
+            //     console.error(`Error deleting task ${taskId}: ${deleteResponse.statusText}`);
+            // }
+
+            // END OF DELETE COMMENT
         } catch (e) {
             console.error(`Error processing task deletion for ${taskId}: ${e.message}`);
         }
