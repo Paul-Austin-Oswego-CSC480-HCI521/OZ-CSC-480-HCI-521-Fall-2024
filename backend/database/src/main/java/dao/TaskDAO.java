@@ -111,7 +111,7 @@ public class TaskDAO {
     // Read all completed tasks
     public List<Task> getCompletedUserTasks(String userEmail) {
         String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE user_email = ? AND status = 1";
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, userEmail);
@@ -183,7 +183,7 @@ public class TaskDAO {
     public List<Task> getAllProjectTasks(int projectId, String userEmail) {
         String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE project_id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, projectId);
@@ -230,7 +230,7 @@ public class TaskDAO {
             """;
         String deleteSql = "DELETE FROM tasks WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath)) {
+        try (Connection conn = DriverManager.getConnection(sqlPath)) {
             conn.setAutoCommit(false);
             try (PreparedStatement insertStmt = conn.prepareStatement(insertSql);
                  PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
@@ -265,7 +265,7 @@ public class TaskDAO {
             """;
         String deleteSql = "DELETE FROM trash WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath)) {
+        try (Connection conn = DriverManager.getConnection(sqlPath)) {
             conn.setAutoCommit(false);
             try (PreparedStatement insertStmt = conn.prepareStatement(insertSql);
                  PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
@@ -294,7 +294,7 @@ public class TaskDAO {
     private void deleteTask(int taskId, String userEmail) {
         String sql = "DELETE FROM tasks WHERE id = ? AND user_email = ?";
 
-        try (Connection conn = DriverManager.getConnection(dbPath);
+        try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, taskId);
