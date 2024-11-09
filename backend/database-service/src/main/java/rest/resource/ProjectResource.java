@@ -2,6 +2,7 @@ package rest.resource;
 
 import dao.ProjectDAO;
 import dao.UserDAO;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -12,6 +13,7 @@ import model.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @RequestScoped
+@RolesAllowed({"user"})
 @Path("/projects")
 public class ProjectResource {
 

@@ -25,14 +25,38 @@ export function Register() {
         setIsCheckPasswordDirty(true);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        if(password === checkPassword) {
-            // Passwords match, ok to submit
-            console.log('Registration attempted with:', { email, password })
+        if(password !== checkPassword) {
+            // Passwords do not match
+            // TODO: give feedback to the user
+            console.log('passwords do not match')
+            return
         }
-        else {
-            console.log('Cannot submit: Passwords do not match')
+        const loginData = {
+            email: email,
+            password: password,
+        };
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_AUTH_ROOT}/auth/create-user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                window.location.href = '/login'
+            }
+
+            else
+                //Handle more visual error logging here for duplicate email
+                console.log('Registration failed:', response.statusText);
+        } catch (e) {
+            console.log(e.message);
         }
     }
 

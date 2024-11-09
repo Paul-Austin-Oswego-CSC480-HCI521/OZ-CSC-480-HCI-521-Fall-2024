@@ -33,6 +33,8 @@ COPY --chown=1001:0 --from=build /${SERVICE}/target/*.war /config/apps
 USER root
 RUN mkdir /usr/share/checkmate
 RUN chown 1001:0 /usr/share/checkmate
+RUN mkdir -p /etc/checkmate/ssl/certs
+RUN chown 1001:0 /etc/checkmate/ssl/certs
 USER 1001:0
 
 RUN configure.sh

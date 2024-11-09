@@ -32,7 +32,11 @@ public class AuthResource {
     @Path("/create-user")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(User user) {
-        userDAO.createUser(user);
-        return Response.ok().build();
+        boolean success = userDAO.createUser(user);
+
+        if(success)
+            return Response.ok().build();
+        else
+            return Response.status(Response.Status.CONFLICT).entity("A user with this email already exists.").build();
     }
 }
