@@ -111,6 +111,19 @@ public class TaskResource {
         return Response.noContent().build();
     }
 
+    // Restore a task by ID
+    @PUT
+    @Path("/restore/{taskId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response restoreTask(@PathParam("taskId") int taskId, Task task) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        taskDAO.restoreTask(taskId, user.getEmail());
+        return Response.noContent().build();
+    }
+
     //Delete a task by ID
     @DELETE
     @Path("/{taskId}")
