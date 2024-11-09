@@ -11,11 +11,11 @@ function PageLayout() {
       <div>
           <header className="sticky z-50 left-0 right-0 top-0">
              <div className="flex items-center bg-blueHighlight">
-                  <div className="flex items-center gap-4 py-4 pl-4">
+                  <a href="/" title='Home' className="flex items-center gap-4 py-4 pl-4">
                       {/* Replace with logo */}
                   <div className="bg-white w-8 h-8 rounded-full"></div>
                   <h1 className="text-2xl text-white font-bold">CheckMate</h1>
-                  </div>
+                  </a>
               </div>
           </header>
           <main className='flex justify-between '>
