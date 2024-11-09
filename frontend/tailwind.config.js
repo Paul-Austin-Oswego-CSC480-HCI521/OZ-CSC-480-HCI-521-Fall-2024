@@ -15,6 +15,7 @@ export default {
   		},
   		colors: {
 			blueHighlight: '#0F172A',
+			blueLight: '#E8F0F9'
 		},
   		keyframes: {
   			'accordion-down': {
