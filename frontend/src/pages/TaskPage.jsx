@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input.jsx";
 import { Button } from "@/components/ui/button.jsx";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.jsx";
 import { Sidebar } from "@/components/ui/sidebar";
 import { Label } from "@radix-ui/react-label";
-import { Trash2 } from "lucide-react";
-import { ArchiveIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { Checkbox } from "@/components/ui/checkbox.jsx";
-import { Dialog } from "@radix-ui/react-dialog";
 import { DialogDemo } from "@/components/Dialog.jsx";
-import { AccordionContent } from "@/components/ui/accordion.jsx";
-import NavButton from "@/components/NavButton.jsx";
 
 import { TaskTable } from '@/components/TaskTable'
 import { taskColumns } from "@/components/TaskColumns";
@@ -340,44 +332,9 @@ export function TaskPage() {
                         </DrawerTrigger>
                     </div>
 
-
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b">
-                                <th className="px-4 py-2 text-center">Completed?</th>
-                                <th className="px-4 py-2 text-center" onClick={() => handleSort("title")}>Task <CaretSortIcon />
-                                </th>
-                                <th className="px-4 py-2 text-center"
-                                    onClick={() => handleSort("project")}>Project <CaretSortIcon /></th>
-                                <th className="px-4 py-2 text-center" onClick={() => handleSort("dueDate")}>Due
-                                    Date <CaretSortIcon /></th>
-                                <th className="px-4 py-2 text-center"
-                                    onClick={() => handleSort("priority")}>Priority <CaretSortIcon /></th>
-                                <th className="px-4 py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tasks
-                                .filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))
-                                .map((task) => (
-                                    <tr key={task.id} className="border-b last:border-b-0">
-                                        <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
-                                            checked={task.completed} /></td>
-                                        <td className="px-4 py-2 text-center">{task.title}</td>
-                                        <td className="px-4 py-2 text-center">{getProjectName(task.project)}</td>
-                                        <td className="px-4 py-2 text-center">{task.dueDate}</td>
-                                        <td className="px-4 py-2 text-center">{task.priority}</td>
-                                        <td className="px-4 py-2 text-center">
-                                            <Button variant="ghost" size="icon"
-                                                onClick={() => setDeletePopup({ isOpen: true, taskId: task.id })}>
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))}
-                        </tbody>
-                    </table>
-
+                    <section>
+                        <TaskTable columns={taskColumns} data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
+                    </section>
                 </div>
             </div>
         </>
