@@ -27,28 +27,19 @@ export function Sidebar({title, setTitleInParent, editMode, isEditMode, children
     };
 
     return (
-        <div
-            style={{
-                backgroundColor: '#F1F6F9',
-                height: '100vh',
-                width: '250px',
-                position: 'fixed',
-                right: 0,
-                top: 0,
-            }}
-            className="p-4 shadow-lg"
-        >
+        <div>
             {editMode ? (
-                <div className="flex items-center justify-between mb-4 w-full">
+                <div className="flex items-center content-center justify-left mx-4">
                     <input
                         type="text"
                         value={newTitle}
                         onChange={(e) => set_title(e.target.value)}
                         autoFocus={true}
-                        className="w-3/4 rounded-md border border-neutral-200 p-2 focus:outline-none focus:ring-1 focus:ring-black focus:bg-white hover:bg-gray-300 transition-colors duration-300 mt-0.5 "
+                        placeholder='Task 1'
+                        className="min-w-[344px] pl-3 mb-2 rounded-md border border-neutral-200 p-1 focus:outline-none focus:ring-1 focus:ring-black focus:bg-white hover:bg-gray-300 transition-colors duration-300 mt-0.5 "
                     />
                     <button onClick={handle_save}>
-                        <CheckIcon className="h-5 w-5 mt-5 hover:text-green-500 transition-colors duration-200"/>
+                        <CheckIcon className="h-5 w-5 hover:text-green-500 transition-colors duration-200"/>
                     </button>
                 </div>
             ) : (
