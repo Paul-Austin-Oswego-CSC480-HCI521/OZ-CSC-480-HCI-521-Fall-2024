@@ -88,7 +88,7 @@ export default function CompletedPage() {
                     const data = await response.json();
                     const formattedTasks = data.map(task => ({
                         id: task.id,
-                        completed: task.status === 1,
+                        completed: task.status,
                         title: task.name,
                         project: task.projectId,
                         dueDate: task.dueDate || 'No Due Date',

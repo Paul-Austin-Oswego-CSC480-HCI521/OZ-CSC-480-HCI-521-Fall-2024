@@ -25,7 +25,7 @@ const priorityOrder = {
 const initialTasks = [
     {
         id: "task-1",
-        completed: false,
+        completed: 0,
         title: "Complete report",
         projectId: "1",
         dueDate: "2024-10-20",
@@ -84,18 +84,18 @@ export function TaskPage() {
                     window.location.replace('/login');
                     return;
                 }
-
                 const response = await fetch(`/tasks`);
                 if (response.ok) {
                     const data = await response.json();
                     const formattedTasks = data.map(task => ({
                         id: task.id,
-                        completed: task.status === 1,
+                        completed: task.status,
                         title: task.name,
                         project: task.projectId,
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
+                    console.log(formattedTasks);
                     setTasks(formattedTasks);
                 } else {
                     console.error('Failed to fetch tasks:', response.statusText);
@@ -123,7 +123,7 @@ export function TaskPage() {
         const newTask = {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
-            status: 1,
+            status: 0,
             projectId: +document.getElementById('projects-option').value,
             dueDate: document.getElementById('date-option').value,
             priority: +document.getElementById('priority-option').value,
@@ -142,7 +142,7 @@ export function TaskPage() {
                 const createdTask = await response.json();
                 const formattedTask = {
                     id: createdTask.id,
-                    completed: createdTask.status === 1,
+                    completed: false,
                     title: createdTask.name,
                     project: createdTask.projectId,
                     dueDate: createdTask.dueDate,
@@ -164,40 +164,10 @@ export function TaskPage() {
                 console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
                 return;
             }
-
-            // UN-COMMENT THIS OUT IF YOU WANT TO TEST IF DELETION WORKS; - SL
-
-            // const deleteResponse = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
-            // console.log("trash deleted")
-            // if (deleteResponse.ok) {
-            //     setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-            // } else {
-            //     console.error(`Error deleting task ${taskId}: ${deleteResponse.statusText}`);
-            // }
-
-            // END OF DELETE COMMENT
         } catch (e) {
             console.error(`Error processing task deletion for ${taskId}: ${e.message}`);
         }
     };
-
-    // const deleteTask = async (taskId) => {
-    //     try {
-    //         const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'});
-    //         if (response.ok) {
-    //             console.log(response)
-    //             setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-    //         } else {
-    //             console.log(`Error deleting task ${taskId}`);
-    //         }
-    //     } catch (e) {
-    //         console.error(e.message);
-    //     }
-    // };
-
-
-
-
 
     const handleSort = (key) => {
         let direction = "asc";
@@ -216,6 +186,32 @@ export function TaskPage() {
         });
         setTasks(sortedTasks);
     };
+
+    const toggleTaskCompletion = async (taskId, currentStatus) => {
+        const updatedStatus = currentStatus === 1 ? 0 : 1;
+        try {
+            const response = await fetch(`/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: updatedStatus }),
+            });
+
+            if (response.ok) {
+                setTasks(prevTasks =>
+                    prevTasks.map(task =>
+                        task.id === taskId ? { ...task, completed: updatedStatus } : task
+                    )
+                );
+            } else {
+                console.error("Failed to update task completion status:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error updating task completion status:", error);
+        }
+    };
+
 
     return (
         <>
@@ -316,7 +312,9 @@ export function TaskPage() {
                     {tasks.map((task) => (
                         <tr key={task.id} className="border-b last:border-b-0">
                             <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
-                                                                            checked={task.completed}/></td>
+                                                                            checked={task.completed}
+                                                                            onClick={() => toggleTaskCompletion(task.id, task.completed)}/>
+                            </td>
                             <td className="px-4 py-2 text-center">{task.title}</td>
                             <td className="px-4 py-2 text-center">{getProjectName(task.project)}</td>
                             <td className="px-4 py-2 text-center">{task.dueDate}</td>

@@ -72,7 +72,7 @@ export default function ProjectPage() {
                     const data = await response.json();
                     const formattedTasks = data.map(task => ({
                         id: task.id,
-                        completed: task.status === 1,
+                        completed: task.status,
                         title: task.name,
                         projectId: task.projectId,
                         dueDate: task.dueDate || 'No Due Date',
