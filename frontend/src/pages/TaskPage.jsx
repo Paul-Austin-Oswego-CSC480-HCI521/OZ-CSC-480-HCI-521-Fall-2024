@@ -186,6 +186,10 @@ export function TaskPage() {
     };
 
     // SL NOTE: DOES NOT WORK; POSSIBLE BACKEND ISSUE?
+    // TWO METHODS - SEND ENTIRE JSON VS SEND ONLY STATUS
+    // NEITHER WORKS
+
+    // METHOD 1 - SEND ENTIRE JSON
     const toggleTaskCompletion = async (task, currentStatus) => {
         const updatedStatus = currentStatus === 1 ? 0 : 1;
         const updatedTask = {
@@ -217,6 +221,32 @@ export function TaskPage() {
             console.error("Error updating task:", error);
         }
     };
+
+    // METHOD 2 - SEND ONLY STATUS
+    // const toggleTaskCompletion = async (task, currentStatus) => {
+    //     const updatedStatus = currentStatus === 1 ? 0 : 1;
+    //     try {
+    //         const response = await fetch(`/tasks/${task.id}`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ status: updatedStatus }),
+    //         });
+    //         if (response.ok) {
+    //             setTasks(prevTasks =>
+    //                 prevTasks.map(task =>
+    //                     task.id === task.id ? { ...task, completed: updatedStatus } : task
+    //                 )
+    //             );
+    //         } else {
+    //             console.error("Failed to update task completion status:", response.statusText);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error updating task completion status:", error);
+    //     }
+    // };
+
 
     return (
         <>
