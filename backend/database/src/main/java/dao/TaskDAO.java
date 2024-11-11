@@ -110,7 +110,26 @@ public class TaskDAO {
 
         return new ArrayList<>();
     }
+    
+    // Read all project tasks
+    public List<Task> getAllProjectTasks(int projectId, String userEmail) {
+        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority WHERE project_id = ? AND user_email = ?";
 
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, projectId);
+            pstmt.setString(2, userEmail);
+            ResultSet rs = pstmt.executeQuery();
+
+            return getTasksFromQuery(rs);
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving tasks: " + e.getMessage());
+        }
+
+        return new ArrayList<>();
+    }
     // Read all completed tasks
     public List<Task> getCompletedUserTasks(String userEmail) {
         String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority FROM tasks WHERE user_email = ? AND status = 1";
@@ -273,6 +292,38 @@ public class TaskDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error restoring task: " + e.getMessage());
+        }
+    }
+    // Delete a task by ID
+    private void deleteTask(int taskId, String userEmail) {
+        String sql = "DELETE FROM tasks WHERE id = ? AND user_email = ?";
+
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, taskId);
+            pstmt.setString(2, userEmail);
+            pstmt.executeUpdate();
+            System.out.println("Task with ID " + taskId + " deleted from active tasks.");
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting task: " + e.getMessage());
+        }
+    }
+    // Delete a task by ID from trash
+        public void deleteTrashTask(int taskId, String userEmail) {
+        String sql = "DELETE FROM trash WHERE id = ? AND user_email = ?";
+
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, taskId);
+            pstmt.setString(2, userEmail);
+            pstmt.executeUpdate();
+            System.out.println("Task with ID " + taskId + " deleted from active tasks.");
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting task: " + e.getMessage());
         }
     }
 }
