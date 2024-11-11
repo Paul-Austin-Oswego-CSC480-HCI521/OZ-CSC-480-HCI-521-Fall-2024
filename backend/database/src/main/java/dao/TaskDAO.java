@@ -8,6 +8,7 @@ import model.Task;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class TaskDAO {
     private String dbPath;
     private String sqlPath;
 
-    // Create the task_tracker table if it doesn't exist
+    // Create the task_tracker table if it doesnt exist
     @PostConstruct
     private void createTableIfNotExists() {
         sqlPath = "jdbc:sqlite:" + dbPath;
@@ -34,12 +35,13 @@ public class TaskDAO {
                 status INTEGER DEFAULT 0,
                 project_id INTEGER,
                 user_email TEXT,
+                due_date TEXT,
+                priority INTEGER,
                 FOREIGN KEY (project_id) REFERENCES projects(id),
                 FOREIGN KEY (user_email) REFERENCES users(email)
             );
             """;
 
-        // TODO: a horrible way of doing things
         String createTrashTableSQL = """
             CREATE TABLE IF NOT EXISTS trash (
                 id INTEGER PRIMARY KEY,
@@ -48,6 +50,8 @@ public class TaskDAO {
                 status INTEGER DEFAULT 0,
                 project_id INTEGER,
                 user_email TEXT,
+                due_date TEXT,
+                priority INTEGER,
                 FOREIGN KEY (project_id) REFERENCES projects(id),
                 FOREIGN KEY (user_email) REFERENCES users(email)
             );
@@ -57,7 +61,7 @@ public class TaskDAO {
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
             stmt.execute(createTrashTableSQL);
-            System.out.println("Table 'tasks' created or already exists.");
+            System.out.println("Tables 'tasks' and 'trash' created or already exist.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -65,20 +69,19 @@ public class TaskDAO {
 
     // Create a new task
     public Task createTask(Task task) {
-        String insertTaskSql = "INSERT INTO tasks (name, desc, status, project_id, user_email) VALUES (?, ?, ?, ?, ?)";
+        String insertTaskSql = "INSERT INTO tasks (name, desc, status, project_id, user_email, due_date, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
-             PreparedStatement pstmtInsert = conn.prepareStatement(insertTaskSql)) {
+             PreparedStatement pstmtInsert = conn.prepareStatement(insertTaskSql, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Insert the new task
             pstmtInsert.setString(1, task.getName());
             pstmtInsert.setString(2, task.getDescription());
-            pstmtInsert.setInt(3, task.getStatus());  // 0 for incomplete | 1 for complete
+            pstmtInsert.setInt(3, task.getStatus());
             pstmtInsert.setInt(4, task.getProjectId());
             pstmtInsert.setString(5, task.getUserEmail());
+            pstmtInsert.setString(6, task.getDueDate().toString()); 
+            pstmtInsert.setInt(7, task.getPriority());
             pstmtInsert.executeUpdate();
-
-            System.out.println("Task created successfully.");
 
             ResultSet rs = pstmtInsert.getGeneratedKeys();
             if (rs.next())
@@ -93,7 +96,7 @@ public class TaskDAO {
 
     // Read all tasks
     public List<Task> getAllUserTasks(String userEmail) {
-        String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE user_email = ?";
+        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority FROM tasks WHERE user_email = ?";
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -110,7 +113,7 @@ public class TaskDAO {
 
     // Read all completed tasks
     public List<Task> getCompletedUserTasks(String userEmail) {
-        String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE user_email = ? AND status = 1";
+        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority FROM tasks WHERE user_email = ? AND status = 1";
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -126,7 +129,7 @@ public class TaskDAO {
 
     // Read all trashed tasks
     public List<Task> getTrashedUserTasks(String userEmail) {
-        String sql = "SELECT id, name, desc, status, project_id, user_email FROM trash WHERE user_email = ?";
+        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority FROM trash WHERE user_email = ?";
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -140,7 +143,6 @@ public class TaskDAO {
         return new ArrayList<>();
     }
 
-
     private List<Task> getTasksFromQuery(ResultSet rs) {
         List<Task> tasks = new ArrayList<>();
         try {
@@ -152,6 +154,8 @@ public class TaskDAO {
                 task.setStatus(rs.getInt("status"));
                 task.setProjectId(rs.getInt("project_id"));
                 task.setUserEmail(rs.getString("user_email"));
+                task.setDueDate(LocalDate.parse(rs.getString("due_date"))); 
+                task.setPriority(rs.getInt("priority"));
                 tasks.add(task);
             }
         } catch (SQLException e) {
@@ -162,7 +166,7 @@ public class TaskDAO {
 
     // Retrieve task by ID
     public Task getTaskById(int taskId, String userEmail) {
-        String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE id = ? AND user_email = ?";
+        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority FROM tasks WHERE id = ? AND user_email = ?";
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -179,39 +183,21 @@ public class TaskDAO {
         return null;
     }
 
-    // Read all project tasks
-    public List<Task> getAllProjectTasks(int projectId, String userEmail) {
-        String sql = "SELECT id, name, desc, status, project_id, user_email FROM tasks WHERE project_id = ? AND user_email = ?";
-
-        try (Connection conn = DriverManager.getConnection(sqlPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, projectId);
-            pstmt.setString(2, userEmail);
-            ResultSet rs = pstmt.executeQuery();
-
-            return getTasksFromQuery(rs);
-
-        } catch (SQLException e) {
-            System.out.println("Error retrieving tasks: " + e.getMessage());
-        }
-
-        return new ArrayList<>();
-    }
-
-    // Update a task's status
+    // Update a tasks status
     public void updateTask(int taskId, Task updated, String userEmail) {
-        String sql = "UPDATE tasks SET name = ?, desc = ?, status = ?, project_id = ? WHERE id = ? AND user_email = ?";
+        String sql = "UPDATE tasks SET name = ?, desc = ?, status = ?, project_id = ?, due_date = ?, priority = ? WHERE id = ? AND user_email = ?";
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, updated.getName());
             pstmt.setString(2, updated.getDescription());
-            pstmt.setInt(3, updated.getStatus()); // 0 for incomplete | 1 for complete
+            pstmt.setInt(3, updated.getStatus());
             pstmt.setInt(4, updated.getProjectId());
-            pstmt.setInt(5, taskId);
-            pstmt.setString(6, userEmail);
+            pstmt.setString(5, updated.getDueDate().toString()); 
+            pstmt.setInt(6, updated.getPriority());
+            pstmt.setInt(7, taskId);
+            pstmt.setString(8, userEmail);
             pstmt.executeUpdate();
             System.out.println("Task with ID " + taskId + " updated successfully.");
 
@@ -223,8 +209,8 @@ public class TaskDAO {
     // Trash a task by ID
     public void trashTask(int taskId, String userEmail) {
         String insertSql = """
-            INSERT INTO trash (id, name, desc, status, project_id, user_email)
-                SELECT id, name, desc, status, project_id, user_email
+            INSERT INTO trash (id, name, desc, status, project_id, user_email, due_date, priority)
+                SELECT id, name, desc, status, project_id, user_email, due_date, priority
                 FROM tasks
                 WHERE id = ? AND user_email = ?;
             """;
@@ -258,8 +244,8 @@ public class TaskDAO {
     // Restore a task by ID
     public void restoreTask(int taskId, String userEmail) {
         String insertSql = """
-            INSERT INTO tasks (id, name, desc, status, project_id, user_email)
-                SELECT id, name, desc, status, project_id, user_email
+            INSERT INTO tasks (id, name, desc, status, project_id, user_email, due_date, priority)
+                SELECT id, name, desc, status, project_id, user_email, due_date, priority
                 FROM trash
                 WHERE id = ? AND user_email = ?;
             """;
@@ -289,38 +275,5 @@ public class TaskDAO {
             System.out.println("Error restoring task: " + e.getMessage());
         }
     }
-
-    // Delete a task by ID
-    private void deleteTask(int taskId, String userEmail) {
-        String sql = "DELETE FROM tasks WHERE id = ? AND user_email = ?";
-
-        try (Connection conn = DriverManager.getConnection(sqlPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, taskId);
-            pstmt.setString(2, userEmail);
-            pstmt.executeUpdate();
-            System.out.println("Task with ID " + taskId + " deleted from active tasks.");
-
-        } catch (SQLException e) {
-            System.out.println("Error deleting task: " + e.getMessage());
-        }
-    }
-
-    // Delete a task by ID from trash
-    public void deleteTrashTask(int taskId, String userEmail) {
-        String sql = "DELETE FROM trash WHERE id = ? AND user_email = ?";
-
-        try (Connection conn = DriverManager.getConnection(sqlPath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, taskId);
-            pstmt.setString(2, userEmail);
-            pstmt.executeUpdate();
-            System.out.println("Task with ID " + taskId + " deleted from active tasks.");
-
-        } catch (SQLException e) {
-            System.out.println("Error deleting task: " + e.getMessage());
-        }
-    }
 }
+
