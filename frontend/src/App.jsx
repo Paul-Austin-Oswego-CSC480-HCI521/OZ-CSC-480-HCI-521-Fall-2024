@@ -4,7 +4,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {TaskPage} from "@/src/pages/TaskPage.jsx";
 import {Register} from './pages/Registration'
 import PageLayout from './pages/Layout'
-import {CompletedPage} from './pages/CompletedPage'
+import CompletedPage from './pages/CompletedPage'
 import SharedWithMe from './pages/SharedWithMe'
 import ProjectPage from './pages/ProjectPage';
 import {SidePanel} from "@/components/SidePanel.jsx";
