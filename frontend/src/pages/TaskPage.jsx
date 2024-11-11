@@ -12,9 +12,6 @@ import {DialogDemo} from "@/components/Dialog.jsx";
 import {AccordionContent} from "@/components/ui/accordion.jsx";
 import NavButton from "@/components/NavButton.jsx";
 
-import {TaskTable} from '@/components/TaskTable'
-import { taskColumns } from "@/components/TaskColumns";
-
 // Initial tasks for test data
 const priorityOrder = {
     Low: 1,
@@ -128,7 +125,6 @@ export function TaskPage() {
             dueDate: document.getElementById('date-option').value,
             priority: +document.getElementById('priority-option').value,
         };
-        console.log(newTask);
         try {
             const response = await fetch('/tasks', {
                 method: 'POST',
@@ -189,31 +185,38 @@ export function TaskPage() {
         setTasks(sortedTasks);
     };
 
-    const toggleTaskCompletion = async (taskId, currentStatus) => {
+    // SL NOTE: DOES NOT WORK; POSSIBLE BACKEND ISSUE?
+    const toggleTaskCompletion = async (task, currentStatus) => {
         const updatedStatus = currentStatus === 1 ? 0 : 1;
+        const updatedTask = {
+            id: task.id,
+            completed: updatedStatus,
+            title: task.name,
+            project: task.projectId,
+            dueDate: task.dueDate,
+            priority: task.priority,
+        };
         try {
-            const response = await fetch(`/tasks/${taskId}`, {
+            const response = await fetch(`/tasks/${task.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ status: updatedStatus }),
+                body: JSON.stringify(updatedTask),
             });
-
             if (response.ok) {
                 setTasks(prevTasks =>
-                    prevTasks.map(task =>
-                        task.id === taskId ? { ...task, completed: updatedStatus } : task
+                    prevTasks.map(t =>
+                        t.id === task.id ? { ...t, completed: updatedStatus } : t
                     )
                 );
             } else {
-                console.error("Failed to update task completion status:", response.statusText);
+                console.error("Failed to update task:", response.status, response.statusText);
             }
         } catch (error) {
-            console.error("Error updating task completion status:", error);
+            console.error("Error updating task:", error);
         }
     };
-
 
     return (
         <>
@@ -315,7 +318,7 @@ export function TaskPage() {
                         <tr key={task.id} className="border-b last:border-b-0">
                             <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
                                                                             checked={task.completed}
-                                                                            onClick={() => toggleTaskCompletion(task.id, task.completed)}/>
+                                                                            onClick={() => toggleTaskCompletion(task, task.completed)}/>
                             </td>
                             <td className="px-4 py-2 text-center">{task.title}</td>
                             <td className="px-4 py-2 text-center">{getProjectName(task.project)}</td>
