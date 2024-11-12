@@ -1,6 +1,7 @@
 package rest.resource;
 
 import dao.UserDAO;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -12,6 +13,7 @@ import model.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Path("/user")
+@RolesAllowed({"user"})
 @RequestScoped
 public class UserResource {
 

@@ -13,18 +13,23 @@ services:
       - ${AUTH_PORT}:9443
     volumes:
       - checkmate-db:/usr/share/checkmate
+      - ./cert/:/etc/checkmate/ssl/certs
     env_file: "auth.env"
     environment:
       - OZ_DATABASE_PATH=/usr/share/checkmate/tasks.db
       - FRONTEND_ROOT=http://${DOMAIN}:${FRONTEND_PORT}
+      - CERT_LOCATION=/etc/checkmate/ssl/certs/cert.p12
   database-service:
     image: checkmate-database-service:${VERSION}
     ports:
       - ${API_PORT}:8443
     volumes:
       - checkmate-db:/usr/share/checkmate
+      - ./cert/:/etc/checkmate/ssl/certs
+    env_file: "auth.env"
     environment:
       - OZ_DATABASE_PATH=/usr/share/checkmate/tasks.db
+      - CERT_LOCATION=/etc/checkmate/ssl/certs/cert.p12
 
 volumes:
   checkmate-db:

@@ -2,18 +2,17 @@ package rest.resource;
 
 import dao.TaskDAO;
 import dao.UserDAO;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import model.Project;
 import model.Task;
 import model.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import java.security.interfaces.RSAPrivateCrtKey;
-
 @Path("/tasks")
+@RolesAllowed({"user"})
 public class TaskResource {
 
     @Inject
@@ -109,6 +108,19 @@ public class TaskResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         taskDAO.trashTask(taskId, user.getEmail());
+        return Response.noContent().build();
+    }
+
+    // Restore a task by ID
+    @PUT
+    @Path("/restore/{taskId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response restoreTask(@PathParam("taskId") int taskId, Task task) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        taskDAO.restoreTask(taskId, user.getEmail());
         return Response.noContent().build();
     }
 
