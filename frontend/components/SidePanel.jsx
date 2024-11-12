@@ -12,9 +12,6 @@ export function SidePanel() {
                         <NavButton href="/">My Tasks</NavButton>
                     </li>
                     <li className="flex flex-col">
-                        <NavButton href="/completed">Completed</NavButton>
-                    </li>
-                    <li className="flex flex-col">
                         <NavButton href="/deleted">Recently Deleted</NavButton>
                     </li>
                     <li className="flex flex-col">

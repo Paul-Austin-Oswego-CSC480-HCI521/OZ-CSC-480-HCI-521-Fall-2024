@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button.jsx";
-import { Sidebar } from "@/components/ui/sidebar";
-import { Label } from "@radix-ui/react-label";
-import { DialogDemo } from "@/components/Dialog.jsx";
-
-import { TaskTable } from '@/components/TaskTable'
-import { taskColumns } from "@/components/TaskColumns";
-
-import { DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader } from "@/components/ui/drawer";
 import React, {useEffect, useState} from "react";
-import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
 import {Sidebar} from "@/components/ui/sidebar";
 import {Label} from "@radix-ui/react-label";
+import {DialogDemo} from "@/components/Dialog.jsx";
+
+import {TaskTable} from '@/components/TaskTable'
+import {taskColumns} from "@/components/TaskColumns";
+
+import {DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader} from "@/components/ui/drawer";
+import {Input} from "@/components/ui/input.jsx";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
 import {Trash2} from "lucide-react";
 import {ArchiveIcon, CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
 import {Checkbox} from "@/components/ui/checkbox.jsx";
 import {Dialog} from "@radix-ui/react-dialog";
-import {DialogDemo} from "@/components/Dialog.jsx";
 import {AccordionContent} from "@/components/ui/accordion.jsx";
 import NavButton from "@/components/NavButton.jsx";
 
@@ -51,10 +46,10 @@ const initialProjects = [
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
     const [projects, setProjects] = useState(initialProjects);
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
-    const [deletePopup, setDeletePopup] = useState({ isOpen: false, taskId: null });
+    const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
     const [activeTab, setActiveTab] = useState("upcoming");
 
     const handleTabClick = (tab) => {
@@ -69,7 +64,7 @@ export function TaskPage() {
 
 
     const handleDeletePopup = (action, taskId) => {
-        setDeletePopup({ isOpen: false, taskId: null });
+        setDeletePopup({isOpen: false, taskId: null});
         if (action === "delete") {
             deleteTask(taskId);
         }
@@ -136,7 +131,7 @@ export function TaskPage() {
         const newTask = {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
-            status: 0,
+            status: 1,
             projectId: +document.getElementById('projects-option').value,
             dueDate: document.getElementById('date-option').value,
             priority: +document.getElementById('priority-option').value,
@@ -170,7 +165,7 @@ export function TaskPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const trashResponse = await fetch(`/tasks/trash/${taskId}`, { method: 'PUT' });
+            const trashResponse = await fetch(`/tasks/trash/${taskId}`, {method: 'PUT'});
             if (!trashResponse.ok) {
                 console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
                 return;
@@ -188,7 +183,7 @@ export function TaskPage() {
         if (sortConfig.key === key && sortConfig.direction === "asc") {
             direction = "desc";
         }
-        setSortConfig({ key, direction });
+        setSortConfig({key, direction});
 
         const sortedTasks = [...tasks].sort((a, b) => {
             if (key === "priority") {
@@ -227,7 +222,7 @@ export function TaskPage() {
             if (response.ok) {
                 setTasks(prevTasks =>
                     prevTasks.map(t =>
-                        t.id === task.id ? { ...t, completed: updatedStatus } : t
+                        t.id === task.id ? {...t, completed: updatedStatus} : t
                     )
                 );
             } else {
@@ -274,7 +269,7 @@ export function TaskPage() {
                 <DrawerHeader>
                     <DrawerTitle>Task Details</DrawerTitle>
                 </DrawerHeader>
-                 <Sidebar
+                <Sidebar
                     id="title-option"
                     title={currentTaskTitle}
                     setTitleInParent={setCurrentTaskTitle}
@@ -286,7 +281,7 @@ export function TaskPage() {
                         id="descriptionBox"
                         placeholder="Description"
                         spellCheck='false'
-                        style={{ resize: 'none' }}
+                        style={{resize: 'none'}}
                         className="flex mx-4 w-[344px] h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
                     >
                     </textarea>
@@ -294,7 +289,7 @@ export function TaskPage() {
                         <Label htmlFor="projects-option">Project: </Label>
                         <select
                             id="projects-option"
-                            
+
                             className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         >
                             <option value="" disabled selected>Select an option</option>
@@ -308,23 +303,23 @@ export function TaskPage() {
                     <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
                         <Label htmlFor="date-option">Due Date: </Label>
                         <input
-                        id="date-option"
-                        type="date"
-                        className=" w-[263px] mr-6 flex h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
+                            id="date-option"
+                            type="date"
+                            className=" w-[263px] mr-6 flex h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
                         >
                         </input>
                     </div>
                     <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
                         <Label htmlFor="repeat-option">Project: </Label>
                         <select
-                        id="repeat-option"
-                        className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
-                    >
-                        <option value="" disabled selected>Select an option</option>
-                        <option value="Never">Repeats Never</option>
-                        <option value="option2">To be determined</option>
-                        <option value="option3">To be determined</option>
-                        <option value="option1">To be determined</option>
+                            id="repeat-option"
+                            className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
+                        >
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="Never">Repeats Never</option>
+                            <option value="option2">To be determined</option>
+                            <option value="option3">To be determined</option>
+                            <option value="option1">To be determined</option>
                         </select>
                     </div>
                     <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
@@ -358,18 +353,18 @@ export function TaskPage() {
                         {/* Tab Buttons for Upcoming and Completed */}
                         <div className="border-b">
                             <div className="flex pl-20 pr-20 gap-[32px]">
-                            <button
-                                className={`text-[16px] font-semibold ${activeTab === 'upcoming' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
-                                onClick={() => handleTabClick("upcoming")}
-                            >
-                                Upcoming
-                            </button>
-                            <button
-                                className={`text-[16px] font-semibold ${activeTab === 'completed' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
-                                onClick={() => handleTabClick("completed")}
-                            >
-                                Completed
-                            </button>
+                                <button
+                                    className={`text-[16px] font-semibold ${activeTab === 'upcoming' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
+                                    onClick={() => handleTabClick("upcoming")}
+                                >
+                                    Upcoming
+                                </button>
+                                <button
+                                    className={`text-[16px] font-semibold ${activeTab === 'completed' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
+                                    onClick={() => handleTabClick("completed")}
+                                >
+                                    Completed
+                                </button>
                             </div>
                         </div>
                         <DrawerTrigger asChild>
@@ -379,46 +374,10 @@ export function TaskPage() {
                         </DrawerTrigger>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns} data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
+                        <TaskTable columns={taskColumns}
+                                   data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
                     </section>
                 </div>
-
-//                 <table className="w-full">
-//                     <thead>
-//                     <tr className="border-b">
-//                         <th className="px-4 py-2 text-center">Completed?</th>
-//                         <th className="px-4 py-2 text-center" onClick={() => handleSort("title")}>Task <CaretSortIcon/>
-//                         </th>
-//                         <th className="px-4 py-2 text-center"
-//                             onClick={() => handleSort("project")}>Project <CaretSortIcon/></th>
-//                         <th className="px-4 py-2 text-center" onClick={() => handleSort("dueDate")}>Due
-//                             Date <CaretSortIcon/></th>
-//                         <th className="px-4 py-2 text-center"
-//                             onClick={() => handleSort("priority")}>Priority <CaretSortIcon/></th>
-//                         <th className="px-4 py-2"></th>
-//                     </tr>
-//                     </thead>
-//                     <tbody>
-//                     {tasks.map((task) => (
-//                         <tr key={task.id} className="border-b last:border-b-0">
-//                             <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
-//                                                                             checked={task.completed}
-//                                                                             onClick={() => toggleTaskCompletion(task, task.completed)}/>
-//                             </td>
-//                             <td className="px-4 py-2 text-center">{task.title}</td>
-//                             <td className="px-4 py-2 text-center">{getProjectName(task.project)}</td>
-//                             <td className="px-4 py-2 text-center">{task.dueDate}</td>
-//                             <td className="px-4 py-2 text-center">{task.priority}</td>
-//                             <td className="px-4 py-2 text-center">
-//                                 <Button variant="ghost" size="icon"
-//                                         onClick={() => setDeletePopup({isOpen: true, taskId: task.id})}>
-//                                     <Trash2 className="h-4 w-4"/>
-//                                 </Button>
-//                             </td>
-//                         </tr>
-//                     ))}
-//                     </tbody>
-//                 </table>
             </div>
         </>
     );
