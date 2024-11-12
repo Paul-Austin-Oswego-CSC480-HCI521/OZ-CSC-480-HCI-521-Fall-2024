@@ -14,6 +14,7 @@ import NavButton from "@/components/NavButton.jsx";
 
 import {TaskTable} from '@/components/TaskTable'
 import { taskColumns } from "@/components/TaskColumns";
+import {DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer.jsx";
 
 // Initial tasks for test data
 const priorityOrder = {
@@ -48,6 +49,12 @@ export default function RecentlyDeleted() {
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
+    const [activeTab, setActiveTab] = useState("upcoming");
+
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
+
 
     const getProjectName = (projectId) => {
         const project = projects.find(project => project.id === projectId);
@@ -193,115 +200,99 @@ export default function RecentlyDeleted() {
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
             />
-            <Sidebar
-                id="title-option"
-                title={currentTaskTitle}
-                setTitleInParent={setCurrentTaskTitle}
-                editMode={editMode}
-                isEditMode={isEditMode}
-            >
-                <select
-                    id="projects-option"
-                    className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
+            <DrawerContent className="max-w-[417px] bg-blueLight fixed bottom-0 right-0 ml-auto h-full pt-20 pl-4">
+                <DrawerHeader>
+                    <DrawerTitle>Task Details</DrawerTitle>
+                </DrawerHeader>
+                <Sidebar
+                    id="title-option"
+                    title={currentTaskTitle}
+                    setTitleInParent={setCurrentTaskTitle}
+                    editMode={editMode}
+                    isEditMode={isEditMode}
                 >
-                    {projects.map((project) => (
-                        <option key={project.id} value={project.id} className="flex flex-col">
-                            {project.name}
-                        </option>
-                    ))}
-                </select>
+                    <Label htmlFor="descriptionBox" className="sr-only">Task Description</Label>
+                    <textarea
+                        id="descriptionBox"
+                        placeholder="Description"
+                        spellCheck='false'
+                        style={{resize: 'none'}}
+                        className="flex mx-4 w-[344px] h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
+                    >
+                    </textarea>
+                    <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
+                        <Label htmlFor="projects-option">Project: </Label>
+                        <select
+                            id="projects-option"
 
+                            className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
+                        >
+                            <option value="" disabled selected>Select an option</option>
+                            {projects.map((project) => (
+                                <option key={project.id} value={project.id} className="flex flex-col">
+                                    {project.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
+                        <Label htmlFor="date-option">Due Date: </Label>
+                        <input
+                            id="date-option"
+                            type="date"
+                            className=" w-[263px] mr-6 flex h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
+                        >
+                        </input>
+                    </div>
+                    <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
+                        <Label htmlFor="repeat-option">Project: </Label>
+                        <select
+                            id="repeat-option"
+                            className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
+                        >
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="Never">Repeats Never</option>
+                            <option value="option2">To be determined</option>
+                            <option value="option3">To be determined</option>
+                            <option value="option1">To be determined</option>
+                        </select>
+                    </div>
+                    <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
+                        <Label htmlFor="priority-option">Project: </Label>
+                        <select
+                            id="priority-option"
+                            className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
+                        >
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="0">Low</option>
+                            <option value="1">Medium</option>
+                            <option value="2">High</option>
+                            <option value="None">No Priority</option>
+                        </select>
+                    </div>
+                    <div className="fixed right-4 bottom-4">
+                        <Button variant="default" onClick={addNewTask}>Save Changes</Button>
+                    </div>
+                </Sidebar>
+            </DrawerContent>
 
-                <input
-                    id="date-option"
-                    type="date"
-                    className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300 mb-4"
-                >
-                </input>
-
-
-                <select
-                    id="repeat-option"
-                    className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
-                >
-                    <option value="Never">Repeats Never</option>
-                    <option value="option2">To be determined</option>
-                    <option value="option3">To be determined</option>
-                    <option value="option1">To be determined</option>
-                </select>
-
-                <select
-                    id="priority-option"
-                    className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
-                >
-                    <option value="0">Low</option>
-                    <option value="1">Medium</option>
-                    <option value="2">High</option>
-                    <option value="None">No Priority</option>
-                </select>
-
-
-                <Label htmlFor="descriptionBox"><b>Task Description</b></Label>
-                <textarea
-                    id="descriptionBox"
-                    placeholder="Describe your task here..."
-                    spellCheck='false'
-                    style={{resize: 'none'}}
-                    className="flex w-full h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
-                >
-               </textarea>
-                <div className="flex justify-end mb-4">
-                    <Button variant="default2" onClick={addNewTask}>Save Changes</Button>
-                </div>
-            </Sidebar>
 
             {/* Main Content */}
-            <div className="bg-white rounded-lg shadow mx-auto max-w-4xl p-6">
-                <h1 className="text-left pb-4 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                    My Tasks
-                </h1>
-                <br/>
-                <hr/>
-                <br/>
-                <div className="text-left mb-4">
-                    <Button onClick={resetTaskFields}>Create New Task</Button>
+            <div className="bg-white pt-5 pb-5 w-full">
+                <div className="flex flex-col gap-[32px]">
+                    <div className="flex flex-col gap-[32px]">
+                        <h1 className="text-left text-[48px] font-bold pl-20 pr-20">
+                            Recently Deleted
+                        </h1>
+                    </div>
+                    <section>
+                        <TaskTable columns={taskColumns}
+                                   data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
+                    </section>
                 </div>
-
-                <table className="w-full">
-                    <thead>
-                    <tr className="border-b">
-                        <th className="px-4 py-2 text-center">Completed?</th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("title")}>Task <CaretSortIcon/>
-                        </th>
-                        <th className="px-4 py-2 text-center"
-                            onClick={() => handleSort("project")}>Project <CaretSortIcon/></th>
-                        <th className="px-4 py-2 text-center" onClick={() => handleSort("dueDate")}>Due
-                            Date <CaretSortIcon/></th>
-                        <th className="px-4 py-2 text-center"
-                            onClick={() => handleSort("priority")}>Priority <CaretSortIcon/></th>
-                        <th className="px-4 py-2"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {tasks.map((task) => (
-                        <tr key={task.id} className="border-b last:border-b-0">
-                            <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
-                                                                            checked={task.completed}/></td>
-                            <td className="px-4 py-2 text-center">{task.title}</td>
-                            <td className="px-4 py-2 text-center">{getProjectName(task.project)}</td>
-                            <td className="px-4 py-2 text-center">{task.dueDate}</td>
-                            <td className="px-4 py-2 text-center">{task.priority}</td>
-                            <td className="px-4 py-2 text-center">
-                                <Button variant="ghost" size="icon"
-                                        onClick={() => setDeletePopup({isOpen: true, taskId: task.id})}>
-                                    <Trash2 className="h-4 w-4"/>
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
             </div>
         </>
     );
 }
+
+
