@@ -10,15 +10,22 @@ const app = express()
 app.use(cookieParser(), express.json())
 
 const instance = axios.create({
+    // TODO: get a real cert rather than a self signed cert (ask paul)
     httpsAgent: new https.Agent({ rejectUnauthorized: false })
 })
 
 async function getJwt(req) {
-    if (req.cookies.sessionID == undefined) {
+    if (req.cookies.ozSessionID == undefined) {
+        console.log('no cookie')
         throw { response: { status: 401, data: 'no sessionID cookie' } }
     }
+    return (await instance.get(AUTH_ROOT + '/auth/jwt', { headers: { 'Oz-Session-Id': req.cookies.ozSessionID } })).data
+}
 
-    return (await instance.get(AUTH_ROOT + '/auth/jwt', { headers: { 'Oz-Session-Id': req.cookies.sessionID } })).data
+async function authHeaders(req, headers) {
+    headers = headers ? headers : {}
+    headers['Authorization'] = 'Bearer ' + await getJwt(req)
+    return headers
 }
 
 function handleRequestError(error, res, context) {
@@ -36,21 +43,21 @@ function handleRequestError(error, res, context) {
     }
 }
 
-function proxyGet(endpoint) {
+function proxyGet() {
     return async (req, res) => {
         try {
-            const response = await instance.get(API_ROOT + endpoint, { headers: await authHeaders(req) })
+            const response = await instance.get(API_ROOT + req.path, { headers: await authHeaders(req) })
             res.send(response.data).end()
         } catch (error) {
-            handleRequestError(error, res, 'get: ' + endpoint)
+            handleRequestError(error, res, 'get: ' + req.path)
         }
     }
 }
 
-function proxyPost(endpoint) {
+function proxyPost() {
     return async (req, res) => {
         try {
-            const response = await instance.post(API_ROOT + endpoint, req.body, {
+            const response = await instance.post(API_ROOT + req.path, req.body, {
                 headers: await authHeaders(req, {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -58,35 +65,84 @@ function proxyPost(endpoint) {
             })
             res.send(response.data).end()
         } catch (error) {
-            handleRequestError(error, res, 'post: ' + endpoint)
+            handleRequestError(error, res, 'post: ' + req.path)
         }
     }
 }
 
-app.get('/tasks', proxyGet('/tasks'))
-app.post('/tasks', proxyPost('/tasks'))
+function proxyPut() {
+    return async (req, res) => {
+        try {
+            const response = await instance.put(API_ROOT + req.path, req.body, {
+                headers: await authHeaders(req, {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                })
+            })
+            res.send(response.data).end()
+        } catch (error) {
+            handleRequestError(error, res, 'put: ' + req.path)
+        }
+    }
+}
+
+function proxyDelete() {
+    return async (req, res) => {
+        try {
+            const response = await instance.delete(API_ROOT + req.path, { headers: await authHeaders(req) })
+            res.send(response.data).end()
+        } catch (error) {
+            handleRequestError(error, res, 'delete: ' + req.path)
+        }
+    }
+}
+
+
+// ****** user routes *******
+// check if the user is authenticated
 app.get('/auth', async (req, res) => {
     try {
         await getJwt(req)
         res.send()
-    } catch {
-        res.sendStatus(401)
-    }
-})
-app.delete('/tasks/:taskId', async (req, res) => {
-    try {
-        const response = await instance.delete(API_ROOT + '/tasks/' + req.params.taskId, { headers: await authHeaders(req) })
-        res.send(response.data).end()
     } catch (error) {
-        handleRequestError(error, res, 'delete: /tasks/:taskId')
+        res.status(401).send(error.message)
     }
 })
+// get user details (may subsume /auth's functionality)
+app.get('/user', proxyGet())
 
-async function authHeaders(req, headers) {
-    headers = headers ? headers : {}
-    headers['Authorization'] = 'Bearer ' + await getJwt(req)
-    return headers
-}
+// ****** project routes ******
+// get all projects
+app.get('/projects', proxyGet())
+// create a new project
+app.post('/projects', proxyPost())
+// get a specific project
+app.get('/projects/:projectId', proxyGet())
+// update a given project
+app.put('/projects/:projectId', proxyPut())
+// delete a given project
+app.delete('/projects/:projectId', proxyDelete())
+
+// ****** task routes ******
+// get all accessable tasks
+app.get('/tasks', proxyGet())
+// create a new task
+app.post('/tasks', proxyPost())
+// get a specific task
+app.get('/tasks/:taskId', proxyGet())
+// update a given task
+app.put('/tasks/:taskId', proxyPut())
+// delete a given task
+app.delete('/tasks/:taskId', proxyDelete())
+
+// get all completed tasks
+app.get('/tasks/completed', proxyGet())
+// get all trashed tasks
+app.get('/tasks/trash', proxyGet())
+// move a task to the trash
+app.put('/tasks/trash/:taskId', proxyPut())
+// get all past due tasks **NOT IMPLEMENTED YET**
+app.get('/tasks/past-due', proxyGet())
 
 export default function proxyPlugin(authRoot, apiRoot) {
     AUTH_ROOT = authRoot

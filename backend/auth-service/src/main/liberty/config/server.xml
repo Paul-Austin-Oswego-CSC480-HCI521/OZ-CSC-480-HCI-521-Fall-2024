@@ -16,27 +16,29 @@
     </featureManager>
 
     <variable name="http.port" defaultValue="9090"/>
-    <variable name="https.port" defaultValue="8443"/>
-    <variable name="location" defaultValue="auth-service"/>
-    <variable name="frontend.root" defaultValue="http://localhost:80"/>
+    <variable name="https.port" defaultValue="9443"/>
+    <variable name="frontend.root" defaultValue="http://localhost:2080"/>
+    <variable name="cert.location" defaultValue="key.jks"/>
+    <variable name="cert.password" defaultValue="testpw"/>
+    <variable name="cert.algorithm" defaultValue="RS256"/>
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
                   host="*"/>
 
-    <keyStore id="testKeyStore" location="key.jks" password="testpw" />
+    <keyStore id="testKeyStore" location="${cert.location}" password="${cert.password}" />
     <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
 
     <githubLogin clientId="${github.client.id}"
                  clientSecret="${github.client.secret}" />
 
-    <webApplication contextRoot="/" location="${location}.war">
+    <webApplication contextRoot="/" location="auth-service.war">
         <application-bnd>
             <security-role name="user">
                 <special-subject type="ALL_AUTHENTICATED_USERS"/>
             </security-role>
         </application-bnd>
-        <security-constraint>
+        <!-- <security-constraint>
             <web-resource-collection>
                 <web-resource-name>NativeLogin</web-resource-name>
                 <url-pattern>/auth/native-login</url-pattern>
@@ -44,14 +46,21 @@
             <auth-constraint>
                 <role-name>user</role-name>
             </auth-constraint>
-        </security-constraint>
+        </security-constraint> -->
     </webApplication>
 
-    <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiresInSeconds="15"/>
+    <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiresInSeconds="15"
+                trustStoreRef="testKeyStore" signatureAlgorithm="${cert.algorithm}"/>
 
     <!--More Cors bs-->
     <cors domain="/auth/native-login"
           allowedOrigins="${frontend.root}"
-          allowCredentials="true"
-          allowedMethods="POST, OPTIONS"/>
+          allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
+          allowedHeaders="*"
+          allowCredentials="true"/>
+    <cors domain="/auth/create-user"
+          allowedOrigins="${frontend.root}"
+          allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
+          allowedHeaders="*"
+          allowCredentials="true"/>
 </server>

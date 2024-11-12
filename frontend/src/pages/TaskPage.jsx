@@ -9,7 +9,10 @@ import {ArchiveIcon, CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
 import {Checkbox} from "@/components/ui/checkbox.jsx";
 import {Dialog} from "@radix-ui/react-dialog";
 import {DialogDemo} from "@/components/Dialog.jsx";
+import {AccordionContent} from "@/components/ui/accordion.jsx";
+import NavButton from "@/components/NavButton.jsx";
 
+// Initial tasks for test data
 const priorityOrder = {
     Low: 1,
     Medium: 2,
@@ -19,78 +22,94 @@ const priorityOrder = {
 const initialTasks = [
     {
         id: "task-1",
-        completed: false,
+        completed: 0,
         title: "Complete report",
-        project: "Office Work",
+        projectId: "1",
         dueDate: "2024-10-20",
-        priority: "High",
-    },
+        priority: 0,
+    }
+];
+
+const initialProjects = [
     {
-        id: "task-2",
-        completed: false,
-        title: "Design homepage",
-        project: "Web Development",
-        dueDate: "2024-10-22",
-        priority: "Medium",
-    },
-    {
-        id: "task-3",
-        completed: true,
-        title: "Team meeting",
-        project: "Internal",
-        dueDate: "2024-10-19",
-        priority: "Low",
-    },
+        description: "this description just got updated",
+        id: 1,
+        name: "Not my first rodeo"
+    }
 ];
 
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
+    const [projects, setProjects] = useState(initialProjects);
     const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
 
+    const getProjectName = (projectId) => {
+        const project = projects.find(project => project.id === projectId);
+        return project ? project.name : 'Unknown Project';
+    };
+
+
     const handleDeletePopup = (action, taskId) => {
-        setDeletePopup({isOpen: false, taskId: null}); // Close dialog after action
+        setDeletePopup({isOpen: false, taskId: null});
         if (action === "delete") {
             deleteTask(taskId);
         }
     };
 
+    const fetchTasks = async () => {
+        try {
+            if (!(await fetch('/auth')).ok) {
+                window.location.replace('/login');
+                return;
+            }
+            const response = await fetch(`/tasks`);
+            if (response.ok) {
+                const data = await response.json();
+                const formattedTasks = data.map(task => ({
+                    id: task.id,
+                    completed: task.status,
+                    title: task.name,
+                    project: task.projectId,
+                    dueDate: task.dueDate || 'No Due Date',
+                    priority: task.priority || 'Medium',
+                }));
+                console.log(formattedTasks);
+                setTasks(formattedTasks);
+            } else {
+                console.error('Failed to fetch tasks:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchTasks = async () => {
+        // Fetching all projects
+        const fetchProjects = async () => {
             try {
-                if (!(await fetch('/auth')).ok) {
-                    window.location.replace('/login');
-                    return;
-                }
-                const response = await fetch(`/tasks`);
+                const response = await fetch('/projects');
                 if (response.ok) {
-                    const data = await response.json();
-                    const formattedTasks = data.map(task => ({
-                        id: task.id,
-                        completed: task.status === 1,
-                        title: task.name,
-                        project: `Project ${task.project_id}`,
-                        dueDate: task.dueDate || 'No Due Date',
-                        priority: task.priority || 'Medium',
-                    }));
-                    setTasks(formattedTasks);
+                    const projectData = await response.json();
+                    setProjects(projectData);
                 } else {
-                    console.error('Failed to fetch tasks:', response.statusText);
+                    console.error("Failed to fetch projects:", response.statusText);
                 }
             } catch (error) {
-                console.error('Error fetching tasks:', error);
+                console.error("Error fetching projects:", error);
             }
         };
 
         fetchTasks();
+        fetchProjects();
     }, []);
 
     const resetTaskFields = async () => {
         isEditMode(true);
         setCurrentTaskTitle('');
-        document.getElementById("projects-option").value = "option1";
+        document.getElementById("projects-option").value = "1";
         document.getElementById("date-option").value = "";
         document.getElementById("priority-option").value = "Low";
         document.getElementById("repeat-option").value = "Never";
@@ -101,8 +120,10 @@ export function TaskPage() {
         const newTask = {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
-            status: 1,
-            project_id: 7,
+            status: 0,
+            projectId: +document.getElementById('projects-option').value,
+            dueDate: document.getElementById('date-option').value,
+            priority: +document.getElementById('priority-option').value,
         };
         try {
             const response = await fetch('/tasks', {
@@ -117,12 +138,13 @@ export function TaskPage() {
                 const createdTask = await response.json();
                 const formattedTask = {
                     id: createdTask.id,
-                    completed: createdTask.status === 1,
+                    completed: false,
                     title: createdTask.name,
-                    project: `Project ${createdTask.project_id}`,
-                    dueDate: "TBD",
-                    priority: "Medium",
+                    project: createdTask.projectId,
+                    dueDate: createdTask.dueDate,
+                    priority: createdTask.priority,
                 };
+                console.log(createdTask);
                 setTasks((prevTasks) => [...prevTasks, formattedTask]);
             }
         } catch (error) {
@@ -132,75 +154,107 @@ export function TaskPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'});
-            if (response.ok) {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-            } else {
-                console.log(`Error deleting task ${taskId}`);
+            const trashResponse = await fetch(`/tasks/trash/${taskId}`, { method: 'PUT' });
+            if (!trashResponse.ok) {
+                console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
+                return;
             }
+            await fetchTasks();
+            console.log(`Task ${taskId} successfully moved to trash.`);
         } catch (e) {
-            console.error(e.message);
+            console.error(`Error processing task deletion for ${taskId}: ${e.message}`);
         }
     };
 
+
     const handleSort = (key) => {
         let direction = "asc";
-
-        // Toggle direction if the same key is being sorted
         if (sortConfig.key === key && sortConfig.direction === "asc") {
             direction = "desc";
         }
-
         setSortConfig({key, direction});
 
         const sortedTasks = [...tasks].sort((a, b) => {
             if (key === "priority") {
-                if (direction === "asc") {
-                    if (priorityOrder[a.priority] < priorityOrder[b.priority]) {
-                        return -1;
-                    }
-                    if (priorityOrder[a.priority] > priorityOrder[b.priority]) {
-                        return 1;
-                    }
-                } else {
-                    if (priorityOrder[a.priority] > priorityOrder[b.priority]) {
-                        return -1;
-                    }
-                    if (priorityOrder[a.priority] < priorityOrder[b.priority]) {
-                        return 1;
-                    }
-                }
-                return 0;
+                return direction === "asc"
+                    ? priorityOrder[a.priority] - priorityOrder[b.priority]
+                    : priorityOrder[b.priority] - priorityOrder[a.priority];
             }
-
-            if (direction === "asc") {
-                if (a[key] < b[key]) {
-                    return -1;
-                }
-                if (a[key] > b[key]) {
-                    return 1;
-                }
-            } else {
-                if (a[key] > b[key]) {
-                    return -1;
-                }
-                if (a[key] < b[key]) {
-                    return 1;
-                }
-            }
-            return 0;
+            return direction === "asc" ? (a[key] < b[key] ? -1 : 1) : (a[key] > b[key] ? -1 : 1);
         });
         setTasks(sortedTasks);
     };
 
+    // SL NOTE: DOES NOT WORK; POSSIBLE BACKEND ISSUE?
+    // TWO METHODS - SEND ENTIRE JSON VS SEND ONLY STATUS
+    // NEITHER WORKS
+
+    // METHOD 1 - SEND ENTIRE JSON
+    const toggleTaskCompletion = async (task, currentStatus) => {
+        const updatedStatus = currentStatus === 1 ? 0 : 1;
+        const updatedTask = {
+            id: task.id,
+            completed: updatedStatus,
+            title: task.name,
+            project: task.projectId,
+            dueDate: task.dueDate,
+            priority: task.priority,
+        };
+        try {
+            const response = await fetch(`/tasks/${task.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedTask),
+            });
+            if (response.ok) {
+                setTasks(prevTasks =>
+                    prevTasks.map(t =>
+                        t.id === task.id ? { ...t, completed: updatedStatus } : t
+                    )
+                );
+            } else {
+                console.error("Failed to update task:", response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error("Error updating task:", error);
+        }
+    };
+
+    // METHOD 2 - SEND ONLY STATUS
+    // const toggleTaskCompletion = async (task, currentStatus) => {
+    //     const updatedStatus = currentStatus === 1 ? 0 : 1;
+    //     try {
+    //         const response = await fetch(`/tasks/${task.id}`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ status: updatedStatus }),
+    //         });
+    //         if (response.ok) {
+    //             setTasks(prevTasks =>
+    //                 prevTasks.map(task =>
+    //                     task.id === task.id ? { ...task, completed: updatedStatus } : task
+    //                 )
+    //             );
+    //         } else {
+    //             console.error("Failed to update task completion status:", response.statusText);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error updating task completion status:", error);
+    //     }
+    // };
+
+
     return (
         <>
-            <div>
-                <DialogDemo
-                    onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
-                    isOpen={deletePopup.isOpen}
-                />
-                <Sidebar
+            <DialogDemo
+                onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
+                isOpen={deletePopup.isOpen}
+            />
+            <Sidebar
                     id="title-option"
                     title={currentTaskTitle}
                     setTitleInParent={setCurrentTaskTitle}
@@ -211,11 +265,13 @@ export function TaskPage() {
                         id="projects-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-                        <option value="option1">Project 1</option>
-                        <option value="option2">Project 2</option>
-                        <option value="option3">Project 3</option>
-                        <option value="option1">No Project</option>
+                        {projects.map((project) => (
+                            <option key={project.id} value={project.id} className="flex flex-col">
+                                {project.name}
+                            </option>
+                        ))}
                     </select>
+
 
                     <input
                         id="date-option"
@@ -234,18 +290,19 @@ export function TaskPage() {
                         <option value="option3">To be determined</option>
                         <option value="option1">To be determined</option>
                     </select>
+
                     <select
                         id="priority-option"
                         className="w-full p-2 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black mb-4"
                     >
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
+                        <option value="0">Low</option>
+                        <option value="1">Medium</option>
+                        <option value="2">High</option>
                         <option value="None">No Priority</option>
                     </select>
 
 
-                    <Label htmlFor="password"><b>Task Description</b></Label>
+                    <Label htmlFor="descriptionBox"><b>Task Description</b></Label>
                     <textarea
                         id="descriptionBox"
                         placeholder="Describe your task here..."
@@ -258,9 +315,10 @@ export function TaskPage() {
                         <Button variant="default2" onClick={addNewTask}>Save Changes</Button>
                     </div>
                 </Sidebar>
-            </div>
+
+            {/* Main Content */}
             <div className="bg-white rounded-lg shadow mx-auto max-w-4xl p-6">
-                <h1 className="text-left scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                <h1 className="text-left pb-4 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                     My Tasks
                 </h1>
                 <br/>
@@ -289,9 +347,11 @@ export function TaskPage() {
                     {tasks.map((task) => (
                         <tr key={task.id} className="border-b last:border-b-0">
                             <td className="px-4 py-2 text-center"><Checkbox id={`task-${task.id}`}
-                                                                            checked={task.completed}/></td>
+                                                                            checked={task.completed}
+                                                                            onClick={() => toggleTaskCompletion(task, task.completed)}/>
+                            </td>
                             <td className="px-4 py-2 text-center">{task.title}</td>
-                            <td className="px-4 py-2 text-center">{task.project}</td>
+                            <td className="px-4 py-2 text-center">{getProjectName(task.project)}</td>
                             <td className="px-4 py-2 text-center">{task.dueDate}</td>
                             <td className="px-4 py-2 text-center">{task.priority}</td>
                             <td className="px-4 py-2 text-center">
