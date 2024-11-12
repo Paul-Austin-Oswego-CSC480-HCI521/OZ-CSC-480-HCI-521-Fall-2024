@@ -46,7 +46,7 @@ export function TaskTable({
     function CellContent({cellContent, cell}){
         if(cell.column.columnDef.accessorKey==="completed"){
             return(
-                <span className="pl-4">
+                <span className="pl-16 pr-0">
                     { flexRender(<Checkbox defaultChecked={cellContent===true} onCheckedChange={(checked)=>handleCheckChange(checked)}/>, cell.getContext()) }
                 </span>
             )
@@ -60,11 +60,11 @@ export function TaskTable({
     }
    
     return (
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
+      <div className={" mr-[340px]"}>
+        <Table >
+          <TableHeader >
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow className={"border-b-transparent"} key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -92,7 +92,9 @@ export function TaskTable({
                         <CellContent cellContent={cell.getValue()} cell={cell}/> 
                     </TableCell>
                   ))}
+                  
                 </TableRow>
+                
               ))
             ) : (
               <TableRow>
