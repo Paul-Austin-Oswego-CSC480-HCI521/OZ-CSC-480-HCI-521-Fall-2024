@@ -28,35 +28,64 @@ class LoginAutomationTest {
         // Navigate to the login page
         driver.get("http://moxie.cs.oswego.edu:49000/login");
 
-        // // Locate email input and enter the username
-        // WebElement emailInput = driver.findElement(By.id("email"));
-        // emailInput.sendKeys("user@gmail.com");
+        // Retrieve email and password from environment variables
+        String email = System.getenv("CSC480_TEST_EMAIL");
+        String password = System.getenv("CSC480_TEST_PASSWORD");
 
-        // // Locate password input and enter the password
-        // WebElement passwordInput = driver.findElement(By.id("password"));
-        // passwordInput.sendKeys("password");
-
-        // // Click the login button
-        // WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
-        // loginButton.click();
-
+        // Click the login button
+        WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        loginButton.click();
         Thread.sleep(5000);
 
         // Locate and click the "Log in with GitHub" button
-        System.out.println("Attempting to find GitHub login button...");
+        System.out.println("\nAttempting to find GitHub login button...");
         WebElement githubLoginButton = driver.findElement(By.xpath("//button[contains(., 'Log in with GitHub')]"));
-        System.out.println("GitHub login button found, clicking it...");
+        System.out.println("GitHub login button found, clicking it...\n");
         githubLoginButton.click();
+        Thread.sleep(30000);
 
-        // Check that the login was successful by verifying if the user was redirected
+        // Locate email input and enter the email
+        WebElement emailInput = driver.findElement(By.id("login_field"));
+        emailInput.sendKeys(email);
+        Thread.sleep(3000);
+
+        // Locate password input and enter the password
+        WebElement passwordInput = driver.findElement(By.id("password"));
+        passwordInput.sendKeys(password);
+        Thread.sleep(3000);
+
+        // Locate and click the "sign in" button
+        System.out.println("Attempting to find sign in button...");
+        WebElement signInButton = driver.findElement(By.xpath("//input[@type='submit' and @value='Sign in']"));
+        System.out.println("Sign in login button found, clicking it...\n");
+        signInButton.click();
+        Thread.sleep(3000);
+
+        // Attempt to locate and click the "Authorize" button if it exists
+        System.out.println("Attempting to find authorize button...");
+        try {
+            WebElement authorizeButton = driver.findElement(By.xpath("//button[@name='authorize' and @value='1']"));
+            System.out.println("Authorize button found, clicking it...");
+            authorizeButton.click();
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            System.out.println("Authorize button not found, skipping...\n");
+        }   
+
+
+        // Check that the login was successful by verifying the current URL
         assertTrue(driver.getCurrentUrl().endsWith("/")); // Expected URL after login
+        Thread.sleep(3000);
 
-        Thread.sleep(5000);
-
-        System.out.println("Attempting to find GitHub login button...");
-        WebElement githubLogoutButton = driver.findElement(By.xpath("//button[contains(., 'Log out')]"));
-        githubLogoutButton.click();
-        assertTrue(driver.getCurrentUrl().endsWith("/login")); // Expected URL after logout
+        // Locate and click the "Log out" button
+        System.out.println("Attempting to find logout button...");
+        WebElement logoutButton = driver.findElement(By.xpath("//a[@href='/Login']"));
+        System.out.println("Logout login button found, clicking it...\n");
+        logoutButton.click();
+        Thread.sleep(3000);
+        
+         // Check that the logout was successful by verifying the current URL
+        assertTrue(driver.getCurrentUrl().endsWith("/Login")); // Expected URL after logout
+        System.out.println("Logout was successful! Thank you for testing CheckMate!");
     }
 
     @AfterEach
@@ -66,4 +95,5 @@ class LoginAutomationTest {
         }
     }
 }
+
 
