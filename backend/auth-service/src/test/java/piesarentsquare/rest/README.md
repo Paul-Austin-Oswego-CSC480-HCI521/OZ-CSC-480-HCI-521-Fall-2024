@@ -1,4 +1,4 @@
-# LoginAutomationTest Guide
+# CheckmateAutomationTest Guide
 
 This series of tests created by the QA Team automates testing functionality within the web application, **CheckMate**. The test script navigates through all pages, selecting buttons and entering details to ensure that each aspect of the project functions as intended.
 
@@ -56,7 +56,7 @@ To run this test, ensure the following environment variables are configured corr
 
 ## Running the Tests
 
-For now, a simple and easy way to run the test is to **right-click** the file named **LoginAutomationTest.java** and select **Run Tests**.
+For now, a simple and easy way to run the test is to **right-click** the file named **CheckmateAutomationTest.java** and select **Run Tests**.
 
 Thank you for testing CheckMate!
 
