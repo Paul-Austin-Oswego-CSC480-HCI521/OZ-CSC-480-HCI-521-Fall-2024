@@ -114,7 +114,6 @@ export function TaskPage() {
         document.getElementById("projects-option").value = 0;
         document.getElementById("date-option").value = "";
         document.getElementById("priority-option").value = "Low";
-        document.getElementById("repeat-option").value = "Never";
         document.getElementById("descriptionBox").value = "";
     };
 
@@ -281,19 +280,6 @@ export function TaskPage() {
                             className=" w-[263px] mr-6 flex h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
                         >
                         </input>
-                    </div>
-                    <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
-                        <Label htmlFor="repeat-option">Repeats: </Label>
-                        <select
-                            id="repeat-option"
-                            className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
-                        >
-                            <option value="" disabled selected>Select an option</option>
-                            <option value="Never">Repeats Never</option>
-                            <option value="option2">To be determined</option>
-                            <option value="option3">To be determined</option>
-                            <option value="option1">To be determined</option>
-                        </select>
                     </div>
                     <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
                         <Label htmlFor="priority-option">Priority: </Label>
