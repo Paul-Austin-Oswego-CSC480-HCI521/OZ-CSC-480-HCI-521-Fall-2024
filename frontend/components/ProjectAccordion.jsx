@@ -71,7 +71,7 @@ function ProjectAccordion() {
     return (
         <Accordion defaultValue="projects" type="single" collapsible>
             <AccordionItem value="projects"
-                           className="w-48 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300 border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50">
+                           className="bg-none">
                 <div className="relative flex">
                     <Button
                         size="icon"
