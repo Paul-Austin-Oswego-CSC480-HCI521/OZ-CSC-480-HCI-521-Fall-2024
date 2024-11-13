@@ -74,7 +74,7 @@ export function TaskPage() {
                     id: task.id,
                     completed: task.status,
                     title: task.name,
-                    project: task.projectId,
+                    project: getProjectName(task.projectId),
                     dueDate: task.dueDate || 'No Due Date',
                     priority: priorityOrder[task.priority],
                 }));
