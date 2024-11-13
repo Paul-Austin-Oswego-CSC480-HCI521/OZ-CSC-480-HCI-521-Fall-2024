@@ -18,7 +18,7 @@ const priorityOrder = {
 const initialTasks = [
     {
         id: "task-1",
-        completed: false,
+        completed: 0,
         title: "Complete report",
         projectId: "1",
         dueDate: "2024-10-20",
@@ -151,17 +151,19 @@ export default function ProjectPage() {
     };
 
     const deleteTask = async (taskId) => {
+        console.log('task to be deleted: ' + taskId);
         try {
             const response = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
             if (response.ok) {
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
             } else {
-                console.error(`Error deleting task ${taskId}`);
+                console.error(`Error deleting task ${taskId}`, response.statusText);
             }
         } catch (error) {
             console.error('Error deleting task:', error);
         }
     };
+
 
     const handleSort = (key) => {
         let direction = "asc";

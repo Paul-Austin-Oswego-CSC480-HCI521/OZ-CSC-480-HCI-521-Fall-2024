@@ -8,20 +8,12 @@ import {TaskTable} from '@/components/TaskTable'
 import {taskColumns} from "@/components/TaskColumns";
 
 import {DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader} from "@/components/ui/drawer";
-import {Input} from "@/components/ui/input.jsx";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.jsx";
-import {Trash2} from "lucide-react";
-import {ArchiveIcon, CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
-import {Checkbox} from "@/components/ui/checkbox.jsx";
-import {Dialog} from "@radix-ui/react-dialog";
-import {AccordionContent} from "@/components/ui/accordion.jsx";
-import NavButton from "@/components/NavButton.jsx";
 
 // Initial tasks for test data
 const priorityOrder = {
-    Low: 1,
-    Medium: 2,
-    High: 3,
+    0: 'Low',
+    1: 'Medium',
+    2: 'High',
 };
 
 const initialTasks = [
@@ -46,7 +38,6 @@ const initialProjects = [
 export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
     const [projects, setProjects] = useState(initialProjects);
-    const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
     const [editMode, isEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
@@ -85,7 +76,7 @@ export function TaskPage() {
                     title: task.name,
                     project: task.projectId,
                     dueDate: task.dueDate || 'No Due Date',
-                    priority: task.priority || 'Medium',
+                    priority: priorityOrder[task.priority],
                 }));
                 console.log(formattedTasks);
                 setTasks(formattedTasks);
@@ -120,7 +111,7 @@ export function TaskPage() {
     const resetTaskFields = async () => {
         isEditMode(true);
         setCurrentTaskTitle('');
-        document.getElementById("projects-option").value = "1";
+        document.getElementById("projects-option").value = 0;
         document.getElementById("date-option").value = "";
         document.getElementById("priority-option").value = "Low";
         document.getElementById("repeat-option").value = "Never";
@@ -131,7 +122,7 @@ export function TaskPage() {
         const newTask = {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
-            status: 1,
+            status: 0,
             projectId: +document.getElementById('projects-option').value,
             dueDate: document.getElementById('date-option').value,
             priority: +document.getElementById('priority-option').value,
@@ -149,7 +140,7 @@ export function TaskPage() {
                 const createdTask = await response.json();
                 const formattedTask = {
                     id: createdTask.id,
-                    completed: false,
+                    completed: 0,
                     title: createdTask.name,
                     project: createdTask.projectId,
                     dueDate: createdTask.dueDate,
@@ -161,6 +152,7 @@ export function TaskPage() {
         } catch (error) {
             console.error('Error adding new task:', error);
         }
+        fetchTasks();
     };
 
     const deleteTask = async (taskId) => {
@@ -177,24 +169,6 @@ export function TaskPage() {
         }
     };
 
-
-    const handleSort = (key) => {
-        let direction = "asc";
-        if (sortConfig.key === key && sortConfig.direction === "asc") {
-            direction = "desc";
-        }
-        setSortConfig({key, direction});
-
-        const sortedTasks = [...tasks].sort((a, b) => {
-            if (key === "priority") {
-                return direction === "asc"
-                    ? priorityOrder[a.priority] - priorityOrder[b.priority]
-                    : priorityOrder[b.priority] - priorityOrder[a.priority];
-            }
-            return direction === "asc" ? (a[key] < b[key] ? -1 : 1) : (a[key] > b[key] ? -1 : 1);
-        });
-        setTasks(sortedTasks);
-    };
 
     // SL NOTE: DOES NOT WORK; POSSIBLE BACKEND ISSUE?
     // TWO METHODS - SEND ENTIRE JSON VS SEND ONLY STATUS
@@ -289,7 +263,6 @@ export function TaskPage() {
                         <Label htmlFor="projects-option">Project: </Label>
                         <select
                             id="projects-option"
-
                             className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         >
                             <option value="" disabled selected>Select an option</option>
@@ -310,7 +283,7 @@ export function TaskPage() {
                         </input>
                     </div>
                     <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
-                        <Label htmlFor="repeat-option">Project: </Label>
+                        <Label htmlFor="repeat-option">Repeats: </Label>
                         <select
                             id="repeat-option"
                             className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
@@ -323,15 +296,15 @@ export function TaskPage() {
                         </select>
                     </div>
                     <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
-                        <Label htmlFor="priority-option">Project: </Label>
+                        <Label htmlFor="priority-option">Priority: </Label>
                         <select
                             id="priority-option"
                             className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         >
                             <option value="" disabled selected>Select an option</option>
-                            <option value="0">Low</option>
-                            <option value="1">Medium</option>
-                            <option value="2">High</option>
+                            <option value="1">Low</option>
+                            <option value="2">Medium</option>
+                            <option value="3">High</option>
                             <option value="None">No Priority</option>
                         </select>
                     </div>
