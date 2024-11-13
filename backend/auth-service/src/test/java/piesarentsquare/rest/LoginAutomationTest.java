@@ -42,7 +42,7 @@ class LoginAutomationTest {
         WebElement githubLoginButton = driver.findElement(By.xpath("//button[contains(., 'Log in with GitHub')]"));
         System.out.println("GitHub login button found, clicking it...\n");
         githubLoginButton.click();
-        Thread.sleep(30000);
+        Thread.sleep(3000);
 
         // Locate email input and enter the email
         WebElement emailInput = driver.findElement(By.id("login_field"));
