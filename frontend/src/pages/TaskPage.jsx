@@ -23,7 +23,7 @@ const initialTasks = [
         title: "Complete report",
         projectId: "1",
         dueDate: "2024-10-20",
-        priority: 0,
+        priority: 1,
     }
 ];
 
