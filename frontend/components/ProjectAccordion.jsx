@@ -12,22 +12,22 @@ import {PlusIcon} from "@radix-ui/react-icons";
 function ProjectAccordion() {
     const [projects, setProjects] = useState([]);
 
-
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/projects');
+            if (response.ok) {
+                const projectData = await response.json();
+                setProjects(projectData);
+            } else {
+                console.error("Failed to fetch projects:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const response = await fetch('/projects');
-                if (response.ok) {
-                    const projectData = await response.json();
-                    setProjects(projectData);
-                } else {
-                    console.error("Failed to fetch projects:", response.statusText);
-                }
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
+
 
         fetchProjects();
     }, []);
@@ -64,6 +64,7 @@ function ProjectAccordion() {
         } else {
             console.log('POST /projects failed to respond')
         }
+        fetchProjects();
     };
 
 

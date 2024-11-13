@@ -18,7 +18,7 @@ const priorityOrder = {
 const initialTasks = [
     {
         id: "task-1",
-        completed: false,
+        completed: 0,
         title: "Complete report",
         projectId: "1",
         dueDate: "2024-10-20",
@@ -45,6 +45,33 @@ export default function ProjectPage() {
     let { projectID } = useParams();
     projectID = +projectID;
 
+    const fetchTasks = async () => {
+        try {
+            if (!(await fetch('/auth')).ok) {
+                window.location.replace('/login');
+                return;
+            }
+
+            const response = await fetch(`/tasks`);
+            if (response.ok) {
+                const data = await response.json();
+                const formattedTasks = data.map(task => ({
+                    id: task.id,
+                    completed: task.status,
+                    title: task.name,
+                    projectId: task.projectId,
+                    dueDate: task.dueDate || 'No Due Date',
+                    priority: task.priority || 'Medium',
+                }));
+                setTasks(formattedTasks);
+            } else {
+                console.error('Failed to fetch tasks:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+        }
+    };
+
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -60,32 +87,6 @@ export default function ProjectPage() {
             }
         };
 
-        const fetchTasks = async () => {
-            try {
-                if (!(await fetch('/auth')).ok) {
-                    window.location.replace('/login');
-                    return;
-                }
-
-                const response = await fetch(`/tasks`);
-                if (response.ok) {
-                    const data = await response.json();
-                    const formattedTasks = data.map(task => ({
-                        id: task.id,
-                        completed: task.status,
-                        title: task.name,
-                        projectId: task.projectId,
-                        dueDate: task.dueDate || 'No Due Date',
-                        priority: task.priority || 'Medium',
-                    }));
-                    setTasks(formattedTasks);
-                } else {
-                    console.error('Failed to fetch tasks:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        };
 
         fetchProjects();
         fetchTasks();
@@ -152,16 +153,18 @@ export default function ProjectPage() {
 
     const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
-            if (response.ok) {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-            } else {
-                console.error(`Error deleting task ${taskId}`);
+            const trashResponse = await fetch(`/tasks/trash/${taskId}`, {method: 'PUT'});
+            if (!trashResponse.ok) {
+                console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
+                return;
             }
-        } catch (error) {
-            console.error('Error deleting task:', error);
+            await fetchTasks();
+            console.log(`Task ${taskId} successfully moved to trash.`);
+        } catch (e) {
+            console.error(`Error processing task deletion for ${taskId}: ${e.message}`);
         }
     };
+
 
     const handleSort = (key) => {
         let direction = "asc";
