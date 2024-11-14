@@ -5,6 +5,8 @@ import {TaskTable} from '@/components/TaskTable'
 import { taskColumns } from "@/components/TaskColumns";
 import {DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer.jsx";
 
+import PageTitle from "@/components/PageTitle";
+
 // Initial tasks for test data
 const priorityOrder = {
     Low: 1,
@@ -106,6 +108,7 @@ export default function RecentlyDeleted() {
 
     return (
         <>
+            <PageTitle title={"Recently Deleted | Checkmate"}></PageTitle>
             <DialogDemo
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
