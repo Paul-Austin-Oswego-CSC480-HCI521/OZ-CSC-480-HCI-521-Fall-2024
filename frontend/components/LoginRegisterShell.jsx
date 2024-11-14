@@ -2,7 +2,8 @@
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import logo from '@/src/assets/logo-white.svg'
+import logoWhite from '@/src/assets/logo-white.svg'
+import logo from '@/src/assets/logo.svg'
 
 // Props:
 // Children: React children components
@@ -31,11 +32,11 @@ export function LoginRegisterShell({children, title, type, dividerText, githubTe
             <div className="grid grid-cols-2 items-center justify-center min-h-screen bg-white">
                 <div className="min-h-screen flex flex-col justify-between bg-blueHighlight">
                     <div className="flex items-center gap-4 pt-6 pl-6">
-                        {/* Replace with logo */}
-                        <img className="p-0.5" width={32} height={32} src={logo} alt=""></img>
-                    <h1 className="text-2xl text-white font-bold">CheckMate</h1>
+                        <img className="p-0.5" width={32} height={32} src={logoWhite} alt=""></img>
+                        <h1 className="text-2xl text-white font-bold">CheckMate</h1>
                     </div>
-                    <div className="text-white max-w-[600px] mx-auto pb-16 px-4 ">
+                    <img className="max-w-[550px] aspect-square mx-auto opacity-45" src={logo} alt=""></img>
+                    <div className="text-white max-w-[600px] mx-auto pb-14 px-4 ">
                         <blockquote >
                         “Life is a constant juggle - I need something to balance everything, let me breathe, and help me stay on top of the game.”
                         </blockquote>
