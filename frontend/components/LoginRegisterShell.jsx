@@ -31,7 +31,7 @@ export function LoginRegisterShell({children, title, type, dividerText, githubTe
         <div>
             <div className="grid grid-cols-2 items-center justify-center min-h-screen bg-white">
                 <div className="min-h-screen flex flex-col justify-between bg-blueHighlight">
-                    <div className="flex items-center gap-4 pt-6 pl-6">
+                    <div className="flex items-center gap-3 pt-4 pl-4">
                         <img className="p-0.5" width={32} height={32} src={logoWhite} alt=""></img>
                         <h1 className="text-2xl text-white font-bold">CheckMate</h1>
                     </div>
