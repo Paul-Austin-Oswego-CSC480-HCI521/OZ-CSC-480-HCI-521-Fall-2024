@@ -36,7 +36,7 @@ export function SidePanel() {
             <nav className="">
                 <ul className="flex flex-col ">
                     <li className="flex flex-col fixed bottom-10 min-w-56 ">
-                        <NavButton href="/Login">Log out
+                        <NavButton href={`${import.meta.env.VITE_AUTH_ROOT}/auth/logout`}>Log out
                             <LogOutIcon className="resize scale-50 translate-x-24"></LogOutIcon>
                         </NavButton>
 
