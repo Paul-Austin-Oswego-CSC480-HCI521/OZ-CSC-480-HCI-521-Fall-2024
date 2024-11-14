@@ -60,6 +60,15 @@ export function TaskTable({
             </span>
           )
         }
+        if(cell.column.columnDef.accessorKey==="dueDate") {
+          const dateArray = cellContent.split('-')
+          const newDate = dateArray[1]+" / "+dateArray[2]+" / "+dateArray[0]
+          return(
+            <span>
+             {newDate}
+            </span>
+          )
+        }
         return (
             <span className="pl-4">
                 { flexRender(cell.column.columnDef.cell, cell.getContext())} 
