@@ -80,7 +80,7 @@ export function TaskPage() {
                     dueDate: task.dueDate || 'No Due Date',
                     priority: priorityOrder[task.priority],
                 }));
-                console.log(formattedTasks);
+                // console.log(formattedTasks);
                 setTasks(formattedTasks);
             } else {
                 console.error('Failed to fetch tasks:', response.statusText);
@@ -336,7 +336,7 @@ export function TaskPage() {
                         </DrawerTrigger>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns}
+                        <TaskTable columns={taskColumns} projects={projects}
                                    data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
                     </section>
                 </div>
