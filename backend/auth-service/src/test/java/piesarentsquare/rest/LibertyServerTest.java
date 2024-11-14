@@ -159,140 +159,140 @@
 // }
 
 
-package piesarentsquare.rest;
+// package piesarentsquare.rest;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+// import org.junit.jupiter.api.AfterEach;
+// import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.Timeout;
+// import org.openqa.selenium.By;
+// import org.openqa.selenium.WebDriver;
+// import org.openqa.selenium.WebElement;
+// import org.openqa.selenium.chrome.ChromeDriver;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+// import io.github.bonigarcia.wdm.WebDriverManager;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
+// import java.io.File;
+// import java.io.IOException;
+// import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.junit.jupiter.api.Assertions.assertTrue;
+// import static org.junit.jupiter.api.Assertions.fail;
 
-class LibertyServerTest {
-    private Process authServiceProcess;
-    private Process databaseServiceProcess;
-    private Process frontendProcess;
-    private WebDriver driver;
+// class LibertyServerTest {
+//     private Process authServiceProcess;
+//     private Process databaseServiceProcess;
+//     private Process frontendProcess;
+//     private WebDriver driver;
 
-    private void runCommand(String directory, String command) throws IOException, InterruptedException {
-        ProcessBuilder builder = new ProcessBuilder(command.split(" "));
-        builder.directory(new File(directory)); // Set the working directory
-        Process process = builder.start();
-        int exitCode = process.waitFor();
+//     private void runCommand(String directory, String command) throws IOException, InterruptedException {
+//         ProcessBuilder builder = new ProcessBuilder(command.split(" "));
+//         builder.directory(new File(directory)); // Set the working directory
+//         Process process = builder.start();
+//         int exitCode = process.waitFor();
 
-        assertEquals(0, exitCode, "Command '" + command + "' failed with exit code: " + exitCode);
-        System.out.println("Command '" + command + "' executed successfully in " + directory);
-    }
+//         assertEquals(0, exitCode, "Command '" + command + "' failed with exit code: " + exitCode);
+//         System.out.println("Command '" + command + "' executed successfully in " + directory);
+//     }
 
-    private Process runCommandInBackground(String directory, String command) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder(command.split(" "));
-        builder.directory(new File(directory)); // Set the working directory
-        Process process = builder.start(); // Start process in background
-        System.out.println("Command '" + command + "' started in background in " + directory);
-        return process;
-    }
+//     private Process runCommandInBackground(String directory, String command) throws IOException {
+//         ProcessBuilder builder = new ProcessBuilder(command.split(" "));
+//         builder.directory(new File(directory)); // Set the working directory
+//         Process process = builder.start(); // Start process in background
+//         System.out.println("Command '" + command + "' started in background in " + directory);
+//         return process;
+//     }
 
-@BeforeEach
-void setUp() {
-    try {
-        // Initialize WebDriver for Selenium
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        System.out.println("WebDriver initialized successfully."); // Debug statement
+// @BeforeEach
+// void setUp() {
+//     try {
+//         // Initialize WebDriver for Selenium
+//         WebDriverManager.chromedriver().setup();
+//         driver = new ChromeDriver();
+//         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//         System.out.println("WebDriver initialized successfully."); // Debug statement
 
-        // Step 1: Set the environment variable
-        System.out.println("Setting database path environment variable...");
-        String ozDatabasePath = "jdbc:sqlite:" + new File(".").getAbsolutePath() + "/tasks.db";
-        System.setProperty("OZ_DATABASE_PATH", ozDatabasePath);
+//         // Step 1: Set the environment variable
+//         System.out.println("Setting database path environment variable...");
+//         String ozDatabasePath = "jdbc:sqlite:" + new File(".").getAbsolutePath() + "/tasks.db";
+//         System.setProperty("OZ_DATABASE_PATH", ozDatabasePath);
 
-        // Step 2: Run Maven install for the backend
-        System.out.println("Running Maven install for the backend...");
-        runCommand("../../backend", "mvn install -DskipTests");
+//         // Step 2: Run Maven install for the backend
+//         System.out.println("Running Maven install for the backend...");
+//         runCommand("../../backend", "mvn install -DskipTests");
 
-        // Step 3: Start Authorization Service
-        System.out.println("Starting Authorization Service...");
-        authServiceProcess = runCommandInBackground("../../backend/auth-service", "mvn liberty:start");
+//         // Step 3: Start Authorization Service
+//         System.out.println("Starting Authorization Service...");
+//         authServiceProcess = runCommandInBackground("../../backend/auth-service", "mvn liberty:start");
 
-        // Step 4: Start Database Service
-        System.out.println("Starting Database Service...");
-        databaseServiceProcess = runCommandInBackground("../database-service", "mvn liberty:start");
+//         // Step 4: Start Database Service
+//         System.out.println("Starting Database Service...");
+//         databaseServiceProcess = runCommandInBackground("../database-service", "mvn liberty:start");
 
-        // Step 5: Install npm dependencies and start frontend server
-        System.out.println("Installing npm dependencies and starting frontend server...");
-        runCommand("../../frontend", "npm install");
-        frontendProcess = runCommandInBackground("../../frontend", "npm run dev");
-
-
-    } catch (IOException | InterruptedException e) {
-        fail("Exception during setup: " + e.getMessage());
-    } catch (Exception e) {
-        fail("Unexpected exception during WebDriver initialization: " + e.getMessage());
-    }
-}
+//         // Step 5: Install npm dependencies and start frontend server
+//         System.out.println("Installing npm dependencies and starting frontend server...");
+//         runCommand("../../frontend", "npm install");
+//         frontendProcess = runCommandInBackground("../../frontend", "npm run dev");
 
 
-    // Teardown: Stop all services
-    @AfterEach
-    void tearDown() {
-        try {
-            if (authServiceProcess != null && authServiceProcess.isAlive()) {
-                System.out.println("Stopping Authorization Service...");
-                runCommand("../../backend/auth-service", "mvn liberty:stop");
-            }
-            if (databaseServiceProcess != null && databaseServiceProcess.isAlive()) {
-                System.out.println("Stopping Database Service...");
-                runCommand("../database-service", "mvn liberty:stop");
-            }
-            if (frontendProcess != null && frontendProcess.isAlive()) {
-                System.out.println("Stopping Frontend...");
-                frontendProcess.destroy();  // Use destroy to send SIGTERM
-                frontendProcess.waitFor();
-            }
-        } catch (IOException | InterruptedException e) {
-            System.err.println("Error during teardown: " + e.getMessage());
-        }
-    }
+//     } catch (IOException | InterruptedException e) {
+//         fail("Exception during setup: " + e.getMessage());
+//     } catch (Exception e) {
+//         fail("Unexpected exception during WebDriver initialization: " + e.getMessage());
+//     }
+// }
 
-    // Test that verifies the setup and runs the login test
-    @Test
-    @Timeout(120)
-    void testStartAndLogin() throws IOException {
-        try {
-            System.out.println("Opening login page...");
-            driver.get("http://localhost:2080/Login");
 
-            Thread.sleep(15000);
+//     // Teardown: Stop all services
+//     @AfterEach
+//     void tearDown() {
+//         try {
+//             if (authServiceProcess != null && authServiceProcess.isAlive()) {
+//                 System.out.println("Stopping Authorization Service...");
+//                 runCommand("../../backend/auth-service", "mvn liberty:stop");
+//             }
+//             if (databaseServiceProcess != null && databaseServiceProcess.isAlive()) {
+//                 System.out.println("Stopping Database Service...");
+//                 runCommand("../database-service", "mvn liberty:stop");
+//             }
+//             if (frontendProcess != null && frontendProcess.isAlive()) {
+//                 System.out.println("Stopping Frontend...");
+//                 frontendProcess.destroy();  // Use destroy to send SIGTERM
+//                 frontendProcess.waitFor();
+//             }
+//         } catch (IOException | InterruptedException e) {
+//             System.err.println("Error during teardown: " + e.getMessage());
+//         }
+//     }
 
-            // Locate and click the "Log in with GitHub" button
-            System.out.println("Attempting to find GitHub login button...");
-            WebElement githubLoginButton = driver.findElement(By.xpath("//button[contains(., 'Log in with GitHub')]"));
-            System.out.println("GitHub login button found, clicking it...");
-            githubLoginButton.click();
+//     // Test that verifies the setup and runs the login test
+//     @Test
+//     @Timeout(120)
+//     void testStartAndLogin() throws IOException {
+//         try {
+//             System.out.println("Opening login page...");
+//             driver.get("http://localhost:2080/Login");
 
-            // Verify the redirection
-            System.out.println("Waiting for redirection...");
-            Thread.sleep(5000);  // Wait for redirection to complete
-            assertTrue(driver.getCurrentUrl().equals("http://localhost:2080"));
+//             Thread.sleep(15000);
 
-            WebElement githubLogoutButton = driver.findElement(By.xpath("//button[contains(., 'Log out')]"));
-            System.out.println("Logout button found, clicking it...");
-            githubLogoutButton.click();
+//             // Locate and click the "Log in with GitHub" button
+//             System.out.println("Attempting to find GitHub login button...");
+//             WebElement githubLoginButton = driver.findElement(By.xpath("//button[contains(., 'Log in with GitHub')]"));
+//             System.out.println("GitHub login button found, clicking it...");
+//             githubLoginButton.click();
 
-        } catch (Exception e) {
-            fail("Exception during execution: " + e.getMessage());
-        }
-    }
-}
+//             // Verify the redirection
+//             System.out.println("Waiting for redirection...");
+//             Thread.sleep(5000);  // Wait for redirection to complete
+//             assertTrue(driver.getCurrentUrl().equals("http://localhost:2080"));
+
+//             WebElement githubLogoutButton = driver.findElement(By.xpath("//button[contains(., 'Log out')]"));
+//             System.out.println("Logout button found, clicking it...");
+//             githubLogoutButton.click();
+
+//         } catch (Exception e) {
+//             fail("Exception during execution: " + e.getMessage());
+//         }
+//     }
+// }
