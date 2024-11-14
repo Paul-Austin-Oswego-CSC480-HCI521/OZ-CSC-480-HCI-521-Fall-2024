@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import logo from '@/src/assets/logo-white.svg'
 
 // Props:
 // Children: React children components
@@ -31,7 +32,7 @@ export function LoginRegisterShell({children, title, type, dividerText, githubTe
                 <div className="min-h-screen flex flex-col justify-between bg-blueHighlight">
                     <div className="flex items-center gap-4 pt-6 pl-6">
                         {/* Replace with logo */}
-                    <div className="bg-white w-8 h-8 rounded-full"></div>
+                        <img className="p-0.5" width={32} height={32} src={logo} alt=""></img>
                     <h1 className="text-2xl text-white font-bold">CheckMate</h1>
                     </div>
                     <div className="text-white max-w-[600px] mx-auto pb-16 px-4 ">
