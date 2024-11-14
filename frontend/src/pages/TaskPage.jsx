@@ -9,6 +9,8 @@ import {taskColumns} from "@/components/TaskColumns";
 
 import {DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader} from "@/components/ui/drawer";
 
+import PageTitle from '@/components/PageTitle'
+
 // Initial tasks for test data
 const priorityOrder = {
     1: 'Low',
@@ -234,6 +236,7 @@ export function TaskPage() {
 
     return (
         <>
+            <PageTitle title={"My Tasks | Checkmate"}></PageTitle>
             <DialogDemo
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
