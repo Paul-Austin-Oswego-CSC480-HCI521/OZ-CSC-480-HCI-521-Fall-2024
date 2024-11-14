@@ -49,7 +49,7 @@
         </security-constraint> -->
     </webApplication>
 
-    <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiresInSeconds="15"
+    <jwtBuilder id="jwtFrontEndBuilder" issuer="moxie.cs.oswego.edu" expiresInSeconds="15"
                 trustStoreRef="testKeyStore" signatureAlgorithm="${cert.algorithm}"/>
 
     <!--More Cors bs-->
