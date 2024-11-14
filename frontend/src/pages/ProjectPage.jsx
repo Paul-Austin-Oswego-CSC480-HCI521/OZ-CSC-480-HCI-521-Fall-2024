@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox.jsx";
 import '../styles/dropdown.css';
 import { DialogDemo } from "@/components/Dialog.jsx";
 import { useParams } from "react-router-dom";
+import PageTitle from "@/components/PageTitle";
 
 const priorityOrder = {
     Low: 1,
@@ -189,6 +190,7 @@ export default function ProjectPage() {
     console.log(filteredTasks)
     return (
         <>
+            <PageTitle title={currentProject?.name+" | Checkmate"}></PageTitle>
             <DialogDemo
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
