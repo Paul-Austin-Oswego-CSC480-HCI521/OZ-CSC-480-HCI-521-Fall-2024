@@ -75,7 +75,7 @@ export default function RecentlyDeleted() {
                         id: task.id,
                         completed: task.status === 1,
                         title: task.name,
-                        project: task.projectId,
+                        project: getProjectName(task.projectId),
                         dueDate: task.dueDate || 'No Due Date',
                         priority: task.priority || 'Medium',
                     }));
