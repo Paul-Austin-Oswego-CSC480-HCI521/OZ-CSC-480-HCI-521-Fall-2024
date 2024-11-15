@@ -19,12 +19,16 @@ TableRow,
 } from "@/components/ui/table"
    
 import { Checkbox } from "@/components/ui/checkbox.jsx";
+import { DrawerTrigger } from "@/components/ui/drawer";
+
 
 export function TaskTable({
     columns,
     data,
+    onTaskSelect,
   }) {
     const [sorting, setSorting] = React.useState([])
+
 
     const table = useReactTable({
       data,
@@ -37,11 +41,13 @@ export function TaskTable({
       },
     })
 
+
     function handleCheckChange(checked){
         // TODO Handle completed tasks when checkbox checked
         // console.log("checked changed to", checked)
         return checked;
     }
+
 
     function CellContent({cellContent, cell}){
         if(cell.column.columnDef.accessorKey==="completed"){
@@ -53,9 +59,10 @@ export function TaskTable({
         }
         return (
             <span className="pl-4">
-                { flexRender(cell.column.columnDef.cell, cell.getContext())} 
+                { flexRender(cell.column.columnDef.cell, cell.getContext())}
             </span>
         )
+
 
     }
    
@@ -86,15 +93,17 @@ export function TaskTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => onTaskSelect(row.original.id)}
+                   className="cursor-pointer hover:bg-gray-100"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                        <CellContent cellContent={cell.getValue()} cell={cell}/> 
+                        <CellContent cellContent={cell.getValue()} cell={cell}/>
                     </TableCell>
                   ))}
-                  
+                 
                 </TableRow>
-                
+         
               ))
             ) : (
               <TableRow>
@@ -108,3 +117,5 @@ export function TaskTable({
       </div>
     )
   }
+
+
