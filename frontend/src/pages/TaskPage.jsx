@@ -106,7 +106,7 @@ export function TaskPage() {
             fetchTasks();
             fetchProjects();
         }
-    }, [projects]);
+    }, [projects.length]);
 
     const resetTaskFields = async () => {
         isEditMode(true);
