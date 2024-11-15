@@ -149,6 +149,7 @@ export default function ProjectPage() {
                     priority: createdTask.priority,
                 };
                 setTasks((prevTasks) => [...prevTasks, formattedTask]);
+                fetchTasks();
             }
         } catch (error) {
             console.error('Error adding new task:', error);
@@ -247,12 +248,14 @@ export default function ProjectPage() {
                 <div className="flex flex-col gap-[32px]">
                     <div className="flex flex-col gap-[32px]">
                         {/* Tab Buttons for Upcoming and Completed */}
+                        <div className="flex flex-col gap-[32px]">
+                            <h1 className="text-left text-[48px] font-bold pl-20 pr-20">
+                                {currentProject?.name}
+                            </h1>
+                        </div>
                         <div className="border-b">
-                            <div className="flex pl-20 pr-20 gap-[32px]">
-                                <h1 className="text-left pb-4 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                                    {currentProject?.name}
-                                </h1>
-                            </div>
+
+
                             <div className="flex pl-20 pr-20 gap-[32px]">
                                 <button
                                     className={`text-[16px] font-semibold ${activeTab === 'upcoming' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
