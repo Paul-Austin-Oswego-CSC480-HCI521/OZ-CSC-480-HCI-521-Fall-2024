@@ -19,7 +19,7 @@ export function SidePanel() {
                     </li>
                 </ul>
             </nav>
-            <hr className="w-48 mx-auto my-6 border-neutral-400"/>
+            <hr className="w-48 mx-auto my-[.5rem] border-neutral-400"/>
             <nav className="flex flex-col items-center">
                 <ProjectAccordion/>
             </nav>
