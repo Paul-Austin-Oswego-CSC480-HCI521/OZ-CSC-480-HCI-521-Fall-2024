@@ -52,14 +52,6 @@ export function TaskTable({
                 </span>
             )
         }
-        if(cell.column.columnDef.accessorKey==="project") {
-          const selectedProject = projects.find(project => cellContent === project.id)
-          return(
-            <span>
-              {selectedProject ? selectedProject.name : "Project not found"}
-            </span>
-          )
-        }
         if(cell.column.columnDef.accessorKey==="dueDate") {
           const dateArray = cellContent.split('-')
           const newDate = dateArray[1]+" / "+dateArray[2]+" / "+dateArray[0]
