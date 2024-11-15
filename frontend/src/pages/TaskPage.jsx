@@ -265,7 +265,7 @@ export function TaskPage() {
                             id="projects-option"
                             className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         >
-                            <option value="" disabled selected>Select an option</option>
+                            <option value="" disabled selected onClick={fetchProjects}>Select an option</option>
                             {projects.map((project) => (
                                 <option key={project.id} value={project.id} className="flex flex-col">
                                     {project.name}
