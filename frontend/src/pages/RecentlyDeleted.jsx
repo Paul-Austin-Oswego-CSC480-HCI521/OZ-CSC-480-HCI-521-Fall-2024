@@ -5,12 +5,14 @@ import {TaskTable} from '@/components/TaskTable'
 import { taskColumns } from "@/components/TaskColumns";
 import {DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer.jsx";
 
-// Initial tasks for test data
+import PageTitle from "@/components/PageTitle";
+
 const priorityOrder = {
-    Low: 1,
-    Medium: 2,
-    High: 3,
+    1: 'Low',
+    2: 'Medium',
+    3: 'High',
 };
+
 
 const initialTasks = [
     {
@@ -19,7 +21,7 @@ const initialTasks = [
         title: "Complete report",
         projectId: "1",
         dueDate: "2024-10-20",
-        priority: 0,
+        priority: 1,
     }
 ];
 
@@ -40,7 +42,7 @@ export default function RecentlyDeleted() {
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
     const [activeTab, setActiveTab] = useState("upcoming");
 
-    console.log(tasks);
+    // console.log(tasks);
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
@@ -57,38 +59,58 @@ export default function RecentlyDeleted() {
             deleteTask(taskId);
         }
     };
+    const fetchTasks = async () => {
+        try {
+            if (!(await fetch('/auth')).ok) {
+                window.location.replace('/login');
+                return;
+            }
+
+            const response = await fetch(`/tasks/trash/`);
+            if (response.ok) {
+                const data = await response.json();
+                const formattedTasks = data.map(task => ({
+                    id: task.id,
+                    completed: task.status === 1,
+                    title: task.name,
+                    project: getProjectName(task.projectId),
+                    dueDate: task.dueDate || 'No Due Date',
+                    priority: task.priority || 'Medium',
+                }));
+                setTasks(formattedTasks);
+            } else {
+                console.error('Failed to fetch tasks:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+        }
+    };
+
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/projects');
+            if (response.ok) {
+                const projectData = await response.json();
+                setProjects(projectData);
+            } else {
+                console.error("Failed to fetch projects:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        }
+    };
+
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                if (!(await fetch('/auth')).ok) {
-                    window.location.replace('/login');
-                    return;
-                }
-
-                const response = await fetch(`/tasks/trash/`);
-                if (response.ok) {
-                    const data = await response.json();
-                    const formattedTasks = data.map(task => ({
-                        id: task.id,
-                        completed: task.status === 1,
-                        title: task.name,
-                        project: task.projectId,
-                        dueDate: task.dueDate || 'No Due Date',
-                        priority: task.priority || 'Medium',
-                    }));
-                    setTasks(formattedTasks);
-                } else {
-                    console.error('Failed to fetch tasks:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        };
-
-        fetchTasks();
+        fetchProjects();
     }, []);
 
+    useEffect(() => {
+        if (projects.length > 0) {
+            fetchTasks();
+            fetchProjects();
+        }
+    }, [projects.length]);
 
     const deleteTask = async (taskId) => {
         try {
@@ -106,6 +128,7 @@ export default function RecentlyDeleted() {
 
     return (
         <>
+            <PageTitle title={"Recently Deleted | Checkmate"}></PageTitle>
             <DialogDemo
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
@@ -120,7 +143,7 @@ export default function RecentlyDeleted() {
                         </h1>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns}
+                        <TaskTable columns={taskColumns} projects={projects}
                                    data={tasks}/>
                     </section>
                 </div>

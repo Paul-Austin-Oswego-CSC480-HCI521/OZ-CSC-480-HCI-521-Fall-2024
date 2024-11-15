@@ -11,7 +11,8 @@ import {DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader} from "@/compone
 import { Drawer, Drawer as DrawerPrimitive } from "vaul"
 import { faL } from "@fortawesome/free-solid-svg-icons";
 
-// Initial tasks for test data
+import PageTitle from '@/components/PageTitle'
+
 const priorityOrder = {
     1: 'Low',
     2: 'Medium',
@@ -25,7 +26,7 @@ const initialTasks = [
         title: "Complete report",
         projectId: "1",
         dueDate: "2024-10-20",
-        priority: 0,
+        priority: 1,
     }
 ];
 
@@ -72,6 +73,19 @@ export function TaskPage() {
             deleteTask2(taskId);
         } else {
             setDeletePopup({ isOpen: false, taskId: null });
+        }
+    };
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/projects');
+            if (response.ok) {
+                const projectData = await response.json();
+                setProjects(projectData);
+            } else {
+                console.error("Failed to fetch projects:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching projects:", error);
         }
     };
 
@@ -139,23 +153,22 @@ export function TaskPage() {
     }
 
     const fetchTasks = async () => {
+        if (!(await fetch('/auth')).ok) {
+            window.location.replace('/login');
+            return;
+        }
         try {
-            if (!(await fetch('/auth')).ok) {
-                window.location.replace('/login');
-                return;
-            }
-            const response = await fetch(`/tasks`);
+            const response = await fetch('/tasks');
             if (response.ok) {
                 const data = await response.json();
                 const formattedTasks = data.map(task => ({
                     id: task.id,
                     completed: task.status,
                     title: task.name,
-                    project: task.projectId,
+                    project: getProjectName(task.projectId), // Project names fetched from state
                     dueDate: task.dueDate || 'No Due Date',
                     priority: priorityOrder[task.priority],
                 }));
-                console.log(formattedTasks);
                 setTasks(formattedTasks);
             } else {
                 console.error('Failed to fetch tasks:', response.statusText);
@@ -166,24 +179,15 @@ export function TaskPage() {
     };
 
     useEffect(() => {
-        // Fetching all projects
-        const fetchProjects = async () => {
-            try {
-                const response = await fetch('/projects');
-                if (response.ok) {
-                    const projectData = await response.json();
-                    setProjects(projectData);
-                } else {
-                    console.error("Failed to fetch projects:", response.statusText);
-                }
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
-
-        fetchTasks();
         fetchProjects();
     }, []);
+
+    useEffect(() => {
+        if (projects.length > 0) {
+            fetchTasks();
+            fetchProjects();
+        }
+    }, [projects.length]);
 
     const resetTaskFields = async () => {
         setIsDrawerOpen(true);
@@ -269,66 +273,67 @@ export function TaskPage() {
     // NEITHER WORKS
 
     // METHOD 1 - SEND ENTIRE JSON
-    const toggleTaskCompletion = async (task, currentStatus) => {
-        const updatedStatus = currentStatus === 1 ? 0 : 1;
-        const updatedTask = {
-            id: task.id,
-            completed: updatedStatus,
-            title: task.name,
-            project: task.projectId,
-            dueDate: task.dueDate,
-            priority: task.priority,
-        };
-        try {
-            const response = await fetch(`/tasks/${task.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedTask),
-            });
-            if (response.ok) {
-                setTasks(prevTasks =>
-                    prevTasks.map(t =>
-                        t.id === task.id ? {...t, completed: updatedStatus} : t
-                    )
-                );
-            } else {
-                console.error("Failed to update task:", response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error("Error updating task:", error);
-        }
-    };
-
-    // METHOD 2 - SEND ONLY STATUS
     // const toggleTaskCompletion = async (task, currentStatus) => {
     //     const updatedStatus = currentStatus === 1 ? 0 : 1;
+    //     const updatedTask = {
+    //         id: task.id,
+    //         completed: updatedStatus,
+    //         title: task.name,
+    //         project: task.projectId,
+    //         dueDate: task.dueDate,
+    //         priority: task.priority,
+    //     };
     //     try {
     //         const response = await fetch(`/tasks/${task.id}`, {
     //             method: 'PUT',
     //             headers: {
     //                 'Content-Type': 'application/json',
     //             },
-    //             body: JSON.stringify({ status: updatedStatus }),
+    //             body: JSON.stringify(updatedTask),
     //         });
     //         if (response.ok) {
     //             setTasks(prevTasks =>
-    //                 prevTasks.map(task =>
-    //                     task.id === task.id ? { ...task, completed: updatedStatus } : task
+    //                 prevTasks.map(t =>
+    //                     t.id === task.id ? {...t, completed: updatedStatus} : t
     //                 )
     //             );
     //         } else {
-    //             console.error("Failed to update task completion status:", response.statusText);
+    //             console.error("Failed to update task:", response.status, response.statusText);
     //         }
     //     } catch (error) {
-    //         console.error("Error updating task completion status:", error);
+    //         console.error("Error updating task:", error);
     //     }
     // };
+
+    // METHOD 2 - SEND ONLY STATUS
+    const toggleTaskCompletion = async (task, currentStatus) => {
+        const updatedStatus = currentStatus === 1 ? 0 : 1;
+        try {
+            const response = await fetch(`/tasks/${task.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: updatedStatus }),
+            });
+            if (response.ok) {
+                setTasks(prevTasks =>
+                    prevTasks.map(task =>
+                        task.id === task.id ? { ...task, status: updatedStatus } : task
+                    )
+                );
+            } else {
+                console.error("Failed to update task completion status:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error updating task completion status:", error);
+        }
+    };
 
 
     return (
         <>
+            <PageTitle title={"My Tasks | Checkmate"}></PageTitle>
             <DialogDemo
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
@@ -363,7 +368,7 @@ export function TaskPage() {
                             id="projects-option"
                             className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         >
-                            <option value="" disabled selected>Select an option</option>
+                            <option value="" disabled selected onClick={fetchProjects}>Select an option</option>
                             {projects.map((project) => (
                                 <option key={project.id} value={project.id} className="flex flex-col">
                                     {project.name}

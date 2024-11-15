@@ -143,6 +143,8 @@ app.get('/tasks/trash', proxyGet())
 app.put('/tasks/trash/:taskId', proxyPut())
 // get all past due tasks **NOT IMPLEMENTED YET**
 app.get('/tasks/past-due', proxyGet())
+// restore a task from the trash
+app.put('/tasks/restore/:taskId', proxyPut())
 
 export default function proxyPlugin(authRoot, apiRoot) {
     AUTH_ROOT = authRoot

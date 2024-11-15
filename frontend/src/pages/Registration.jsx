@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label"
 import { PasswordInput } from '@/components/PasswordInput'
 import { LoginRegisterShell } from '@/components/LoginRegisterShell'
 
+import PageTitle from '@/components/PageTitle'
+
 export function Register() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -85,6 +87,7 @@ export function Register() {
         githubText={"Sign up with GitHub"}
         githubMethod={handleGithubRegistration}
         > 
+            <PageTitle title="Register | Checkmate" />
             <form onSubmit={handleSubmit}>
                 <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-1.5">
