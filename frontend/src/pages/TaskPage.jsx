@@ -211,29 +211,29 @@ export function TaskPage() {
     // };
 
     // METHOD 2 - SEND ONLY STATUS
-    // const toggleTaskCompletion = async (task, currentStatus) => {
-    //     const updatedStatus = currentStatus === 1 ? 0 : 1;
-    //     try {
-    //         const response = await fetch(`/tasks/${task.id}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ status: updatedStatus }),
-    //         });
-    //         if (response.ok) {
-    //             setTasks(prevTasks =>
-    //                 prevTasks.map(task =>
-    //                     task.id === task.id ? { ...task, status: updatedStatus } : task
-    //                 )
-    //             );
-    //         } else {
-    //             console.error("Failed to update task completion status:", response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error updating task completion status:", error);
-    //     }
-    // };
+    const toggleTaskCompletion = async (task, currentStatus) => {
+        const updatedStatus = currentStatus === 1 ? 0 : 1;
+        try {
+            const response = await fetch(`/tasks/${task.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: updatedStatus }),
+            });
+            if (response.ok) {
+                setTasks(prevTasks =>
+                    prevTasks.map(task =>
+                        task.id === task.id ? { ...task, status: updatedStatus } : task
+                    )
+                );
+            } else {
+                console.error("Failed to update task completion status:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error updating task completion status:", error);
+        }
+    };
 
 
     return (
