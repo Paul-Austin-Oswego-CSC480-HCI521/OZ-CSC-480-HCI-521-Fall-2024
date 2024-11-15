@@ -4,7 +4,6 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {TaskPage} from "@/src/pages/TaskPage.jsx";
 import {Register} from './pages/Registration'
 import PageLayout from './pages/Layout'
-import {CompletedPage} from './pages/CompletedPage'
 import SharedWithMe from './pages/SharedWithMe'
 import ProjectPage from './pages/ProjectPage';
 import {SidePanel} from "@/components/SidePanel.jsx";
@@ -18,7 +17,6 @@ export default function Component() {
                 <Routes>
                     <Route path="/" element={<PageLayout/>}>
                         <Route index element={<TaskPage/>}/>
-                        <Route path="completed" element={<CompletedPage/>}/>
                         <Route path="deleted" element={<RecentlyDeleted/>}/>
                         <Route path="shared" element={<SharedWithMe/>}/>
                         {/*<Route path="project" element={<ProjectPage/>}/>*/}

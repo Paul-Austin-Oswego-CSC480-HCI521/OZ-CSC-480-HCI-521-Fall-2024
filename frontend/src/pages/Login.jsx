@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { PasswordInput } from '@/components/PasswordInput'
 import { LoginRegisterShell } from '@/components/LoginRegisterShell'
 
+import PageTitle from '@/components/PageTitle'
+
 export function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -55,6 +57,7 @@ export function Login() {
             githubText={"Log in with GitHub"}
             githubMethod={handleGithubLogin}
             >
+            <PageTitle title="Login | Checkmate" />
             <form onSubmit={handleSubmit}>
                 <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-1.5">
