@@ -5,7 +5,7 @@ import {LogOutIcon} from "lucide-react"
 
 export function SidePanel() {
     return (
-        <nav className="mt-6 bg-blueLight w-[222px] fixed top-0 bottom-0 pt-16">
+      <nav className="mt-6 bg-blueLight w-[222px] fixed top-0 bottom-0 pt-16">
             <ul className="flex flex-col h-full">
                 <li className="flex flex-col">
                     <NavButton href="/">My Tasks</NavButton>
