@@ -62,25 +62,33 @@ export function TaskPage() {
             deleteTask(taskId);
         }
     };
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/projects');
+            if (response.ok) {
+                const projectData = await response.json();
+                setProjects(projectData);
+            } else {
+                console.error("Failed to fetch projects:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        }
+    };
 
     const fetchTasks = async () => {
         try {
-            if (!(await fetch('/auth')).ok) {
-                window.location.replace('/login');
-                return;
-            }
-            const response = await fetch(`/tasks`);
+            const response = await fetch('/tasks');
             if (response.ok) {
                 const data = await response.json();
                 const formattedTasks = data.map(task => ({
                     id: task.id,
                     completed: task.status,
                     title: task.name,
-                    project: getProjectName(task.projectId),
+                    project: getProjectName(task.projectId), // Project names fetched from state
                     dueDate: task.dueDate || 'No Due Date',
                     priority: priorityOrder[task.priority],
                 }));
-                console.log(formattedTasks);
                 setTasks(formattedTasks);
             } else {
                 console.error('Failed to fetch tasks:', response.statusText);
@@ -91,24 +99,14 @@ export function TaskPage() {
     };
 
     useEffect(() => {
-        // Fetching all projects
-        const fetchProjects = async () => {
-            try {
-                const response = await fetch('/projects');
-                if (response.ok) {
-                    const projectData = await response.json();
-                    setProjects(projectData);
-                } else {
-                    console.error("Failed to fetch projects:", response.statusText);
-                }
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
-
-        fetchTasks();
         fetchProjects();
     }, []);
+
+    useEffect(() => {
+        if (projects.length > 0) {
+            fetchTasks();
+        }
+    }, [projects]);
 
     const resetTaskFields = async () => {
         isEditMode(true);
