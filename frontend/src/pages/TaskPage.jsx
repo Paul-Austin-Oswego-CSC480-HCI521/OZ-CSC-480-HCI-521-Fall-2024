@@ -224,7 +224,7 @@ export function TaskPage() {
     //         if (response.ok) {
     //             setTasks(prevTasks =>
     //                 prevTasks.map(task =>
-    //                     task.id === task.id ? { ...task, completed: updatedStatus } : task
+    //                     task.id === task.id ? { ...task, status: updatedStatus } : task
     //                 )
     //             );
     //         } else {

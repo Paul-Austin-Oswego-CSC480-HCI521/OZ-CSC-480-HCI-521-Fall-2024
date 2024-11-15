@@ -123,7 +123,7 @@ export default function ProjectPage() {
         const newTask = {
             name: currentTaskTitle,
             description: document.getElementById('descriptionBox').value,
-            status: 1,
+            status: 0,
             projectId: +document.getElementById('projects-option').value,
             dueDate: document.getElementById('date-option').value,
             priority: document.getElementById('priority-option').value,
@@ -142,7 +142,7 @@ export default function ProjectPage() {
                 const createdTask = await response.json();
                 const formattedTask = {
                     id: createdTask.id,
-                    completed: createdTask.status === 1,
+                    completed: createdTask.status,
                     title: createdTask.name,
                     projectId: createdTask.projectId,
                     dueDate: createdTask.dueDate,
