@@ -45,7 +45,7 @@ function ProjectAccordion() {
 
     const addProject = async () => {
         const nextId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
-        const projectName = `Project ${nextId}`; // Dynamic project name
+        const projectName = `Project ${nextId}`;
 
         let response = await fetch('/projects', {
             method: 'POST',
@@ -92,7 +92,6 @@ function ProjectAccordion() {
                     <ul className="flex flex-col gap-1 -mx-2 -mb-2">
                         {projects.map((project) => (
                                 <li key={project.id} className="grid grid-cols-[70%_30%]">
-                                    {/*TODO: USE THIS TO SEND PARAMETERS TO PROJECTS-PAGE*/}
                                     <NavButton
                                         href={`/project/${project.id}`}
                                     >
