@@ -76,6 +76,10 @@ export function TaskPage() {
     };
 
     const fetchTasks = async () => {
+        if (!(await fetch('/auth')).ok) {
+            window.location.replace('/login');
+            return;
+        }
         try {
             const response = await fetch('/tasks');
             if (response.ok) {
