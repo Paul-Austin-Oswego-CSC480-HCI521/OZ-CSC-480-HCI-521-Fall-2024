@@ -11,7 +11,7 @@ import {useParams} from "react-router-dom";
 import PageTitle from "@/components/PageTitle";
 import {DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer.jsx";
 import {TaskTable} from "@/components/TaskTable.jsx";
-import {taskColumns} from "@/components/TaskColumns.jsx";
+import {taskColumnsProject} from "@/components/TaskColumnsProject.jsx";
 
 const priorityOrder = {
     1: 'Low',
@@ -278,7 +278,7 @@ export default function ProjectPage() {
                         </DrawerTrigger>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns}
+                        <TaskTable columns={taskColumnsProject}
                                    data={filteredTasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
                     </section>
                 </div>

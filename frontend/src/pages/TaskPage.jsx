@@ -338,7 +338,7 @@ export function TaskPage() {
                         </DrawerTrigger>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns}
+                        <TaskTable columns={taskColumns} projects={projects}
                                    data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
                     </section>
                 </div>
