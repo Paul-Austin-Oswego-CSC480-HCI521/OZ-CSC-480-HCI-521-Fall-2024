@@ -110,7 +110,7 @@ export default function RecentlyDeleted() {
             fetchTasks();
             fetchProjects();
         }
-    }, [projects]);
+    }, [projects.length]);
 
     const deleteTask = async (taskId) => {
         try {
