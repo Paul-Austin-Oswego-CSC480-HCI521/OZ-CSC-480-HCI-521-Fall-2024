@@ -42,7 +42,7 @@ export default function RecentlyDeleted() {
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
     const [activeTab, setActiveTab] = useState("upcoming");
 
-    console.log(tasks);
+    // console.log(tasks);
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
@@ -123,7 +123,7 @@ export default function RecentlyDeleted() {
                         </h1>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns}
+                        <TaskTable columns={taskColumns} projects={projects}
                                    data={tasks}/>
                     </section>
                 </div>

@@ -23,6 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox.jsx";
 export function TaskTable({
     columns,
     data,
+    projects
   }) {
     const [sorting, setSorting] = React.useState([])
 
@@ -50,6 +51,23 @@ export function TaskTable({
                     { flexRender(<Checkbox defaultChecked={cellContent===true} onCheckedChange={(checked)=>handleCheckChange(checked)}/>, cell.getContext()) }
                 </span>
             )
+        }
+        if(cell.column.columnDef.accessorKey==="project") {
+          const selectedProject = projects.find(project => cellContent === project.id)
+          return(
+            <span>
+              {selectedProject ? selectedProject.name : "Project not found"}
+            </span>
+          )
+        }
+        if(cell.column.columnDef.accessorKey==="dueDate") {
+          const dateArray = cellContent.split('-')
+          const newDate = dateArray[1]+" / "+dateArray[2]+" / "+dateArray[0]
+          return(
+            <span>
+             {newDate}
+            </span>
+          )
         }
         return (
             <span className="pl-4">
