@@ -27,8 +27,6 @@ function ProjectAccordion() {
     };
 
     useEffect(() => {
-
-
         fetchProjects();
     }, []);
 

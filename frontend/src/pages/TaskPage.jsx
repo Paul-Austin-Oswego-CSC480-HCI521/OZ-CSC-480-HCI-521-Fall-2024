@@ -11,7 +11,6 @@ import {DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader} from "@/compone
 
 import PageTitle from '@/components/PageTitle'
 
-// Initial tasks for test data
 const priorityOrder = {
     1: 'Low',
     2: 'Medium',
@@ -105,6 +104,7 @@ export function TaskPage() {
     useEffect(() => {
         if (projects.length > 0) {
             fetchTasks();
+            fetchProjects();
         }
     }, [projects]);
 
@@ -174,37 +174,37 @@ export function TaskPage() {
     // NEITHER WORKS
 
     // METHOD 1 - SEND ENTIRE JSON
-    const toggleTaskCompletion = async (task, currentStatus) => {
-        const updatedStatus = currentStatus === 1 ? 0 : 1;
-        const updatedTask = {
-            id: task.id,
-            completed: updatedStatus,
-            title: task.name,
-            project: task.projectId,
-            dueDate: task.dueDate,
-            priority: task.priority,
-        };
-        try {
-            const response = await fetch(`/tasks/${task.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedTask),
-            });
-            if (response.ok) {
-                setTasks(prevTasks =>
-                    prevTasks.map(t =>
-                        t.id === task.id ? {...t, completed: updatedStatus} : t
-                    )
-                );
-            } else {
-                console.error("Failed to update task:", response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error("Error updating task:", error);
-        }
-    };
+    // const toggleTaskCompletion = async (task, currentStatus) => {
+    //     const updatedStatus = currentStatus === 1 ? 0 : 1;
+    //     const updatedTask = {
+    //         id: task.id,
+    //         completed: updatedStatus,
+    //         title: task.name,
+    //         project: task.projectId,
+    //         dueDate: task.dueDate,
+    //         priority: task.priority,
+    //     };
+    //     try {
+    //         const response = await fetch(`/tasks/${task.id}`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(updatedTask),
+    //         });
+    //         if (response.ok) {
+    //             setTasks(prevTasks =>
+    //                 prevTasks.map(t =>
+    //                     t.id === task.id ? {...t, completed: updatedStatus} : t
+    //                 )
+    //             );
+    //         } else {
+    //             console.error("Failed to update task:", response.status, response.statusText);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error updating task:", error);
+    //     }
+    // };
 
     // METHOD 2 - SEND ONLY STATUS
     // const toggleTaskCompletion = async (task, currentStatus) => {
@@ -265,7 +265,7 @@ export function TaskPage() {
                             id="projects-option"
                             className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         >
-                            <option value="" disabled selected>Select an option</option>
+                            <option value="" disabled selected onClick={fetchProjects}>Select an option</option>
                             {projects.map((project) => (
                                 <option key={project.id} value={project.id} className="flex flex-col">
                                     {project.name}
