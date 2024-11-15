@@ -15,6 +15,8 @@ const buttonVariants = cva(
           "bg-red-500 text-neutral-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-neutral-50 dark:hover:bg-red-900/90",
         outline:
           "border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50",
+          outline_destructive:
+          "border-2 border-neutral-600 bg-white hover:bg-red-500 hover:text-white hover:border-red-500 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-red-500 dark:hover:text-white dark:hover:border-red-500",
         secondary:
           "bg-neutral-100 text-neutral-900 hover:bg-neutral-100/80 dark:bg-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-800/80",
         ghost: "hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50",
@@ -44,5 +46,6 @@ const Button = React.forwardRef(({ className, variant, size, asChild = false, ..
   );
 })
 Button.displayName = "Button"
+
 
 export { Button, buttonVariants }

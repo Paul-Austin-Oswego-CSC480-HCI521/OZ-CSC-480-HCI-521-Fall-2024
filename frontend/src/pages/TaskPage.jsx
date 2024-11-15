@@ -8,6 +8,8 @@ import {TaskTable} from '@/components/TaskTable'
 import {taskColumns} from "@/components/TaskColumns";
 
 import {DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader} from "@/components/ui/drawer";
+import { Drawer, Drawer as DrawerPrimitive } from "vaul"
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 import PageTitle from '@/components/PageTitle'
 
@@ -43,7 +45,9 @@ export function TaskPage() {
     const [editMode, isEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
     const [activeTab, setActiveTab] = useState("upcoming");
-
+    const [lastSelectedTask, setLastSelectedTask] = useState(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+   
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
@@ -55,10 +59,20 @@ export function TaskPage() {
     };
 
 
+
+
+    // const handleDeletePopup = (action, taskId) => {
+    //     setDeletePopup({isOpen: false, taskId: null});
+    //     if (action === "delete") {
+    //         deleteTask2(taskId);
+    //     }
+    // };
+
     const handleDeletePopup = (action, taskId) => {
-        setDeletePopup({isOpen: false, taskId: null});
         if (action === "delete") {
-            deleteTask(taskId);
+            deleteTask2(taskId);
+        } else {
+            setDeletePopup({ isOpen: false, taskId: null });
         }
     };
     const fetchProjects = async () => {
@@ -74,6 +88,69 @@ export function TaskPage() {
             console.error("Error fetching projects:", error);
         }
     };
+
+
+    const handleTaskSelect = (taskId) => {
+        setIsDrawerOpen(true);
+        console.log("Task clicked:", taskId);
+     const selectedTask = tasks.find(task => task.id === taskId);
+     console.log("Selected Task:",selectedTask)
+     
+     if (!selectedTask) {
+         console.error("Task not found");
+         return;
+     }
+        setLastSelectedTask(selectedTask);
+        isEditMode(false);
+
+
+     const descriptionBoxElement = document.getElementById("descriptionBox");
+     if (descriptionBoxElement) {
+         descriptionBoxElement.value = selectedTask.description || '';
+     } else {
+         console.error("Element with id 'descriptionBox' not found");
+     }
+
+
+     const projectSelectElement = document.getElementById("projects-option");
+     if (projectSelectElement) {
+         projectSelectElement.value = selectedTask.projectId || '';
+     } else {
+         console.error("Element with id 'projects-option' not found");
+     }
+
+
+     const dateElement = document.getElementById("date-option");
+     if (dateElement) {
+         dateElement.value = selectedTask.dueDate || '';
+     } else {
+         console.error("Element with id 'date-option' not found");
+     }
+
+
+     const priorityMap = {
+        "Low": "1",
+        "Medium": "2",
+        "High": "3",
+        "No Priority": "None"
+    };
+
+
+    const priorityElement = document.getElementById('priority-option');
+    if (priorityElement) {
+        const priorityValue = priorityMap[selectedTask.priority] || '1';
+        priorityElement.value = priorityValue;
+    } else {
+        console.error("Element with id 'priority-option' not found");
+    }
+
+
+
+
+//      setIsDrawerOpen(true);
+
+
+    }
 
     const fetchTasks = async () => {
         if (!(await fetch('/auth')).ok) {
@@ -113,8 +190,10 @@ export function TaskPage() {
     }, [projects.length]);
 
     const resetTaskFields = async () => {
+        setIsDrawerOpen(true);
         isEditMode(true);
         setCurrentTaskTitle('');
+        setLastSelectedTask('');
         document.getElementById("projects-option").value = 0;
         document.getElementById("date-option").value = "";
         document.getElementById("priority-option").value = "Low";
@@ -172,6 +251,22 @@ export function TaskPage() {
         }
     };
 
+
+    const deleteTask2 = async (taskId) => {
+        try {
+            const trashResponse = await fetch(`/tasks/trash/${taskId}`, { method: 'PUT' });
+            if (!trashResponse.ok) {
+                console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
+                return;
+            }
+            setDeletePopup({ isOpen: false, taskId: null });
+            await fetchTasks();
+            resetTaskFields();
+            console.log(`Task ${taskId} successfully moved to trash.`);
+        } catch (e) {
+            console.error(`Error deleting task ${taskId}: ${e.message}`);
+        }
+    };
 
     // SL NOTE: DOES NOT WORK; POSSIBLE BACKEND ISSUE?
     // TWO METHODS - SEND ENTIRE JSON VS SEND ONLY STATUS
@@ -243,13 +338,16 @@ export function TaskPage() {
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
             />
-            <DrawerContent className="max-w-[417px] bg-blueLight fixed bottom-0 right-0 ml-auto h-full pt-20 pl-4">
-                <DrawerHeader>
+            {/* <DrawerContent className={`max-w-[417px] bg-blueLight fixed bottom-0 right-0 ml-auto h-full pt-20 pl-4 ${isDrawerOpen ? 'block' : 'hidden'}`}> */}
+                {/* <DrawerHeader>
                     <DrawerTitle>Task Details</DrawerTitle>
-                </DrawerHeader>
+                </DrawerHeader> */}
+
+
+                {/* A.D. - Commented out the Drawer changes because it was causing issues w/ selecting tasks*/}
                 <Sidebar
                     id="title-option"
-                    title={currentTaskTitle}
+                    title={lastSelectedTask ? lastSelectedTask.title : ''}
                     setTitleInParent={setCurrentTaskTitle}
                     editMode={editMode}
                     isEditMode={isEditMode}
@@ -260,7 +358,8 @@ export function TaskPage() {
                         placeholder="Description"
                         spellCheck='false'
                         style={{resize: 'none'}}
-                        className="flex mx-4 w-[344px] h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
+                        className="flex mx-4 w-[300px] h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
+                        // className="flex mx-4 w-[344px] h-60 rounded-md border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-black bg-white px-3 py-2 ring-offset-white file:border-0 file:bg-transparent file:font-light placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 mb-4"
                     >
                     </textarea>
                     <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
@@ -299,11 +398,14 @@ export function TaskPage() {
                             <option value="None">No Priority</option>
                         </select>
                     </div>
-                    <div className="fixed right-4 bottom-4">
+                    <div className="fixed bottom-4 flex gap-4 ml-10">
+                        <Button variant="outline_destructive" onClick={() => setDeletePopup({ isOpen: true, taskId: lastSelectedTask.id })}>Delete Task</Button>
                         <Button variant="default" onClick={addNewTask}>Save Changes</Button>
                     </div>
                 </Sidebar>
-            </DrawerContent>
+            {/* </DrawerContent> */}
+
+
 
 
             {/* Main Content */}
@@ -338,8 +440,10 @@ export function TaskPage() {
                         </DrawerTrigger>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns} projects={projects}
-                                   data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}/>
+                        <TaskTable columns={taskColumns}
+                                   data={tasks.filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}
+                                   onTaskSelect={handleTaskSelect}
+                                   />
                     </section>
                 </div>
             </div>
