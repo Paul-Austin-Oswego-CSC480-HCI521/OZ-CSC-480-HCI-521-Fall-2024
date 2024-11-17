@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 .idea/
 .vscode/
 /*.db
 **/.DS_Store
 tasks.db
+=======
+.idea/
+.vscode/
+/*.db
+**/.DS_Store
+auth.env
+>>>>>>> gui-init

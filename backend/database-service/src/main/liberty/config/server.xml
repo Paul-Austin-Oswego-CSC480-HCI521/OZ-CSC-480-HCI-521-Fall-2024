@@ -13,13 +13,19 @@
 
     <variable name="http.port" defaultValue="8080"/>
     <variable name="https.port" defaultValue="8443"/>
+    <variable name="cert.location" defaultValue="key.jks"/>
+    <variable name="cert.password" defaultValue="testpw"/>
+    <variable name="cert.algorithm" defaultValue="RS256"/>
+    <variable name="cert.alias" defaultValue="480TestCert"/>
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
                   host="*" />
 
-    <keyStore id="testKeyStore" location="key.jks" password="testpw" />
+    <keyStore id="testKeyStore" location="${cert.location}" password="${cert.password}" />
     <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
+
+    <mpJwt id="jwtFrontEndBuilder" tokenHeader="Authorization" audiences="frontend" signatureAlgorithm="${cert.algorithm}" keyName="${cert.alias}" issuer="moxie.cs.oswego.edu"/>
 
     <webApplication contextRoot="/" location="database-service.war" />
 </server>

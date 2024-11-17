@@ -18,12 +18,15 @@
     <variable name="http.port" defaultValue="9090"/>
     <variable name="https.port" defaultValue="9443"/>
     <variable name="frontend.root" defaultValue="http://localhost:2080"/>
+    <variable name="cert.location" defaultValue="key.jks"/>
+    <variable name="cert.password" defaultValue="testpw"/>
+    <variable name="cert.algorithm" defaultValue="RS256"/>
 
     <httpEndpoint httpPort="${http.port}" httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
                   host="*"/>
 
-    <keyStore id="testKeyStore" location="key.jks" password="testpw" />
+    <keyStore id="testKeyStore" location="${cert.location}" password="${cert.password}" />
     <ssl id="defaultSSLConfig" trustDefaultCerts="true" keyStoreRef="testKeyStore" />
 
     <githubLogin clientId="${github.client.id}"
@@ -46,7 +49,8 @@
         </security-constraint> -->
     </webApplication>
 
-    <jwtBuilder id="jwtFrontEndBuilder" issuer="http://openliberty.io" expiresInSeconds="15"/>
+    <jwtBuilder id="jwtFrontEndBuilder" issuer="moxie.cs.oswego.edu" expiresInSeconds="15"
+                trustStoreRef="testKeyStore" signatureAlgorithm="${cert.algorithm}"/>
 
     <!--More Cors bs-->
     <cors domain="/auth/native-login"

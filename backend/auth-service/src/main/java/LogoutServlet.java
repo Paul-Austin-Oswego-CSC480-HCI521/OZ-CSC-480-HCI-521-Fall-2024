@@ -20,8 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = "/auth/logout")
-@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"user"},
-        transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
+@ServletSecurity(value = @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class LogoutServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -57,7 +56,7 @@ public class LogoutServlet extends HttpServlet {
             response.addCookie(sessionIDCookie);
         }
         request.logout();
-        response.sendRedirect(frontendRoot);
+        response.sendRedirect(frontendRoot + "/login");
     }
 
     static Cookie getCookie(HttpServletRequest request, String name) {

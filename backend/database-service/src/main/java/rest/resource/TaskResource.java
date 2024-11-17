@@ -2,18 +2,17 @@ package rest.resource;
 
 import dao.TaskDAO;
 import dao.UserDAO;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import model.Project;
 import model.Task;
 import model.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import java.security.interfaces.RSAPrivateCrtKey;
-
 @Path("/tasks")
+@RolesAllowed({"user"})
 public class TaskResource {
 
     @Inject
