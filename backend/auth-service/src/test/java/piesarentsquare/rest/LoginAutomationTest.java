@@ -22,11 +22,7 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 // import static org.junit.jupiter.api.Assertions.assertTrue;
-<<<<<<< HEAD
-import static org.junit.jupiter.api.Assertions.fail;
-=======
 // import static org.junit.jupiter.api.Assertions.fail;
->>>>>>> gui-init
 
 class LoginAutomationTest {
     private WebDriver driver;
@@ -53,11 +49,7 @@ class LoginAutomationTest {
     private void sendSigintToProcess(Process process) throws IOException {
         if (process != null && process.isAlive()) {
             long pid = process.pid(); // Get PID (Java 9+)
-<<<<<<< HEAD
-            ProcessBuilder killBuilder = new ProcessBuilder("kill", "-2", Long.toString(pid));
-=======
             ProcessBuilder killBuilder = new ProcessBuilder("kill", "-9", Long.toString(pid));
->>>>>>> gui-init
             Process killProcess = killBuilder.start();
             try {
                 killProcess.waitFor();
@@ -74,50 +66,28 @@ class LoginAutomationTest {
         Process websiteProcess = null;
         System.out.println("Running start_website script...");
         websiteProcess = runCommandInBackground("../../", "bash start_website.sh");
-<<<<<<< HEAD
-=======
         Thread.sleep(3000);
->>>>>>> gui-init
         // Initialize WebDriver for Selenium
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         System.out.println("WebDriver initialized successfully."); // Debug statement
         try {
-<<<<<<< HEAD
-            Thread.sleep(8000);
-            System.out.println("Opening login page...");
-            driver.get("http://localhost:2080/Login");
-
-            Thread.sleep(20000);
-=======
             Thread.sleep(10000);
             System.out.println("Opening login page...");
             driver.get("http://localhost:2080/Login");
 
             Thread.sleep(22000);
->>>>>>> gui-init
 
             // Locate and click the "Log in with GitHub" button
             System.out.println("Attempting to find GitHub login button...");
             WebElement githubLoginButton = driver.findElement(By.xpath("//button[contains(., 'Log in with GitHub')]"));
-<<<<<<< HEAD
-            System.out.println("GitHub login button found, clicking it...");
-            githubLoginButton.click();
-
-            Thread.sleep(2000);
-
-            System.out.println("Attempting to find Advanced button...");
-            WebElement advanced_Button = driver.findElement(By.xpath("//button[contains(., 'Advanced')]"));
-            System.out.println("Advanced button found, clicking it...");
-=======
             githubLoginButton.click();
 
             Thread.sleep(3000);
 
             System.out.println("Attempting to find Advanced button...");
             WebElement advanced_Button = driver.findElement(By.xpath("//button[contains(., 'Advanced')]"));
->>>>>>> gui-init
             advanced_Button.click();
 
             Thread.sleep(2000);
@@ -135,11 +105,7 @@ class LoginAutomationTest {
             WebElement createTaskButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Create New Task')]")));
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createTaskButton);
     
-<<<<<<< HEAD
-            WebElement titleField = driver.findElement(By.xpath("//input[@placeholder='Task 1']"));
-=======
             WebElement titleField = driver.findElement(By.xpath("//input[@placeholder='Task Title']"));
->>>>>>> gui-init
             titleField.sendKeys("Automated Task Title");
 
             // Step 3: Enter Task Description
@@ -151,11 +117,7 @@ class LoginAutomationTest {
             // // Step 4: Select Project from Dropdown
             // System.out.println("Selecting Project...");
             // Select projectDropdown = new Select(driver.findElement(By.id("projects-option")));
-<<<<<<< HEAD
-            // projectDropdown.selectByVisibleText("Not my first rodeo"); // or select by value if you have dynamic options
-=======
             // projectDropdown.selectByVisibleText("Not my first rodeo");
->>>>>>> gui-init
 
             // Step 5: Set the Due Date
             System.out.println("Setting Due Date...");
@@ -172,49 +134,8 @@ class LoginAutomationTest {
             WebElement saveButton = driver.findElement(By.xpath("//button[contains(., 'Save Changes')]"));
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", saveButton);
 
-<<<<<<< HEAD
-            Thread.sleep(4000);
-
-            // // Optional: Wait and verify if the task was created successfully
-            // System.out.println("Verifying task creation...");
-            // wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[contains(., 'My Tasks')]"))); // Or another element that confirms success
-
-            // System.out.println("New task created successfully.");
-
-            // System.out.println("Attempting to find Passkey text...");
-            // WebElement passkey_Button = driver.findElement(By.xpath("//*[contains(text(), 'Sign in with a passkey')]"));
-            // System.out.println("Proceed button found, clicking it...");
-            // passkey_Button.click();
-
-            // Thread.sleep(10000);
-
-            // Locate email input and enter the username
-            // WebElement emailInput = driver.findElement(By.id("Username or email address"));
-            // emailInput.sendKeys("user@gmail.com");
-
-            // // Locate password input and enter the password
-            // WebElement passwordInput = driver.findElement(By.id("password"));
-            // passwordInput.sendKeys("password");
-
-            // Click the login button
-            // WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
-            // loginButton.click();
-
-            // Check that the login was successful by verifying if the user was redirected
-            // assertTrue(driver.getCurrentUrl().endsWith("/")); // Expected URL after login
-
-            // Verify the redirection
-            // System.out.println("Waiting for redirection...");
-            // Thread.sleep(5000);  // Wait for redirection to complete
-            // assertTrue(driver.getCurrentUrl().equals("http://localhost:2080"));
-
-            // WebElement githubLogoutButton = driver.findElement(By.xpath("//*[contains(text(), 'Log out')]"));
-            // System.out.println("Logout button found, clicking it...");
-            // githubLogoutButton.click();
-=======
             Thread.sleep(6000);
 
->>>>>>> gui-init
             WebElement githubLogoutButton = driver.findElement(By.xpath("//*[contains(text(), 'Log out')]"));
             System.out.println("Logout button found, attempting JavaScript click...");
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", githubLogoutButton);
@@ -238,9 +159,4 @@ class LoginAutomationTest {
         }
     }
 }
-<<<<<<< HEAD
         
-    
-=======
-        
->>>>>>> gui-init
