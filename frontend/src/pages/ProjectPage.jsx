@@ -179,10 +179,6 @@ export default function ProjectPage() {
                 onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
                 isOpen={deletePopup.isOpen}
             />
-            <DrawerContent className="max-w-[417px] bg-blueLight fixed bottom-0 right-0 ml-auto h-full pt-20 pl-4">
-                <DrawerHeader>
-                    <DrawerTitle>Task Details</DrawerTitle>
-                </DrawerHeader>
                 <Sidebar
                     id="title-option"
                     title={currentTaskTitle}
@@ -239,7 +235,6 @@ export default function ProjectPage() {
                         <Button variant="default" onClick={addNewTask}>Save Changes</Button>
                     </div>
                 </Sidebar>
-            </DrawerContent>
 
 
             {/* Main Content */}
