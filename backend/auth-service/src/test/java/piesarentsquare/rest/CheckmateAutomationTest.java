@@ -208,19 +208,19 @@ class CheckmateAutomationTest {
         
         loginButton.click();
         
+        // Edit this below - may want to use something different to wait for...
         wait.until(ExpectedConditions.urlContains("/"));
         assertTrue(driver.getCurrentUrl().endsWith("/"),
             "Failed to redirect to task page after clicking login");
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     void createProject() {
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[contains(@class, 'inline-flex') and contains(@class, 'items-center') and contains(@class, 'justify-center')]")));
 
-        // Click the button five times
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             button.click();
         }
     }
@@ -268,7 +268,7 @@ class CheckmateAutomationTest {
         saveChangesButton.click();
     }
 
-    // Verifies a task is present in the table with correct details
+    // Verifies a task is present in the table with correct details.
     void verifyTask(String taskName, String projectName, String dueDate, String priority) {
         // Wait for the task table to contain the new task with the provided details
         WebElement taskRow = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -289,7 +289,7 @@ class CheckmateAutomationTest {
 
     // Creates and verifies Task 1
     @Test
-    @Order(11)
+    @Order(21)
     void createAndVerifyTask1() {
         createTask("Task 1", "Description 1", "Project 1", "12252024", "Low");
         verifyTask("Task 1", "Project 1", "12 / 25 / 2024", "Low");
@@ -297,7 +297,7 @@ class CheckmateAutomationTest {
 
     // Creates and verifies Task 2
     @Test
-    @Order(12)
+    @Order(13)
     void createAndVerifyTask2() {
         createTask("Task 2", "Description 2", "Project 1", "12262024", "Medium");
         verifyTask("Task 2", "Project 1", "12 / 26 / 2024", "Medium");
@@ -305,7 +305,7 @@ class CheckmateAutomationTest {
     
     // Creates and verifies Task 3
     @Test
-    @Order(12)
+    @Order(14)
     void createAndVerifyTask3() {
         createTask("Task 3", "Description 3", "Project 2", "12272024", "High");
         verifyTask("Task 3", "Project 2", "12 / 27 / 2024", "High");
@@ -313,7 +313,7 @@ class CheckmateAutomationTest {
 
     // Creates and verifies Task 4
     @Test
-    @Order(12)
+    @Order(15)
     void createAndVerifyTask4() {
         createTask("Task 4", "Description 4", "Project 2", "12282024", "No Priority");
         verifyTask("Task 4", "Project 2", "12 / 28 / 2024", "No Priority");
