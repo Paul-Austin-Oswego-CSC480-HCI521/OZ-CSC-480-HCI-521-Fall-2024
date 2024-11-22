@@ -1,0 +1,67 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: jakarta.faces; type=spec,
+ jakarta.faces.annotation; type=spec,
+ jakarta.faces.application; type=spec,
+ jakarta.faces.component; type=spec,
+ jakarta.faces.component.behavior; type=spec,
+ jakarta.faces.component.html; type=spec,
+ jakarta.faces.component.search; type=spec,
+ jakarta.faces.component.visit; type=spec,
+ jakarta.faces.context; type=spec,
+ jakarta.faces.convert; type=spec,
+ jakarta.faces.el; type=spec,
+ jakarta.faces.event; type=spec,
+ jakarta.faces.flow; type=spec,
+ jakarta.faces.flow.builder; type=spec,
+ jakarta.faces.lifecycle; type=spec,
+ jakarta.faces.model; type=spec,
+ jakarta.faces.push; type=spec,
+ jakarta.faces.render; type=spec,
+ jakarta.faces.validator; type=spec,
+ jakarta.faces.view; type=spec,
+ jakarta.faces.view.facelets; type=spec,
+ jakarta.faces.webapp; type=spec,
+ org.apache.myfaces.core.api.shared; type=spec,
+ org.apache.myfaces.core.api.shared.lang; type=spec,
+ org.apache.myfaces.renderkit.html; type=third-party,
+ org.apache.myfaces.config.webparameters; type=third-party,
+ org.apache.myfaces.renderkit; type=third-party,
+ org.apache.myfaces.renderkit.html.base; type=third-party,
+ org.apache.myfaces.renderkit.html.util; type=third-party
+IBM-App-ForceRestart: install,
+ uninstall
+IBM-AppliesTo: io.openliberty;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: io.openliberty
+IBM-ShortName: faces-4.0
+Subsystem-Content: io.openliberty.jakarta.websocket-2.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.servlet-6.0; type="osgi.subsystem.feature",
+ io.openliberty.facesProvider-4.0.0.MyFaces; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.eeCompatible-10.0; type="osgi.subsystem.feature",
+ io.openliberty.jakarta.validation-3.0; type="osgi.subsystem.feature",
+ io.openliberty.jakarta.faces-4.0; type="osgi.subsystem.feature",
+ io.openliberty.expressionLanguage-5.0; type="osgi.subsystem.feature",
+ io.openliberty.cdi-4.0; type="osgi.subsystem.feature",
+ io.openliberty.org.apache.myfaces.4.0; version="[1.0.0,1.1.0)",
+ com.ibm.ws.jsf.shared.jakarta; version="[1.0.0,1.1.0)",
+ io.openliberty.faces.4.0.internal; version="[1.0.0,1.1.0)",
+ com.ibm.ws.cdi.interfaces.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.cdi.2.0.jsf.jakarta; version="[1.0.0,1.1.0)",
+ io.openliberty.faces.4.0.thirdparty; location:="dev/api/third-party/,lib/"; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.faces-4.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Jakarta Faces 4.0
+Subsystem-SymbolicName: io.openliberty.faces-4.0; visibility:=public; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel
+WLP-AlsoKnownAs: jsf-4.0
+WLP-DisableAllFeatures-OnConflict: true
+WLP-InstantOn-Enabled: true
+WLP-Platform: jakartaee-10.0

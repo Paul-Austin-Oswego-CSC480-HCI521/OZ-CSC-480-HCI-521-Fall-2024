@@ -1,0 +1,85 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: com.ibm.ws.ejb.portable; type=internal,
+ com.ibm.websphere.endpoint; type=ibm-api,
+ javax.rmi; type=spec,
+ javax.rmi.CORBA; type=spec,
+ org.omg.stub.java.rmi; type=spec,
+ org.omg.BiDirPolicy; type=spec,
+ org.omg.CONV_FRAME; type=spec,
+ org.omg.CORBA; type=spec,
+ org.omg.CORBA.ContainedPackage; type=spec,
+ org.omg.CORBA.ContainerPackage; type=spec,
+ org.omg.CORBA.InterfaceDefPackage; type=spec,
+ org.omg.CORBA.ORBPackage; type=spec,
+ org.omg.CORBA.PollableSetPackage; type=spec,
+ org.omg.CORBA.TypeCodePackage; type=spec,
+ org.omg.CORBA.ValueDefPackage; type=spec,
+ org.omg.CORBA.portable; type=spec,
+ org.omg.CORBA_2_3; type=spec,
+ org.omg.CORBA_2_3.portable; type=spec,
+ org.omg.CORBA_2_4; type=spec,
+ org.omg.CORBA_2_4.portable; type=spec,
+ org.omg.CSI; type=spec,
+ org.omg.CSIIOP; type=spec,
+ org.omg.CosNaming; type=spec,
+ org.omg.CosNaming.NamingContextExtPackage; type=spec,
+ org.omg.CosNaming.NamingContextPackage; type=spec,
+ org.omg.CosTSInteroperation; type=spec,
+ org.omg.CosTransactions; type=spec,
+ org.omg.Dynamic; type=spec,
+ org.omg.DynamicAny; type=spec,
+ org.omg.DynamicAny.DynAnyFactoryPackage; type=spec,
+ org.omg.DynamicAny.DynAnyPackage; type=spec,
+ org.omg.GIOP; type=spec,
+ org.omg.GSSUP; type=spec,
+ org.omg.IIOP; type=spec,
+ org.omg.IOP; type=spec,
+ org.omg.IOP.CodecFactoryPackage; type=spec,
+ org.omg.IOP.CodecPackage; type=spec,
+ org.omg.MessageRouting; type=spec,
+ org.omg.Messaging; type=spec,
+ org.omg.PortableInterceptor; type=spec,
+ org.omg.PortableInterceptor.ORBInitInfoPackage; type=spec,
+ org.omg.PortableServer; type=spec,
+ org.omg.PortableServer.CurrentPackage; type=spec,
+ org.omg.PortableServer.POAManagerFactoryPackage; type=spec,
+ org.omg.PortableServer.POAManagerPackage; type=spec,
+ org.omg.PortableServer.POAPackage; type=spec,
+ org.omg.PortableServer.ServantLocatorPackage; type=spec,
+ org.omg.PortableServer.portable; type=spec,
+ org.omg.SSLIOP; type=spec,
+ org.omg.Security; type=spec,
+ org.omg.SecurityLevel1; type=spec,
+ org.omg.SecurityLevel2; type=spec,
+ org.omg.SendingContext; type=spec,
+ org.omg.SendingContext.CodeBasePackage; type=spec,
+ org.omg.TimeBase; type=spec
+IBM-App-ForceRestart: install,
+ uninstall
+IBM-AppliesTo: io.openliberty;productEdition=Open;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: io.openliberty
+IBM-ShortName: enterpriseBeansRemote-4.0
+Subsystem-Content: ejbRemotePortable.jakarta.jar; type=file; location:="clients/ejbRemotePortable.jakarta.jar"; version="[1.0.0,1.1.0)",
+ com.ibm.websphere.appserver.iioptransport-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.eeCompatible-9.0; ibm.tolerates:="10.0, 11.0"; type="osgi.subsystem.feature",
+ io.openliberty.enterpriseBeansLite-4.0; type="osgi.subsystem.feature",
+ com.ibm.ws.ejbcontainer.remote.jakarta; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.enterpriseBeansRemote-4.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Jakarta Enterprise Beans 4.0 Remote
+Subsystem-SymbolicName: io.openliberty.enterpriseBeansRemote-4.0; visibility:=public; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel
+WLP-AlsoKnownAs: ejbRemote-4.0
+WLP-DisableAllFeatures-OnConflict: true
+WLP-Platform: jakartaee-9.1,
+ jakartaee-10.0,
+ jakartaee-11.0

@@ -1,0 +1,78 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: org.apache.cxf.binding.soap.wsdl.extensions; type=internal,
+ org.apache.cxf.databinding; type=internal,
+ jakarta.jws; type=spec,
+ jakarta.jws.soap; type=spec,
+ jakarta.xml.soap; type=spec,
+ jakarta.xml.ws; type=spec,
+ jakarta.xml.ws.handler; type=spec,
+ jakarta.xml.ws.handler.soap; type=spec,
+ jakarta.xml.ws.http; type=spec,
+ jakarta.xml.ws.soap; type=spec,
+ jakarta.xml.ws.spi; type=spec,
+ jakarta.xml.ws.spi.http; type=spec,
+ jakarta.xml.ws.wsaddressing; type=spec,
+ jakarta.annotation; type=spec,
+ jakarta.annotation.security; type=spec,
+ jakarta.annotation.sql; type=spec
+IBM-App-ForceRestart: uninstall,
+ install
+IBM-AppliesTo: io.openliberty;productEdition=Open;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: io.openliberty
+IBM-SPI-Package: com.ibm.wsspi.adaptable.module,
+ com.ibm.ws.adaptable.module.structure,
+ com.ibm.wsspi.adaptable.module.adapters,
+ com.ibm.wsspi.artifact,
+ com.ibm.wsspi.artifact.factory,
+ com.ibm.wsspi.artifact.factory.contributor,
+ com.ibm.wsspi.artifact.overlay,
+ com.ibm.wsspi.artifact.equinox.module,
+ com.ibm.wsspi.anno.classsource,
+ com.ibm.wsspi.anno.info,
+ com.ibm.wsspi.anno.service,
+ com.ibm.wsspi.anno.targets,
+ com.ibm.wsspi.anno.util,
+ com.ibm.ws.anno.classsource.specification
+IBM-ShortName: xmlWS-4.0
+Subsystem-Content: wsgen; ibm.executable:=true; ibm.file.encoding:=ebcdic; type=file; location:="bin/xmlWS/wsgen",
+ wsimport; ibm.executable:=true; ibm.file.encoding:=ebcdic; type=file; location:="bin/xmlWS/wsimport",
+ ibm-ws-bnd_1_0.xsd; type=file; location:="dev/api/ibm/schema/ibm-ws-bnd_1_0.xsd",
+ wsimport.bat; type=file; location:="bin/xmlWS/wsimport.bat",
+ ws-wsimport.jar; type=file; location:="bin/xmlWS/tools/ws-wsimport.jar"; version="[1.0.0,1.1.0)",
+ wsgen.bat; type=file; location:="bin/xmlWS/wsgen.bat",
+ ws-wsgen.jar; type=file; location:="bin/xmlWS/tools/ws-wsgen.jar"; version="[1.0.0,1.1.0)",
+ com.ibm.websphere.appserver.eeCompatible-10.0; ibm.tolerates:="11.0"; type="osgi.subsystem.feature",
+ io.openliberty.xmlws4.0.internal.ee-10.0; ibm.tolerates:="11.0"; type="osgi.subsystem.feature",
+ io.openliberty.xmlws.common-4.0; type="osgi.subsystem.feature",
+ io.openliberty.com.sun.xml.messaging.saaj.2.0; type=jar; version="[1.0.0,1.1.0)",
+ io.openliberty.jakarta.xmlBinding.3.0; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.1.0)",
+ io.openliberty.jakarta.activation.2.0; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.1.0)",
+ io.openliberty.jakarta.jws.3.0; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.1.0)",
+ io.openliberty.jakarta.soap.2.0; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.1.0)",
+ io.openliberty.jakarta.xmlWS.3.0; location:="dev/api/spec/,lib/"; type=jar; version="[1.0.0,1.1.0)",
+ io.openliberty.xmlWS.3.0.internal.tools; type=jar; version="[1.0.0,1.1.0)",
+ com.ibm.ws.javaee.ddmodel.ws; version="[1.0.0,1.1.0)",
+ com.ibm.ws.jaxws.2.3.common.jakarta; start-phase:=CONTAINER_LATE; version="[1.0.0,1.1.0)",
+ com.ibm.ws.jaxws.webcontainer.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.jaxws.web.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.jaxws.wsat; version="[1.0.0,1.1.0)",
+ com.ibm.ws.webservices.javaee.common.jakarta; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.xmlWS-4.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Jakarta XML Web Services 4.0
+Subsystem-SymbolicName: io.openliberty.xmlWS-4.0; visibility:=public; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel
+WLP-AlsoKnownAs: jaxws-4.0
+WLP-DisableAllFeatures-OnConflict: true
+WLP-InstantOn-Enabled: true
+WLP-Platform: jakartaee-10.0,
+ jakartaee-11.0

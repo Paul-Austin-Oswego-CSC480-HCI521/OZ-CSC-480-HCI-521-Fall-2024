@@ -1,0 +1,23 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: com.ibm.ws.clientcontainer.remote.common;type="internal"
+IBM-AppliesTo: io.openliberty;productEdition=Open;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-Install-Policy: when-satisfied
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-Process-Types: server
+IBM-ProductID: io.openliberty
+IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.enterpriseBeansRemote-4.0))",
+ osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.clientContainerRemoteSupportCommon-1.0))"
+Subsystem-Content: com.ibm.websphere.appserver.clientContainerRemoteSupportCommon-1.0; type="osgi.subsystem.feature",
+ com.ibm.ws.ejbcontainer.remote.client.server.jakarta; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.enterpriseBeansRemoteClientServer-2.0
+Subsystem-ManifestVersion: 1
+Subsystem-SymbolicName: io.openliberty.enterpriseBeansRemoteClientServer-2.0; visibility:=private; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel

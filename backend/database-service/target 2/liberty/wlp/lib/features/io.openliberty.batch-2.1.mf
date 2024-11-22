@@ -1,0 +1,47 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: jakarta.batch.api; type=spec,
+ jakarta.batch.api.chunk; type=spec,
+ jakarta.batch.api.chunk.listener; type=spec,
+ jakarta.batch.api.listener; type=spec,
+ jakarta.batch.api.partition; type=spec,
+ jakarta.batch.operations; type=spec,
+ jakarta.batch.runtime; type=spec,
+ jakarta.batch.runtime.context; type=spec,
+ jakarta.inject; type=spec,
+ com.ibm.websphere.persistence.mbean; type=ibm-api
+IBM-App-ForceRestart: uninstall,
+ install
+IBM-AppliesTo: io.openliberty;productEdition=Open;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: io.openliberty
+IBM-ShortName: batch-2.1
+Subsystem-Content: com.ibm.websphere.appserver.jdbc-4.2; ibm.tolerates:="4.3"; type="osgi.subsystem.feature",
+ io.openliberty.batch2.1.internal.ee-10.0; ibm.tolerates:="11.0"; type="osgi.subsystem.feature",
+ io.openliberty.jakarta.annotation-2.1; ibm.tolerates:="3.0"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.eeCompatible-10.0; ibm.tolerates:="11.0"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.contextService-1.0; type="osgi.subsystem.feature",
+ io.openliberty.persistenceService-2.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.jndi-1.0; type="osgi.subsystem.feature",
+ io.openliberty.jakarta.cdi-4.0; ibm.tolerates:="4.1"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.transaction-2.0; type="osgi.subsystem.feature",
+ com.ibm.jbatch.spi; version="[1.0.0,1.1.0)",
+ com.ibm.ws.security.credentials; version="[1.0.0,1.1.0)",
+ com.ibm.websphere.security; version="[1.1.0,1.2.0)",
+ com.ibm.jbatch.container.jakarta.ee10; version="[1.0.0,1.1.0)",
+ io.openliberty.jakarta.batch.2.1; location:="dev/api/spec/,lib/"; mavenCoordinates="jakarta.batch:jakarta.batch-api:2.1.1"; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.batch-2.1
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Jakarta Batch 2.1
+Subsystem-SymbolicName: io.openliberty.batch-2.1; visibility:=public; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel
+WLP-DisableAllFeatures-OnConflict: true
+WLP-Platform: jakartaee-10.0,
+ jakartaee-11.0

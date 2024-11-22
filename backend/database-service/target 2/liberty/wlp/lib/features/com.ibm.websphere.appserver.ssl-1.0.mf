@@ -1,0 +1,41 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: com.ibm.websphere.ssl; type=ibm-api,
+ com.ibm.websphere.endpoint; type=ibm-api
+IBM-AppliesTo: io.openliberty;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-Process-Types: server,
+ client
+IBM-ProductID: io.openliberty
+IBM-SPI-Package: com.ibm.wsspi.ssl
+IBM-ShortName: ssl-1.0
+Subsystem-Content: com.ibm.websphere.appserver.spi.ssl_1.6-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.ssl_1.6-javadoc.zip",
+ com.ibm.websphere.appserver.api.ssl_1.7-javadoc.zip; type=file; location:="dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.ssl_1.7-javadoc.zip",
+ com.ibm.websphere.appserver.channelfw-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.certificateCreator-1.0; ibm.tolerates:="2.0"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.spi.ssl; location:="dev/spi/ibm/,lib/"; type=jar; version="[1.6.0,1.7.0)",
+ com.ibm.websphere.appserver.api.ssl; location:="dev/api/ibm/,lib/"; type=jar; version="[1.7.0,1.8.0)",
+ com.ibm.ws.ssl; version="[1.7.0,1.8.0)",
+ com.ibm.ws.channel.ssl; version="[1.0.0,1.1.0)",
+ com.ibm.websphere.security; version="[1.1.0,1.2.0)",
+ com.ibm.ws.crypto.certificateutil; version="[1.0.0,1.1.0)",
+ com.ibm.ws.crypto.common; version="[1.0.0,1.1.0)",
+ io.openliberty.wsoc.ssl.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.endpoint; version="[1.0.0,1.1.0)",
+ io.openliberty.io.netty; version="[1.0.0,1.1.0)",
+ io.openliberty.io.netty.ssl; version="[1.0.0,1.1.0)",
+ io.openliberty.netty.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.netty.internal.tls.impl; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/com.ibm.websphere.appserver.ssl-1.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Secure Socket Layer 1.0
+Subsystem-SymbolicName: com.ibm.websphere.appserver.ssl-1.0;visibility:=public;singleton:=false;superseded=true;superseded-by="transportSecurity-1.0"
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-DisableAllFeatures-OnConflict: false
+WLP-InstantOn-Enabled: true

@@ -1,0 +1,45 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: com.ibm.websphere.messaging.mbean; type=ibm-api,
+ com.ibm.websphere.endpoint; type=ibm-api
+IBM-AppliesTo: io.openliberty;productEdition=Open;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: io.openliberty
+IBM-ShortName: messagingServer-3.0
+Subsystem-Content: com.ibm.websphere.appserver.api.messaging_1.0-javadoc.zip; type=file; location:="dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.messaging_1.0-javadoc.zip",
+ com.ibm.websphere.appserver.appLifecycle-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.channelfw-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.eeCompatible-9.0; ibm.tolerates:="10.0, 11.0"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.transaction-2.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.api.messaging; location:="dev/api/ibm/,lib/"; type=jar; version="[1.0.0,1.1.0)",
+ com.ibm.ws.messaging.comms.server; version="[1.0.0,1.1.0)",
+ com.ibm.ws.messaging.msgstore.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.messaging.common; version="[1.0.0,1.1.0)",
+ com.ibm.ws.messaging.utils; version="[1.0.0,1.1.0)",
+ com.ibm.ws.messaging.security.common; version="[1.0.0,1.1.0)",
+ com.ibm.ws.messaging.runtime; version="[1.0.0,1.1.0)",
+ com.ibm.ws.messaging.comms.client; version="[1.0.0,1.1.0)",
+ com.ibm.websphere.security; version="[1.1.0,1.2.0)",
+ io.openliberty.io.netty; version="[1.0.0,1.1.0)",
+ io.openliberty.io.netty.ssl; version="[1.0.0,1.1.0)",
+ io.openliberty.netty.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.netty.internal.impl; version="[1.0.0,1.1.0)",
+ io.openliberty.endpoint; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.messagingServer-3.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Messaging Server 3.0
+Subsystem-SymbolicName: io.openliberty.messagingServer-3.0; visibility:=public; singleton:=false
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel
+WLP-AlsoKnownAs: wasJmsServer-3.0
+WLP-DisableAllFeatures-OnConflict: true
+WLP-InstantOn-Enabled: true
+WLP-Platform: jakartaee-9.1,
+ jakartaee-10.0,
+ jakartaee-11.0

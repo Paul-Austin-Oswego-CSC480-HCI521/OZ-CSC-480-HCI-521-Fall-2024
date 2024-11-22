@@ -1,0 +1,26 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: jakarta.activation; type="spec"
+IBM-App-ForceRestart: uninstall,
+ install
+IBM-AppliesTo: io.openliberty;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-Process-Types: client,
+ server
+IBM-ProductID: io.openliberty
+Subsystem-Content: io.openliberty.jakarta.activation-2.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.eeCompatible-10.0; ibm.tolerates:="11.0"; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.classloading-1.0; type="osgi.subsystem.feature",
+ io.openliberty.org.eclipse.angus.activation; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.activation.internal-2.1
+Subsystem-ManifestVersion: 1
+Subsystem-SymbolicName: io.openliberty.activation.internal-2.1; visibility:=private; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel
+WLP-DisableAllFeatures-OnConflict: true

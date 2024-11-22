@@ -1,0 +1,13 @@
+
+arg0=defaultServer
+arg1=--pid=
+arg2=--stop
+exit=1
+
+                 Java home:  /opt/homebrew/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home
+              Install root:  /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/
+          System libraries:  /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/lib/
+                 User root:  /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/
+                    Config:  /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/servers/defaultServer/
+                    Output:  /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/servers/defaultServer/
+

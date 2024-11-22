@@ -1,0 +1,48 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-App-ForceRestart: install,
+ uninstall
+IBM-AppliesTo: io.openliberty;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: io.openliberty
+Subsystem-Category: JakartaEE10Application
+Subsystem-Content: ws-webserverPluginutil.jar; type=file; location:="bin/tools/ws-webserverPluginutil.jar"; version="[1.0.0,1.1.0)",
+ pluginUtility; ibm.executable:=true; ibm.file.encoding:=ebcdic; type=file; location:="bin/pluginUtility",
+ pluginUtility.bat; type=file; location:="bin/pluginUtility.bat",
+ io.openliberty.jakartaeePlatform-10.0; type="osgi.subsystem.feature",
+ io.openliberty.servlet.api-6.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.javaeeddSchema-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.injection-2.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.httptransport-1.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.requestProbes-1.0; type="osgi.subsystem.feature",
+ io.openliberty.jakarta.annotation-2.1; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.eeCompatible-10.0; type="osgi.subsystem.feature",
+ com.ibm.ws.webserver.plugin.utility; type=jar; version="[1.0.0,1.1.0)",
+ com.ibm.ws.app.manager.war.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.managedobject; version="[1.0.0,1.1.0)",
+ com.ibm.ws.org.apache.commons.io; version="[1.0.0,1.1.0)",
+ com.ibm.websphere.security; version="[1.1.0,1.2.0)",
+ com.ibm.ws.org.apache.commons.fileupload.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.webcontainer.servlet.4.0.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.webcontainer.servlet.3.1.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.session.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.webcontainer.jakarta; version="[1.1.0,1.2.0)",
+ com.ibm.ws.webcontainer.cors.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.http.plugin.merge; version="[1.0.0,1.1.0)",
+ com.ibm.ws.webserver.plugin.runtime.jakarta; version="[1.0.0,1.1.0)",
+ com.ibm.ws.webserver.plugin.runtime.interfaces; version="[1.0.0,1.1.0)",
+ io.openliberty.session.6.0.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.webcontainer.servlet.6.0.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.webcontainer.servlet.6.0.internal.factories; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.servlet.internal-6.0
+Subsystem-ManifestVersion: 1
+Subsystem-SymbolicName: io.openliberty.servlet.internal-6.0; visibility:=private; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-Activation-Type: parallel
+WLP-DisableAllFeatures-OnConflict: true

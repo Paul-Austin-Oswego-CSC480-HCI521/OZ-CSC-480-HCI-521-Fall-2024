@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archive>
+    <dir sourceOnDisk="/Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/classes" targetInArchive="/WEB-INF/classes"/>
+    <file sourceOnDisk="/Users/zipporahmuse/.m2/repository/org/xerial/sqlite-jdbc/3.42.0.0/sqlite-jdbc-3.42.0.0.jar" targetInArchive="/WEB-INF/lib/sqlite-jdbc-3.42.0.0.jar"/>
+    <file sourceOnDisk="/Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/tmp/META-INF/MANIFEST.MF" targetInArchive="/META-INF/MANIFEST.MF"/>
+</archive>

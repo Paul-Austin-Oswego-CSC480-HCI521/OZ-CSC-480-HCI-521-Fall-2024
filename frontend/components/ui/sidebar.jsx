@@ -115,18 +115,23 @@ export function Sidebar({ title, setTitleInParent, editMode, isEditMode, childre
                         <input
                             type="text"
                             value={newTitle}
-                            onChange={(e) => setNewTitle(e.target.value)}
+                            onChange={(e) => {
+                                setNewTitle(e.target.value); // Update local state
+                                setTitleInParent(e.target.value); // Update parent state
+                            }}
+                            //onChange={(e) => setNewTitle(e.target.value)}
                             autoFocus
                             placeholder="Task Title"
                             className="min-w-[250px] pl-3 mb-4 mt-4 rounded-md border border-neutral-200 p-1 focus:outline-none focus:ring-1 focus:ring-black focus:bg-white hover:bg-gray-300 transition-colors duration-300 mt-0.5 "
                         />
-                        <button onClick={handleSave}>
+                        {/* <button onClick={handleSave}>
                             <CheckIcon className="h-5 w-5 hover:text-green-500 transition-colors duration-200" />
-                        </button>
+                        </button> */}
                     </div>
                 ) : (
                     <div className="flex items-center justify-between">
-                        <h1 className="text-xl font-semibold mt-4 mb-4 ml-4 w-60 truncate">{newTitle}</h1>
+                        <h1 className="mt-4 mb-4 ml-4 w-60 truncate">{newTitle}</h1>
+                        {/* <h1 className="text-xl font-semibold mt-4 mb-4 ml-4 w-60 truncate">{newTitle}</h1> */}
                         <button onClick={pencilClick} className="focus:outline-none mt-2">
                             <Pencil1Icon className="h-4 w-4 text-gray-500" />
                         </button>

@@ -1,0 +1,72 @@
+********************************************************************************
+product = Open Liberty 24.0.0.11 (wlp-1.0.95.cl241120241021-1102)
+wlp.install.dir = /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/
+java.home = /opt/homebrew/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home
+java.version = 23.0.1
+java.runtime = OpenJDK Runtime Environment (23.0.1)
+os = Mac OS X (14.4; aarch64) (en_US)
+process = 71587@res-dhcp-129-3-134-246
+Classpath = /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/bin/tools/ws-server.jar
+Java Library path = /Users/zipporahmuse/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+********************************************************************************
+[11/14/24, 20:09:44:070 EST] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           A CWWKE0001I: The server defaultServer has been launched.
+[11/14/24, 20:09:44:537 EST] 00000025 com.ibm.ws.config.xml.internal.ServerXMLConfiguration        A CWWKG0093A: Processing configuration drop-ins resource: /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/servers/defaultServer/configDropins/overrides/liberty-plugin-variable-config.xml
+[11/14/24, 20:09:44:643 EST] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           I CWWKE0002I: The kernel started after 0.74 seconds
+[11/14/24, 20:09:44:654 EST] 00000032 com.ibm.ws.kernel.feature.internal.FeatureManager            I CWWKF0007I: Feature update started.
+[11/14/24, 20:09:45:016 EST] 00000024 com.ibm.ws.security.ready.internal.SecurityReadyServiceImpl  I CWWKS0007I: The security service is starting...
+[11/14/24, 20:09:45:136 EST] 00000028 com.ibm.ws.app.manager.internal.monitor.DropinMonitor        A CWWKZ0058I: Monitoring dropins for applications.
+[11/14/24, 20:09:45:323 EST] 00000025 com.ibm.ws.cache.ServerCache                                 I DYNA1001I: WebSphere Dynamic Cache instance named baseCache initialized successfully.
+[11/14/24, 20:09:45:324 EST] 00000025 com.ibm.ws.cache.ServerCache                                 I DYNA1071I: The cache provider default is being used.
+[11/14/24, 20:09:45:325 EST] 00000025 com.ibm.ws.cache.CacheServiceImpl                            I DYNA1056I: Dynamic Cache (object cache) initialized successfully.
+[11/14/24, 20:09:45:454 EST] 00000027 rty.security.mp.jwt.v21.config.impl.MpConfigProxyServiceImpl I CWWKS5786I: The MicroProfile JWT version 2.1 mpConfigProxy was processed successfully.
+[11/14/24, 20:09:45:504 EST] 00000027 org.jboss.weld.Version                                       I WELD-000900: 5.1.1 (SP2)
+[11/14/24, 20:09:45:790 EST] 0000002e com.ibm.ws.security.mp.jwt.impl.MicroProfileJwtServiceImpl   I CWWKS5500I: The MicroProfile JWT configuration [MicroProfileJwtService] was successfully processed.
+[11/14/24, 20:09:45:792 EST] 0000002e com.ibm.ws.security.mp.jwt.impl.MicroProfileJwtConfigImpl    I CWWKS5500I: The MicroProfile JWT configuration [defaultMpJwt] was successfully processed.
+[11/14/24, 20:09:45:797 EST] 0000002e com.ibm.ws.ssl.config.WSKeyStore                             I CWPKI0819I: The default keystore is not created because a password is not configured on the <keyStore id="defaultKeyStore"/> element, and the 'keystore_password' environment variable is not set. 
+[11/14/24, 20:09:46:217 EST] 00000024 com.ibm.ws.sib.utils.ras.SibMessage                          I  CWSID0108I: JMS server has started.  
+[11/14/24, 20:09:46:231 EST] 00000035 com.ibm.ws.security.token.ltpa.internal.LTPAKeyCreateTask    I CWWKS4105I: LTPA configuration is ready after 0.009 seconds.
+[11/14/24, 20:09:46:239 EST] 00000024 ibm.ws.security.authentication.internal.jaas.JAASServiceImpl I CWWKS1123I: The collective authentication plugin with class name NullCollectiveAuthenticationPlugin has been activated. 
+[11/14/24, 20:09:46:389 EST] 00000024 com.ibm.ws.security.jaspi.AuthConfigFactoryWrapper           I CWWKS1655I: The default Java Authentication SPI for Containers (JASPIC) AuthConfigFactory class com.ibm.ws.security.jaspi.ProviderRegistry is being used because the Java security property authconfigprovider.factory is not set. 
+[11/14/24, 20:09:46:395 EST] 00000024 com.ibm.ws.security.jwt.internal.ConsumerImpl                I CWWKS6012I: The JSON Web Token (JWT) consumer service is available.
+[11/14/24, 20:09:46:403 EST] 00000024 com.ibm.ws.security.jwt.web.JwtEndpointServices              I CWWKS6002I: The JSON Web Token (JWT) endpoint service is available.
+[11/14/24, 20:09:46:440 EST] 00000026 cxf.cxf.core.3.2.jakarta:1.0.95.cl241120241021-1102(id=292)] I Aries Blueprint packages not available. So namespaces will not be registered
+[11/14/24, 20:09:46:490 EST] 0000002e org.apache.cxf.ext.logging.osgi.Activator                    I CXF message logging feature disabled
+[11/14/24, 20:09:46:772 EST] 00000037 com.ibm.ws.app.manager.AppMessageHelper                      I CWWKZ0018I: Starting application database-service.
+[11/14/24, 20:09:46:773 EST] 00000037 bm.ws.app.manager.war.internal.WARDeployedAppInfoFactoryImpl I CWWKZ0134I: The database-service application is using the loose application definition at the /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/servers/defaultServer/apps/database-service.war.xml location.
+[11/14/24, 20:09:46:896 EST] 00000035 com.ibm.ws.webcontainer.osgi.webapp.WebGroup                 I SRVE0169I: Loading Web Module: io.openliberty.security.jwt.internal.
+[11/14/24, 20:09:46:897 EST] 00000035 com.ibm.ws.webcontainer                                      I SRVE0250I: Web Module io.openliberty.security.jwt.internal has been bound to default_host.
+[11/14/24, 20:09:46:898 EST] 00000035 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0016I: Web application available (default_host): http://res-dhcp-129-3-134-246:8080/jwt/
+[11/14/24, 20:09:46:922 EST] 00000040 com.ibm.ws.session.WASSessionCore                            I SESN8501I: The session manager did not find a persistent storage location; HttpSession objects will be stored in the local application server's memory.
+[11/14/24, 20:09:47:020 EST] 0000003f com.ibm.ws.session.WASSessionCore                            I SESN0176I: A new session context will be created for application key default_host/jwt
+[11/14/24, 20:09:47:030 EST] 0000003f com.ibm.ws.util                                              I SESN0172I: The session manager is using the Java default SecureRandom implementation for session ID generation.
+[11/14/24, 20:09:47:069 EST] 0000003f org.hibernate.validator.internal.util.Version                I HV000001: Hibernate Validator 7.0.4.Final
+[11/14/24, 20:09:47:105 EST] 00000040 com.ibm.ws.webcontainer.osgi.mbeans.PluginGenerator          I SRVE9103I: A configuration file for a web server plugin was automatically generated for this server at /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/servers/defaultServer/logs/state/plugin-cfg.xml.
+[11/14/24, 20:09:47:212 EST] 0000003f com.ibm.ws.cache.CacheServiceImpl                            I DYNA1056I: Dynamic Cache (object cache) initialized successfully.
+[11/14/24, 20:09:47:223 EST] 0000003f org.apache.myfaces.webapp.MyFacesContainerInitializer        I Using io.openliberty.faces40.internal.ee.WASMyFacesContainerInitializer
+[11/14/24, 20:09:47:383 EST] 00000037 org.jboss.weld.Event                                         I WELD-000411: Observer method [BackedAnnotatedMethod] org.apache.myfaces.config.annotation.CdiAnnotationProviderExtension.processAnnotatedType(@Observes ProcessAnnotatedType<T>) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+[11/14/24, 20:09:47:848 EST] 00000037 com.ibm.ws.webcontainer.osgi.webapp.WebGroup                 I SRVE0169I: Loading Web Module: database-service.
+[11/14/24, 20:09:47:848 EST] 00000037 com.ibm.ws.webcontainer                                      I SRVE0250I: Web Module database-service has been bound to default_host.
+[11/14/24, 20:09:47:848 EST] 00000037 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0016I: Web application available (default_host): http://res-dhcp-129-3-134-246:8080/
+[11/14/24, 20:09:47:849 EST] 00000034 com.ibm.ws.session.WASSessionCore                            I SESN0176I: A new session context will be created for application key default_host/
+[11/14/24, 20:09:47:850 EST] 00000034 com.ibm.ws.util                                              I SESN0172I: The session manager is using the Java default SecureRandom implementation for session ID generation.
+[11/14/24, 20:09:47:861 EST] 00000034 org.apache.myfaces.webapp.MyFacesContainerInitializer        I Using io.openliberty.faces40.internal.ee.WASMyFacesContainerInitializer
+[11/14/24, 20:09:47:865 EST] 00000035 com.ibm.ws.webcontainer.osgi.mbeans.PluginGenerator          I SRVE9103I: A configuration file for a web server plugin was automatically generated for this server at /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/servers/defaultServer/logs/state/plugin-cfg.xml.
+[11/14/24, 20:09:47:885 EST] 00000034 com.ibm.ws.app.manager.AppMessageHelper                      A CWWKZ0001I: Application database-service started in 1.113 seconds.
+[11/14/24, 20:09:47:899 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPPort                       E CWWKO0221E: TCP Channel defaultHttpEndpoint initialization did not succeed.  The socket bind did not succeed for host * and port 8080.  The port might already be in use.  Exception Message: Address already in use
+[11/14/24, 20:09:47:900 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPChannel                    I CWWKO0220I: TCP Channel defaultHttpEndpoint has stopped listening for requests on host * port 8080.
+[11/14/24, 20:09:47:901 EST] 00000032 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0028I: Web application moved (default_host): https://res-dhcp-129-3-134-246:8443/jwt/
+[11/14/24, 20:09:47:901 EST] 00000032 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0028I: Web application moved (default_host): https://res-dhcp-129-3-134-246:8443/
+[11/14/24, 20:09:47:903 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPPort                       E CWWKO0221E: TCP Channel wasJmsEndpoint488 initialization did not succeed.  The socket bind did not succeed for host localhost and port 7276.  The port might already be in use.  Exception Message: Address already in use
+[11/14/24, 20:09:47:904 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPChannel                    I CWWKO0220I: TCP Channel wasJmsEndpoint488 has stopped listening for requests on host localhost port 7276.
+[11/14/24, 20:09:47:904 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPPort                       E CWWKO0221E: TCP Channel defaultHttpEndpoint-ssl initialization did not succeed.  The socket bind did not succeed for host * and port 8443.  The port might already be in use.  Exception Message: Address already in use
+[11/14/24, 20:09:47:905 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPChannel                    I CWWKO0220I: TCP Channel defaultHttpEndpoint-ssl has stopped listening for requests on host * port 8443.
+[11/14/24, 20:09:47:905 EST] 00000032 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0017I: Web application removed (default_host): https://res-dhcp-129-3-134-246:8443/jwt/
+[11/14/24, 20:09:47:905 EST] 00000032 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0017I: Web application removed (default_host): https://res-dhcp-129-3-134-246:8443/
+[11/14/24, 20:09:47:906 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPPort                       E CWWKO0221E: TCP Channel wasJmsEndpoint488-ssl initialization did not succeed.  The socket bind did not succeed for host localhost and port 7286.  The port might already be in use.  Exception Message: Address already in use
+[11/14/24, 20:09:47:907 EST] 00000032 com.ibm.ws.tcpchannel.internal.TCPChannel                    I CWWKO0220I: TCP Channel wasJmsEndpoint488-ssl has stopped listening for requests on host localhost port 7286.
+[11/14/24, 20:09:47:914 EST] 00000032 com.ibm.ws.kernel.feature.internal.FeatureManager            A CWWKF0012I: The server installed the following features: [appAuthentication-3.0, appAuthorization-2.1, appClientSupport-2.0, appSecurity-5.0, batch-2.1, beanValidation-3.0, cdi-4.0, concurrent-3.0, connectors-2.1, distributedMap-1.0, enterpriseBeans-4.0, enterpriseBeansHome-4.0, enterpriseBeansLite-4.0, enterpriseBeansPersistentTimer-4.0, enterpriseBeansRemote-4.0, expressionLanguage-5.0, faces-4.0, jakartaee-10.0, jdbc-4.2, jndi-1.0, jsonb-3.0, jsonp-2.1, jwt-1.0, mail-2.1, managedBeans-2.0, mdb-4.0, messaging-3.1, messagingClient-3.0, messagingSecurity-3.0, messagingServer-3.0, mpConfig-3.1, mpJwt-2.1, pages-3.1, persistence-3.1, persistenceContainer-3.1, restfulWS-3.1, restfulWSClient-3.1, servlet-6.0, ssl-1.0, transportSecurity-1.0, webProfile-10.0, websocket-2.1, xmlBinding-4.0, xmlWS-4.0].
+[11/14/24, 20:09:47:915 EST] 00000032 com.ibm.ws.kernel.feature.internal.FeatureManager            I CWWKF0008I: Feature update completed in 3.271 seconds.
+[11/14/24, 20:09:47:916 EST] 00000032 com.ibm.ws.kernel.feature.internal.FeatureManager            A CWWKF0011I: The defaultServer server is ready to run a smarter planet. The defaultServer server started in 4.014 seconds.
+[11/14/24, 20:09:48:047 EST] 00000034 org.jboss.resteasy.resteasy_jaxrs.i18n                       I RESTEASY002225: Deploying jakarta.ws.rs.core.Application: class rest.RestApplication$Proxy$_$$_WeldClientProxy
+[11/14/24, 20:09:48:085 EST] 00000034 com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [database-service] [/] [rest.RestApplication]: Initialization successful.
+[11/14/24, 20:09:56:483 EST] 00000061 .ibm.ws.transport.iiop.server.security.CSIv2SubsystemFactory E CWWKS9660E: The orb element with the defaultOrb id attribute requires a user registry but no user registry became available within 10 seconds.   As a result, no application will start. Ensure that you have configured an appropriate user registry in the server.xml file.

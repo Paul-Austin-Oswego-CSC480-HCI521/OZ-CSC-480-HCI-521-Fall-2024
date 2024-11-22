@@ -1,0 +1,16 @@
+Launching defaultServer (Open Liberty 24.0.0.11/wlp-1.0.95.cl241120241021-1102) on OpenJDK 64-Bit Server VM, version 23.0.1 (en_US)
+[AUDIT   ] CWWKE0001I: The server defaultServer has been launched.
+[AUDIT   ] CWWKG0093A: Processing configuration drop-ins resource: /Users/zipporahmuse/Desktop/CSC480/ZM_480/backend/database-service/target/liberty/wlp/usr/servers/defaultServer/configDropins/overrides/liberty-plugin-variable-config.xml
+[ERROR   ] CWWKF0001E: A feature definition could not be found for mpconfig-3.1
+[ERROR   ] CWWKF0001E: A feature definition could not be found for jsonb-3.0
+[ERROR   ] CWWKF0001E: A feature definition could not be found for appsecurity-5.0
+[ERROR   ] CWWKF0001E: A feature definition could not be found for restfulws-3.1
+[ERROR   ] CWWKF0001E: A feature definition could not be found for jsonp-2.1
+[ERROR   ] CWWKF0001E: A feature definition could not be found for jakartaee-10.0
+[ERROR   ] CWWKF0001E: A feature definition could not be found for cdi-4.0
+[ERROR   ] CWWKF0001E: A feature definition could not be found for mpjwt-2.1
+[AUDIT   ] CWWKF0012I: The server installed the following features: [].
+[AUDIT   ] CWWKF0011I: The defaultServer server is ready to run a smarter planet. The defaultServer server started in 0.521 seconds.
+[AUDIT   ] CWWKE0055I: Server shutdown requested on Thursday, November 14, 2024 at 7:52 PM. The server defaultServer is shutting down.
+[AUDIT   ] CWWKE1100I: Waiting for up to 30 seconds for the server to quiesce.
+[AUDIT   ] CWWKE0036I: The server defaultServer stopped after 16.459 seconds.

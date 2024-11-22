@@ -1,0 +1,64 @@
+Created-By: 17.0.12 (IBM Corporation)
+IBM-API-Package: jakarta.security.enterprise; type=spec,
+ jakarta.security.enterprise.authentication.mechanism.http; type=spec,
+ jakarta.security.enterprise.authentication.mechanism.http.openid; type=spec,
+ jakarta.security.enterprise.credential; type=spec,
+ jakarta.security.enterprise.identitystore; type=spec,
+ jakarta.security.enterprise.identitystore.openid; type=spec,
+ jakarta.security.auth.message; type=spec,
+ jakarta.security.auth.message.callback; type=spec,
+ jakarta.security.auth.message.config; type=spec,
+ jakarta.security.auth.message.module; type=spec,
+ com.ibm.wsspi.security.tai; type=ibm-api,
+ com.ibm.wsspi.security.token; type=ibm-api,
+ com.ibm.wsspi.security.auth.callback; type=ibm-api,
+ com.ibm.wsspi.security.common.auth.module; type=ibm-api,
+ com.ibm.websphere.security.auth.callback; type=ibm-api,
+ com.ibm.websphere.security.web; type=ibm-api
+IBM-AppliesTo: io.openliberty;productVersion="24.0.0.11"
+IBM-Feature-Version: 2
+IBM-InstallTo: core
+IBM-License-Agreement: wlp/lafiles/LA
+IBM-ProductID: io.openliberty
+IBM-ShortName: appSecurity-5.0
+Subsystem-Content: io.openliberty.jaspic.spi_1.1-javadoc.zip; type=file; location:="dev/spi/ibm/javadoc/io.openliberty.jaspic.spi_1.1-javadoc.zip",
+ io.openliberty.cdi-4.0; type="osgi.subsystem.feature",
+ io.openliberty.jakarta.authentication-3.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.servlet-6.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.eeCompatible-10.0; type="osgi.subsystem.feature",
+ com.ibm.websphere.appserver.security-1.0; type="osgi.subsystem.feature",
+ io.openliberty.securityAPI.jakarta-1.0; type="osgi.subsystem.feature",
+ io.openliberty.jakarta.security.enterprise-3.0; type="osgi.subsystem.feature",
+ io.openliberty.expressionLanguage-5.0; type="osgi.subsystem.feature",
+ io.openliberty.jsonp-2.1; type="osgi.subsystem.feature",
+ io.openliberty.webAppSecurity-2.0; type="osgi.subsystem.feature",
+ io.openliberty.jaspic.spi; location:="dev/spi/ibm/,lib/"; type=jar; version="[1.1.0,1.2.0)",
+ com.ibm.ws.org.apache.commons.lang3; version="[1.0.0,1.1.0)",
+ com.ibm.ws.org.apache.httpcomponents; version="[1.0.0,1.1.0)",
+ com.ibm.ws.org.jose4j; version="[1.0.0,1.1.0)",
+ com.ibm.ws.security.common.jsonwebkey; version="[1.0.0,1.1.0)",
+ io.openliberty.org.apache.commons.codec; version="[1.16.0,1.17.0)",
+ io.openliberty.org.apache.commons.logging; version="[1.2.0,1.3.0)",
+ io.openliberty.security.common.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.security.jakartasec.2.0.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.security.jakartasec.2.0.internal.cdi; version="[1.0.0,1.1.0)",
+ io.openliberty.security.oidcclientcore.internal.jakarta; version="[1.0.0,1.1.0)",
+ io.openliberty.security.jakartasec.3.0.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.security.jakartasec.3.0.internal.cdi; version="[1.0.0,1.1.0)",
+ io.openliberty.security.authentication.internal.filter; version="[1.0.0,1.1.0)",
+ io.openliberty.security.sso.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.security.jaspic.2.0.internal; version="[1.0.0,1.1.0)",
+ io.openliberty.security.common.jwt.internal; version="[1.0.0,1.1.0)"
+Subsystem-Description: %description
+Subsystem-License: https://www.eclipse.org/legal/epl-2.0/
+Subsystem-Localization: OSGI-INF/l10n/io.openliberty.appSecurity-5.0
+Subsystem-ManifestVersion: 1
+Subsystem-Name: Application Security 5.0 (Jakarta Security 3.0)
+Subsystem-SymbolicName: io.openliberty.appSecurity-5.0; visibility:=public; singleton:=true
+Subsystem-Type: osgi.subsystem.feature
+Subsystem-Vendor: IBM Corp.
+Subsystem-Version: 1.0.0
+Tool: Bnd-7.0.0.202310060912
+WLP-DisableAllFeatures-OnConflict: true
+WLP-InstantOn-Enabled: true
+WLP-Platform: jakartaee-10.0

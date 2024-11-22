@@ -42,7 +42,8 @@ export function TaskPage() {
     const [tasks, setTasks] = useState(initialTasks);
     const [projects, setProjects] = useState(initialProjects);
     const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
-    const [editMode, isEditMode] = useState(false);
+    // const [editMode, isEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(false);
     const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
     const [activeTab, setActiveTab] = useState("upcoming");
     const [lastSelectedTask, setLastSelectedTask] = useState(null);
@@ -101,7 +102,8 @@ export function TaskPage() {
          return;
      }
         setLastSelectedTask(selectedTask);
-        isEditMode(false);
+        // isEditMode(false);
+        setEditMode(false);
 
 
      const descriptionBoxElement = document.getElementById("descriptionBox");
@@ -191,12 +193,15 @@ export function TaskPage() {
 
     const resetTaskFields = async () => {
         setIsDrawerOpen(true);
-        isEditMode(true);
+        // isEditMode(true);
+        setEditMode(true);
         setCurrentTaskTitle('');
         setLastSelectedTask('');
-        document.getElementById("projects-option").value = 0;
+        //document.getElementById("projects-option").value = 0;
+        document.getElementById("projects-option").value = "";
         document.getElementById("date-option").value = "";
-        document.getElementById("priority-option").value = "Low";
+        //document.getElementById("priority-option").value = "Low";
+        document.getElementById("priority-option").value = "";
         document.getElementById("descriptionBox").value = "";
     };
 
@@ -220,6 +225,7 @@ export function TaskPage() {
 
             if (response.ok) {
                 const createdTask = await response.json();
+                console.log('Created Task:', createdTask);
                 const formattedTask = {
                     id: createdTask.id,
                     completed: 0,
@@ -307,7 +313,7 @@ export function TaskPage() {
 
     // METHOD 2 - SEND ONLY STATUS
     const toggleTaskCompletion = async (task, currentStatus) => {
-        const updatedStatus = currentStatus === 1 ? 0 : 1;
+        //const updatedStatus = currentStatus === 1 ? 0 : 1;
         try {
             const response = await fetch(`/tasks/${task.id}`, {
                 method: 'PUT',
@@ -343,14 +349,15 @@ export function TaskPage() {
                     <DrawerTitle>Task Details</DrawerTitle>
                 </DrawerHeader> */}
 
-
+           
                 {/* A.D. - Commented out the Drawer changes because it was causing issues w/ selecting tasks*/}
                 <Sidebar
                     id="title-option"
                     title={lastSelectedTask ? lastSelectedTask.title : ''}
                     setTitleInParent={setCurrentTaskTitle}
                     editMode={editMode}
-                    isEditMode={isEditMode}
+                    //isEditMode={isEditMode}
+                    setEditMode={setEditMode}
                 >
                     <Label htmlFor="descriptionBox" className="sr-only">Task Description</Label>
                     <textarea
@@ -403,6 +410,7 @@ export function TaskPage() {
                         <Button variant="default" onClick={addNewTask}>Save Changes</Button>
                     </div>
                 </Sidebar>
+                
             {/* </DrawerContent> */}
 
 
