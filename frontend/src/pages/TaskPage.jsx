@@ -47,19 +47,11 @@ export function TaskPage() {
     const [activeTab, setActiveTab] = useState("upcoming");
     const [lastSelectedTask, setLastSelectedTask] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-   
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-    };
-
 
     const getProjectName = (projectId) => {
         const project = projects.find(project => project.id === projectId);
         return project ? project.name : 'Unknown Project';
     };
-
-
-
 
     // const handleDeletePopup = (action, taskId) => {
     //     setDeletePopup({isOpen: false, taskId: null});
@@ -95,7 +87,7 @@ export function TaskPage() {
         console.log("Task clicked:", taskId);
      const selectedTask = tasks.find(task => task.id === taskId);
      console.log("Selected Task:",selectedTask)
-     
+
      if (!selectedTask) {
          console.error("Task not found");
          return;
@@ -268,43 +260,6 @@ export function TaskPage() {
         }
     };
 
-    // SL NOTE: DOES NOT WORK; POSSIBLE BACKEND ISSUE?
-    // TWO METHODS - SEND ENTIRE JSON VS SEND ONLY STATUS
-    // NEITHER WORKS
-
-    // METHOD 1 - SEND ENTIRE JSON
-    // const toggleTaskCompletion = async (task, currentStatus) => {
-    //     const updatedStatus = currentStatus === 1 ? 0 : 1;
-    //     const updatedTask = {
-    //         id: task.id,
-    //         completed: updatedStatus,
-    //         title: task.name,
-    //         project: task.projectId,
-    //         dueDate: task.dueDate,
-    //         priority: task.priority,
-    //     };
-    //     try {
-    //         const response = await fetch(`/tasks/${task.id}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(updatedTask),
-    //         });
-    //         if (response.ok) {
-    //             setTasks(prevTasks =>
-    //                 prevTasks.map(t =>
-    //                     t.id === task.id ? {...t, completed: updatedStatus} : t
-    //                 )
-    //             );
-    //         } else {
-    //             console.error("Failed to update task:", response.status, response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error updating task:", error);
-    //     }
-    // };
-
     // METHOD 2 - SEND ONLY STATUS
     const toggleTaskCompletion = async (task, currentStatus) => {
         const updatedStatus = currentStatus === 1 ? 0 : 1;
@@ -421,13 +376,13 @@ export function TaskPage() {
                             <div className="flex pl-20 pr-20 gap-[32px]">
                                 <button
                                     className={`text-[16px] font-semibold ${activeTab === 'upcoming' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
-                                    onClick={() => handleTabClick("upcoming")}
+                                    onClick={() => setActiveTab("upcoming")}
                                 >
                                     Upcoming
                                 </button>
                                 <button
                                     className={`text-[16px] font-semibold ${activeTab === 'completed' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
-                                    onClick={() => handleTabClick("completed")}
+                                    onClick={() => setActiveTab("completed")}
                                 >
                                     Completed
                                 </button>

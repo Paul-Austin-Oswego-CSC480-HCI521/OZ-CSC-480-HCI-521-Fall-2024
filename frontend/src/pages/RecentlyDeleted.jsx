@@ -75,7 +75,7 @@ export default function RecentlyDeleted() {
                     title: task.name,
                     project: getProjectName(task.projectId),
                     dueDate: task.dueDate || 'No Due Date',
-                    priority: task.priority || 'Medium',
+                    priority: priorityOrder[task.priority]
                 }));
                 setTasks(formattedTasks);
             } else {
