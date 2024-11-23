@@ -1,50 +1,27 @@
-import React, {useEffect, useState} from "react";
-import {Button} from "@/components/ui/button.jsx";
+import React, { useEffect, useState } from 'react'
+import { authAndFetchProjects, fetchTasks, formatTasks } from '@/lib/taskProjectUtils'
 
-import {TaskTable} from '@/components/TaskTable'
-import {taskColumns} from "@/components/TaskColumns";
-
-import {DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader} from "@/components/ui/drawer";
-import { Drawer, Drawer as DrawerPrimitive } from "vaul"
-import { faL } from "@fortawesome/free-solid-svg-icons";
-
+import { Button } from '@/components/ui/button'
+import { TaskTable } from '@/components/TaskTable'
 import PageTitle from '@/components/PageTitle'
-import { TaskSidePanel } from "@/components/TaskSidePanel";
+import { TaskSidePanel } from '@/components/TaskSidePanel'
+import { taskColumnsProject } from '@/components/TaskColumnsProject'
+import { taskColumns } from '@/components/TaskColumns'
 
-const priorityOrder = {
-    0: 'No Priority',
-    1: 'Low',
-    2: 'Medium',
-    3: 'High',
-};
+import { DrawerTrigger, DrawerContent, DrawerTitle, DrawerHeader } from '@/components/ui/drawer'
+import { Drawer, Drawer as DrawerPrimative } from 'vaul'
+import { faL } from '@fortawesome/free-solid-svg-icons'
 
-export function TaskPage() {
-    const [tasks, setTasks] = useState({});
-    const [projects, setProjects] = useState(null);
+const isPresent = num => !!num || num === 0
+
+export const TaskPage = ({projectId}) => {
+    const [pageTitle, setPageTitle] = useState(isPresent(projectId) ? 'Project' : 'My Tasks')
+    const [tasks, setTasks] = useState({})
+    const [projects, setProjects] = useState(null)
     const [selectedProject, setSelectedProject] = useState(null)
-    const [activeTab, setActiveTab] = useState("upcoming");
-    const [lastSelectedTask, setLastSelectedTask] = useState(null);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-    const getProjectName = (projectId) => {
-        const project = projects.find(project => project.id === projectId);
-        return project ? project.name : 'Unknown Project';
-    };
-
-    const fetchProjects = async () => {
-        try {
-            const response = await fetch('/projects');
-            if (!response.ok)
-                throw new error(`[${response.status}]: ${response.statusText}`)
-            const projectData = await response.json();
-            setProjects(projectData);
-            setSelectedProject(projectData[0])
-            return projectData
-        } catch (error) {
-            console.error("Error fetching projects:", error);
-            return null
-        }
-    };
+    const [activeTab, setActiveTab] = useState("upcoming")
+    const [lastSelectedTask, setLastSelectedTask] = useState(null)
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
     const createDefaultProject = async () => {
         try {
@@ -79,157 +56,38 @@ export function TaskPage() {
 //      setIsDrawerOpen(true);
     }
 
-    const fetchTasks = async () => {
-        try {
-            const response = await fetch('/tasks');
-            if (response.ok) {
-                const data = await response.json();
-                const formattedTasks = Object.fromEntries(
-                    data.map(task => [task.id, {
-                        id: task.id,
-                        completed: task.status,
-                        title: task.name,
-                        project: getProjectName(task.projectId), // Project names fetched from state
-                        dueDate: task.dueDate || 'No Due Date',
-                        priority: priorityOrder[task.priority],
-                    }])
-                )
-                setTasks(formattedTasks)
-                console.log(formattedTasks)
-            } else {
-                console.error('Failed to fetch tasks:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error fetching tasks:', error);
-        }
-    };
-
-    const onLoad = async () => {
-        if (!(await fetch('/auth')).ok) {
-            window.location.replace('/login');
-            return;
-        }
-        const projectData = fetchProjects();
-        if (projectData === null)
-            return;
-        else if (projectData.length === 0)
-            return createDefaultProject()
-        else
-            fetchTasks()
-    }
+    useEffect(() => {
+        authAndFetchProjects(setProjects)
+    }, []);
 
     useEffect(() => {
-        onLoad()
-    }, []);
+        if (projects == null)
+            return
+        if (projects.length === 0)
+            return createDefaultProject()
+        
+        if (isPresent(projectId)) {
+            const p = projects.find(project => project.id === projectId)
+            if (p) {
+                setPageTitle(p.name)
+                setSelectedProject(p)
+            }
+            else
+                console.error('TODO: replace this with a 404 page')
+        } else
+            setSelectedProject(projects[0])
+
+        fetchTasks(setTasks)
+    }, [projects, projectId])
 
     const resetTaskFields = async () => {
         setIsDrawerOpen(true);
-        // isEditMode(true);
-        // setCurrentTaskTitle('');
         setLastSelectedTask(null);
-        // document.getElementById("projects-option").value = 0;
-        // document.getElementById("date-option").value = "";
-        // document.getElementById("priority-option").value = "Low";
-        // document.getElementById("descriptionBox").value = "";
     };
-
-    // const addNewTask = async () => {
-    //     const newTask = {
-    //         name: currentTaskTitle,
-    //         description: document.getElementById('descriptionBox').value,
-    //         status: 0,
-    //         projectId: +document.getElementById('projects-option').value,
-    //         dueDate: document.getElementById('date-option').value,
-    //         priority: +document.getElementById('priority-option').value,
-    //     };
-    //     try {
-    //         const response = await fetch('/tasks', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(newTask),
-    //         });
-
-    //         if (response.ok) {
-    //             const createdTask = await response.json();
-    //             const formattedTask = {
-    //                 id: createdTask.id,
-    //                 completed: 0,
-    //                 title: createdTask.name,
-    //                 project: createdTask.projectId,
-    //                 dueDate: createdTask.dueDate,
-    //                 priority: createdTask.priority,
-    //             };
-    //             console.log(createdTask);
-    //             setTasks((prevTasks) => [...prevTasks, formattedTask]);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error adding new task:', error);
-    //     }
-    //     fetchTasks();
-    // };
-
-    // const deleteTask = async (taskId) => {
-    //     try {
-    //         const trashResponse = await fetch(`/tasks/trash/${taskId}`, {method: 'PUT'});
-    //         if (!trashResponse.ok) {
-    //             console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
-    //             return;
-    //         }
-    //         await fetchTasks();
-    //         console.log(`Task ${taskId} successfully moved to trash.`);
-    //     } catch (e) {
-    //         console.error(`Error processing task deletion for ${taskId}: ${e.message}`);
-    //     }
-    // };
-
-
-    // const deleteTask2 = async (taskId) => {
-    //     try {
-    //         const trashResponse = await fetch(`/tasks/trash/${taskId}`, { method: 'PUT' });
-    //         if (!trashResponse.ok) {
-    //             console.error(`Failed to move task ${taskId} to trash: ${trashResponse.statusText}`);
-    //             return;
-    //         }
-    //         setDeletePopup({ isOpen: false, taskId: null });
-    //         await fetchTasks();
-    //         resetTaskFields();
-    //         console.log(`Task ${taskId} successfully moved to trash.`);
-    //     } catch (e) {
-    //         console.error(`Error deleting task ${taskId}: ${e.message}`);
-    //     }
-    // };
-
-    // METHOD 2 - SEND ONLY STATUS
-    // const toggleTaskCompletion = async (task, currentStatus) => {
-    //     const updatedStatus = currentStatus === 1 ? 0 : 1;
-    //     try {
-    //         const response = await fetch(`/tasks/${task.id}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ status: updatedStatus }),
-    //         });
-    //         if (response.ok) {
-    //             setTasks(prevTasks =>
-    //                 prevTasks.map(task =>
-    //                     task.id === task.id ? { ...task, status: updatedStatus } : task
-    //                 )
-    //             );
-    //         } else {
-    //             console.error("Failed to update task completion status:", response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error updating task completion status:", error);
-    //     }
-    // };
-
 
     return (
         <>
-            <PageTitle title={"My Tasks | Checkmate"}></PageTitle>
+            <PageTitle title={`${pageTitle} | Checkmate`}></PageTitle>
             
             {/* <DrawerContent className={`max-w-[417px] bg-blueLight fixed bottom-0 right-0 ml-auto h-full pt-20 pl-4 ${isDrawerOpen ? 'block' : 'hidden'}`}> */}
                 {/* <DrawerHeader>
@@ -249,7 +107,7 @@ export function TaskPage() {
                 <div className="flex flex-col gap-[32px]">
                     <div className="flex flex-col gap-[32px]">
                         <h1 className="text-left text-[48px] font-bold pl-20 pr-20">
-                            My Tasks
+                            {pageTitle}
                         </h1>
 
                         {/* Tab Buttons for Upcoming and Completed */}
@@ -276,13 +134,14 @@ export function TaskPage() {
                         </DrawerTrigger>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns}
-                                   data={Object.values(tasks).filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}
+                        <TaskTable columns={isPresent(projectId) ? taskColumnsProject : taskColumns}
+                                   data={formatTasks(tasks, projects, isPresent(projectId) ? selectedProject : null)
+                                            .filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}
                                    onTaskSelect={handleTaskSelect}
                                    />
                     </section>
                 </div>
             </div>
         </>
-    );
+    )
 }

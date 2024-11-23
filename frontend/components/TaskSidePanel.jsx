@@ -1,28 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import {Label} from '@radix-ui/react-label'
+import { Label } from '@radix-ui/react-label'
+import { Button } from '@/components/ui/button.jsx'
 import { DialogDemo } from './Dialog'
-import {Button} from '@/components/ui/button.jsx'
+import { post, put } from '@/lib/taskProjectUtils'
 
 export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject}) => {
     const [popupOpen, setPopupOpen] = useState(false)
     const [taskTitle, setTaskTitle] = useState(selectedTask ? selectedTask.name : 'New Task')
 
-    const fetchWithBody = async (endpoint, method, body) => {
-        return await fetch(endpoint, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body,
-        })
-    }
-
     const getTask = () => {
         return {
             name:           taskTitle,
             description:    document.getElementById('description-box').value,
-            status:         0,
+            status:         selectedTask ? selectedTask.status : 0,
             projectId:     +document.getElementById('projects-option').value,
             dueDate:        document.getElementById('date-option').value,
             priority:      +document.getElementById('priority-option').value,
@@ -33,18 +24,17 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
         try {
             let response
             if (selectedTask)
-                response = await fetchWithBody(`/tasks/${selectedTask.id}`, 'PUT', JSON.stringify(getTask()))
+                response = await put(`/tasks/${selectedTask.id}`, getTask())
             else
-                response = await fetchWithBody('/tasks', 'POST', JSON.stringify(getTask()))
+                response = await post('/tasks', getTask())
+                
             if (!response.ok)
-                throw new error(`[${response.status}]: ${response.statusText}`)
+                throw new Error(`[${response.status}]: ${response.statusText}`)
             const task = await response.json()
-            task.completed = task.status
-            delete task.status
-            console.log('setting tasks: ', task)
             setTasks(tasks => {
-                tasks[task.id] = task
-                return tasks
+                const newTasks = structuredClone(tasks)
+                newTasks[task.id] = task
+                return newTasks
             })
         } catch (e) {
             console.error('Error adding new task: ', e)
@@ -65,15 +55,25 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
         try {
             const response = await fetch(`/tasks/trash/${selectedTask.id}`, { method: 'PUT' })
             if (!response.ok)
-                throw new error(`[${response.status}]: ${response.statusText}`)
+                throw new Error(`[${response.status}]: ${response.statusText}`)
             setTasks(tasks => {
-                delete tasks[selectedTask.id]
-                return tasks
+                const {[selectedTask.id]: _, ...rest} = tasks
+                return rest
             })
         } catch (e) {
             console.error('Error deleting task')
         }
     }
+
+    useEffect(() => {
+        if (!selectedTask)
+            return
+        setTaskTitle(selectedTask ? selectedTask.name : 'New Task')
+        document.getElementById('description-box').value = selectedTask.description
+        document.getElementById('projects-option').value = selectedTask.projectId
+        document.getElementById('date-option').value = selectedTask.dueDate
+        document.getElementById('priority-option').value = selectedTask.priority
+    }, [selectedTask])
 
     return (
         <>
