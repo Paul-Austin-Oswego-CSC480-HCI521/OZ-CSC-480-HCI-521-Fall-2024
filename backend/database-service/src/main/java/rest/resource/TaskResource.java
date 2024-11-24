@@ -95,6 +95,7 @@ public class TaskResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         taskDAO.updateTask(taskId, task, user.getEmail());
+        task.setId(taskId);
         return Response.ok().entity(task).build();
     }
 

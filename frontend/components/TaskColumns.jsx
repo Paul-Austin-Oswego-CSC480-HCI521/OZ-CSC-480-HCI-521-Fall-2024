@@ -2,6 +2,7 @@
 // Documentation: https://ui.shadcn.com/docs/components/data-table
 
 import { TaskHeaderButton } from '@/components/TaskHeaderButton'
+import { priorityToValue } from '@/lib/taskProjectUtils'
 
 // Columns for TaskTable, accessorKey needs to match ket used in initialTasks/task data
 export const taskColumns = [
@@ -47,12 +48,7 @@ export const taskColumns = [
         sortingFn: (
             rowA, rowB, columnId
         ) => {
-            // Sort by priority 
-            const priorities = ["Low", "Medium", "High"];
-            const rowAPri = priorities.indexOf(rowA.getValue(columnId))
-            const rowBPri = priorities.indexOf(rowB.getValue(columnId))
-
-            return rowAPri < rowBPri ? 1 : rowAPri > rowBPri ? -1 : 0;
+            return priorityToValue[rowA.getValue(columnId)] - priorityToValue[rowB.getValue(columnId)];
         }
     },
 ]

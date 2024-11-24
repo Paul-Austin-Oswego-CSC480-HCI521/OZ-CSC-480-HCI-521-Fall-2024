@@ -57,6 +57,7 @@ public class ProjectResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         projectDAO.updateProject(projectId, updated, user.getEmail());
+        updated.setId(projectId);
         return Response.ok(updated).build();
     }
 
