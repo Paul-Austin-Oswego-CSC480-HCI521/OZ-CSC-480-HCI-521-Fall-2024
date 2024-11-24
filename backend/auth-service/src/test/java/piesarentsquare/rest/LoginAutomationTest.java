@@ -19,10 +19,12 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 // import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 // import static org.junit.jupiter.api.Assertions.assertTrue;
 // import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class LoginAutomationTest {
     private WebDriver driver;
@@ -44,6 +46,10 @@ class LoginAutomationTest {
         System.out.println("Command '" + command + "' started in background in " + directory);
         return process;
     }
+    private boolean nodeKillPort(int portNum, Process process) throws IOException, InterruptedException {
+    new ProcessBuilder("npm", "exec", "kill-port", Integer.toString(portNum)).start();
+    return process.waitFor(5, TimeUnit.SECONDS);
+    }
 
         // Method to send SIGINT (Ctrl+C) to a process
     private void sendSigintToProcess(Process process) throws IOException {
@@ -58,10 +64,11 @@ class LoginAutomationTest {
             }
             System.out.println("Sent SIGINT (Ctrl+C) to process with PID: " + pid);
         }
+        
     }
 
     @Test
-    @Timeout(120)
+    @Timeout(180)
     void testStartAndLogin() throws IOException, InterruptedException {
         Process websiteProcess = null;
         System.out.println("Running start_website script...");
@@ -148,6 +155,8 @@ class LoginAutomationTest {
             try {
                 Thread.sleep(8000);
                 sendSigintToProcess(websiteProcess);
+                nodeKillPort(2080, websiteProcess);
+
             } catch (IOException e) {
                 System.err.println("Error stopping website process: " + e.getMessage());
             }
@@ -156,6 +165,11 @@ class LoginAutomationTest {
             if (driver != null) {
                 driver.quit();
             }
+            if (!nodeKillPort(2080, websiteProcess)) {
+            // Above is a hardcoded constant. Is there a way to read this
+            // from the config files instead?
+            fail("Failed to stop frontend");
+}
         }
     }
 }
