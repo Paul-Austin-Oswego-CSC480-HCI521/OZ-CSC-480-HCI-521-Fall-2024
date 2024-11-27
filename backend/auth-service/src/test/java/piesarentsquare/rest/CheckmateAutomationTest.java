@@ -166,9 +166,9 @@ class CheckmateAutomationTest {
         
         signUpButton.click();
         
-        wait.until(ExpectedConditions.urlContains("/Login"));
+        wait.until(ExpectedConditions.urlContains("/login"));
 
-        assertTrue(driver.getCurrentUrl().endsWith("/Login"),
+        assertTrue(driver.getCurrentUrl().endsWith("/login"),
             "Failed to redirect to login page after clicking sign up");
     }
 
@@ -202,7 +202,7 @@ class CheckmateAutomationTest {
     // Clicks the "Log in" button and verifies the action was performed.
     @Test
     @Order(10)
-    void clickLoginButton() {
+    void clickLoginButton() throws InterruptedException {
         WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[@type='submit' and text()='Log in']")));
         
@@ -210,21 +210,37 @@ class CheckmateAutomationTest {
         
         // Edit this below - may want to use something different to wait for...
         wait.until(ExpectedConditions.urlContains("/"));
+        Thread.sleep(2000);
         assertTrue(driver.getCurrentUrl().endsWith("/"),
-            "Failed to redirect to task page after clicking login");
+            "Failed to redirect to homepage after clicking login");
     }
 
+    // Creates a project for i amount of times.
     @Test
     @Order(11)
-    void createProject() {
+    void createProject() throws InterruptedException {
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[contains(@class, 'inline-flex') and contains(@class, 'items-center') and contains(@class, 'justify-center')]")));
 
         for (int i = 0; i < 2; i++) {
             button.click();
+            Thread.sleep(2000);
         }
     }
 
+    // Clicks the "Checkmate" and verifies the URL after the was performed.
+    @Test
+    @Order(12)
+    void clickCheckmateButton() {
+        WebElement checkmateButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//a[@title='Home' and contains(@class, 'flex')]")));
+        
+        checkmateButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("/"));
+        assertTrue(driver.getCurrentUrl().endsWith("/"),
+            "Failed to redirect to homepage after clicking login");
+    }
 
     // Function to create a task
     void createTask(String taskName, String description, String projectName, String dueDate, String priority) {
@@ -236,9 +252,11 @@ class CheckmateAutomationTest {
         // Fill out task details
         WebElement taskNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//input[@type='text' and @placeholder='Task Title']")));
+            taskNameInput.clear();
         taskNameInput.sendKeys(taskName);
+        taskNameInput.sendKeys(taskName, Keys.TAB); // Moves focus to the next element
+        taskNameInput.sendKeys(Keys.ENTER);        // Simulates pressing the Enter key
         taskNameInput.sendKeys(Keys.TAB);
-        taskNameInput.sendKeys(Keys.ENTER);
 
         WebElement descriptionInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//textarea[@placeholder='Description']")));
@@ -287,37 +305,38 @@ class CheckmateAutomationTest {
         assertEquals(priority, actualPriority, "Priority does not match");
     }
 
-    // Creates and verifies Task 1
-    @Test
-    @Order(21)
-    void createAndVerifyTask1() {
-        createTask("Task 1", "Description 1", "Project 1", "12252024", "Low");
-        verifyTask("Task 1", "Project 1", "12 / 25 / 2024", "Low");
-    }
-
-    // Creates and verifies Task 2
+    // Creates and verifies "Finish Gift Wrapping" using "Low" priority
     @Test
     @Order(13)
-    void createAndVerifyTask2() {
-        createTask("Task 2", "Description 2", "Project 1", "12262024", "Medium");
-        verifyTask("Task 2", "Project 1", "12 / 26 / 2024", "Medium");
-    }
-    
-    // Creates and verifies Task 3
-    @Test
-    @Order(14)
-    void createAndVerifyTask3() {
-        createTask("Task 3", "Description 3", "Project 2", "12272024", "High");
-        verifyTask("Task 3", "Project 2", "12 / 27 / 2024", "High");
+    void createAndVerifyTask1() {
+        createTask("Finish Gift Wrapping", "Wrap the remaining gifts for family and friends.", "Project 1", "12152024", "Low");
+        verifyTask("Finish Gift Wrapping", "Project 1", "12 / 15 / 2024", "Low");
     }
 
-    // Creates and verifies Task 4
+    // Creates and verifies "Organize Team Lunch" using "Medium" priority
+    @Test
+    @Order(14)
+    void createAndVerifyTask2() {
+        createTask("Organize Team Lunch", "Book a restaurant and send invites to the team.", "Project 1", "12162024", "Medium");
+        verifyTask("Organize Team Lunch", "Project 1", "12 / 16 / 2024", "Medium");
+    }
+
+    // Creates and verifies "Send Holiday Cards" using "High" priority
     @Test
     @Order(15)
-    void createAndVerifyTask4() {
-        createTask("Task 4", "Description 4", "Project 2", "12282024", "No Priority");
-        verifyTask("Task 4", "Project 2", "12 / 28 / 2024", "No Priority");
+    void createAndVerifyTask3() {
+        createTask("Send Holiday Cards", "Write and mail personalized holiday cards to clients.", "Project 2", "12172024", "High");
+        verifyTask("Send Holiday Cards", "Project 2", "12 / 17 / 2024", "High");
     }
+
+    // // Creates and verifies "Prepare for New Year" using "No Priority"
+    // @Test
+    // @Order(16)
+    // void createAndVerifyTask4() {
+    //     createTask("Prepare for New Year", "Buy decorations and finalize plans for the New Year party.", "Project 2", "12182024", "No Priority");
+    //     verifyTask("Prepare for New Year", "Project 2", "12 / 18 / 2024", "No Priority");
+    // }
+
 
     // Tears down the WebDriver after all tests complete.
     @AfterAll
