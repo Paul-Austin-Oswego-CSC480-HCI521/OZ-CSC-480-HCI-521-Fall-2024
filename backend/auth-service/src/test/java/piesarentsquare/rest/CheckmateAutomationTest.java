@@ -253,7 +253,6 @@ class CheckmateAutomationTest {
         WebElement taskNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//input[@type='text' and @placeholder='Task Title']")));
             taskNameInput.clear();
-        taskNameInput.sendKeys(taskName);
         taskNameInput.sendKeys(taskName, Keys.TAB); // Moves focus to the next element
         taskNameInput.sendKeys(Keys.ENTER);        // Simulates pressing the Enter key
         taskNameInput.sendKeys(Keys.TAB);
