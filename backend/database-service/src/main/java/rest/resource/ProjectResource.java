@@ -87,4 +87,28 @@ public class ProjectResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+
+    @PUT
+    @Path("/trash/{projectId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response trashProject(@PathParam("projectId") int projectId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        projectDAO.trashProject(projectId, user.getEmail());
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/restore/{projectId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response restoreProject(@PathParam("projectId") int projectId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        projectDAO.restoreProject(projectId, user.getEmail());
+        return Response.noContent().build();
+    }
 }

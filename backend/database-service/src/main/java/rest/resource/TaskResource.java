@@ -111,6 +111,19 @@ public class TaskResource {
         return Response.noContent().build();
     }
 
+    // Trash tasks by project ID
+    @PUT
+    @Path("/trash/{projectId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response projectTrash(@PathParam("projectId") int projectId, Task task) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        taskDAO.projectTrash(projectId, user.getEmail());
+        return Response.noContent().build();
+    }
+
     // Restore a task by ID
     @PUT
     @Path("/restore/{taskId}")
@@ -124,15 +137,16 @@ public class TaskResource {
         return Response.noContent().build();
     }
 
-    //Delete a task by ID
-    @DELETE
-    @Path("/{taskId}")
+    // Restore tasks by project ID
+    @PUT
+    @Path("/restore/{projectId}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteTrashTask(@PathParam("taskId") int taskId) {
+    public Response projectRestore(@PathParam("projectId") int projectId, Task task) {
         User user = userDAO.getUserByEmail(jwt.getSubject());
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
-        taskDAO.deleteTrashTask(taskId, user.getEmail());
+        taskDAO.projectRestore(projectId, user.getEmail());
         return Response.noContent().build();
     }
 

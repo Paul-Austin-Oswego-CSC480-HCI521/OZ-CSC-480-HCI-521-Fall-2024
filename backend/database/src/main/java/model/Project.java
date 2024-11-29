@@ -5,6 +5,7 @@ public class Project {
     private String name;
     private String description;
     private String userEmail;
+    private int trash;
 
     // Getters and setters
     public int getId() { return id; }
@@ -18,4 +19,7 @@ public class Project {
 
     public String getUserEmail() { return userEmail; }
     public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
+
+    public int getTrash() { return trash; }
+    public void setTrash(int trash) { this.trash = trash; }
 }
