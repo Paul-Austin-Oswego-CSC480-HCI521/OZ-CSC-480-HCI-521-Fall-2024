@@ -4,7 +4,7 @@
 import { TaskHeaderButton } from '@/components/TaskHeaderButton'
 
 // Columns for TaskTable, accessorKey needs to match ket used in initialTasks/task data
-export const taskColumns = [
+export const taskColumnsProject = [
     {
         accessorKey: "completed",
         header: "",
@@ -15,15 +15,6 @@ export const taskColumns = [
         header: ({ column }) => {
             return (
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Task Name</TaskHeaderButton>
-            )
-          },
-        sortingFns: "alphanumeric",
-    },
-    {
-        accessorKey: "project",
-        header: ({ column }) => {
-            return (
-                <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Project</TaskHeaderButton>
             )
           },
         sortingFns: "alphanumeric",

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import rest.AuthResource;
+import util.CookieUtil;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -28,7 +29,6 @@ public class NativeLoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //Get login info from json (believe this should be sent as a JWT? Not sure about security measures here...)
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> loginData = objectMapper.readValue(request.getInputStream(), Map.class);
 
@@ -37,6 +37,7 @@ public class NativeLoginServlet extends HttpServlet {
         if (sessionId.isPresent()) {
             Cookie sessionCookie = new Cookie(AuthResource.SESSION_ID_COOKIE, sessionId.get());
             sessionCookie.setPath("/");
+            sessionCookie.setDomain(CookieUtil.getDomainFromPath(frontendRoot));
             sessionCookie.setSecure(true);
             sessionCookie.setHttpOnly(true);
             sessionCookie.setAttribute("SameSite", "None");

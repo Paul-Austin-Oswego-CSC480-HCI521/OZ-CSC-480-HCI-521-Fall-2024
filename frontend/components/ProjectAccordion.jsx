@@ -12,23 +12,21 @@ import {PlusIcon} from "@radix-ui/react-icons";
 function ProjectAccordion() {
     const [projects, setProjects] = useState([]);
 
-
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/projects');
+            if (response.ok) {
+                const projectData = await response.json();
+                setProjects(projectData);
+            } else {
+                console.error("Failed to fetch projects:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const response = await fetch('/projects');
-                if (response.ok) {
-                    const projectData = await response.json();
-                    setProjects(projectData);
-                } else {
-                    console.error("Failed to fetch projects:", response.statusText);
-                }
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
-
         fetchProjects();
     }, []);
 
@@ -46,31 +44,32 @@ function ProjectAccordion() {
     };
 
     const addProject = async () => {
-        const projectName = document.getElementById("project-name").value;
-        const projectDescription = document.getElementById("project-description").value;
+        const nextId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
+        const projectName = `Project ${nextId}`;
 
         let response = await fetch('/projects', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: projectName,
-                description: projectDescription,
             })
-        })
-        let project = undefined
+        });
+
         if (response.ok) {
-            project = await response.json()
-            console.log(project)
+            const newProject = await response.json();
+            console.log('Created new project:', newProject);
+            setProjects(prevProjects => [...prevProjects, newProject]);
         } else {
-            console.log('POST /projects failed to respond')
+            console.log('POST /projects failed to respond');
         }
     };
+
 
 
     return (
         <Accordion defaultValue="projects" type="single" collapsible>
             <AccordionItem value="projects"
-                           className="w-48 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300 border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50">
+                           className="bg-none">
                 <div className="relative flex">
                     <Button
                         size="icon"
@@ -93,7 +92,6 @@ function ProjectAccordion() {
                     <ul className="flex flex-col gap-1 -mx-2 -mb-2">
                         {projects.map((project) => (
                                 <li key={project.id} className="grid grid-cols-[70%_30%]">
-                                    {/*TODO: USE THIS TO SEND PARAMETERS TO PROJECTS-PAGE*/}
                                     <NavButton
                                         href={`/project/${project.id}`}
                                     >
@@ -113,22 +111,6 @@ function ProjectAccordion() {
                             </li>
                         ))}
                     </ul>
-                </AccordionContent>
-                <AccordionContent className="">
-                    <input
-                        id="project-name"
-                        type="text"
-                        placeholder="enter project-name"
-                        className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300 mb-4"
-                    >
-                    </input>
-                    <input
-                        id="project-description"
-                        type="text"
-                        placeholder="enter project-description"
-                        className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300 mb-4"
-                    >
-                    </input>
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

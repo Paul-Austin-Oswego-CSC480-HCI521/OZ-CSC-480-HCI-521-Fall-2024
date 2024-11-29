@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import rest.AuthResource;
+import util.CookieUtil;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -29,14 +30,11 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String domain = frontendRoot.split(":\\/\\/")[1].split(":")[0];
-        System.out.println(domain);
-
         String email = request.getRemoteUser();
         String sessionId = userDAO.ssoLogin(email);
         Cookie sessionCookie = new Cookie(AuthResource.SESSION_ID_COOKIE, sessionId);
         sessionCookie.setPath("/");
-        sessionCookie.setDomain(domain);
+        sessionCookie.setDomain(CookieUtil.getDomainFromPath(frontendRoot));
         // sessionCookie.setSecure(true);
         sessionCookie.setHttpOnly(true);
         // sessionCookie.setAttribute("SameSite", "None");

@@ -1,13 +1,11 @@
-FROM node:18-alpine
+FROM oven/bun:latest
 
 WORKDIR /app
 
-COPY package.json .
-
-RUN npm install
-
 COPY . .
+
+RUN bun install
 
 EXPOSE 2080
 
-CMD [ "npx", "vite", "--host" ]
+CMD [ "bun", "run", "devhost" ]
