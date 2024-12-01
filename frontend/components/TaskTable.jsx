@@ -22,13 +22,17 @@ import { Checkbox } from "@/components/ui/checkbox.jsx";
 import { DrawerTrigger } from "@/components/ui/drawer";
 
 
+
+
 export function TaskTable({
     columns,
     data,
     onTaskSelect,
-    projects
+    projects,
+    selectedTask,
   }) {
     const [sorting, setSorting] = React.useState([])
+    const [highlightedTask, setSelectedTask] = React.useState(selectedTask);
 
 
     const table = useReactTable({
@@ -43,11 +47,15 @@ export function TaskTable({
     })
 
 
+
+
     function handleCheckChange(checked){
         // TODO Handle completed tasks when checkbox checked
         // console.log("checked changed to", checked)
         return checked;
     }
+
+
 
 
     function CellContent({cellContent, cell}){
@@ -72,6 +80,8 @@ export function TaskTable({
                 { flexRender(cell.column.columnDef.cell, cell.getContext())}
             </span>
         )
+
+
 
 
     }
@@ -103,8 +113,11 @@ export function TaskTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => onTaskSelect(row.original.id)}
-                   className="cursor-pointer hover:bg-gray-100"
+                  onClick={() => {
+                    setSelectedTask(row.id);
+                    onTaskSelect(row.original.id);
+                  }}
+                  className={`cursor-pointer hover:bg-gray-100 ${highlightedTask === row.id ? 'bg-gray-100' : ''}`}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 
+
 import { Label } from '@radix-ui/react-label'
 import { Button } from '@/components/ui/button.jsx'
 import { DialogDemo } from './Dialog'
 import { post, put } from '@/lib/taskProjectUtils'
 
+
 export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject}) => {
     const [popupOpen, setPopupOpen] = useState(false)
     const [taskTitle, setTaskTitle] = useState(selectedTask ? selectedTask.name : 'New Task')
+
 
     const getTask = () => {
         return {
@@ -20,6 +23,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
         }
     }
 
+
     const addEditTask = async () => {
         try {
             let response
@@ -27,7 +31,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                 response = await put(`/tasks/${selectedTask.id}`, getTask())
             else
                 response = await post('/tasks', getTask())
-                
+               
             if (!response.ok)
                 throw new Error(`[${response.status}]: ${response.statusText}`)
             const task = await response.json()
@@ -41,15 +45,17 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
         }
     }
 
+
     const onPopupSelect = action => {
         setPopupOpen(false)
         if (action === 'delete')
             deleteTask()
     }
 
+
     const deleteTask = async () => {
         if (!selectedTask) {
-            console.error('trying to delete non-existent task')   
+            console.error('trying to delete non-existent task')  
             return
         }
         try {
@@ -65,6 +71,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
         }
     }
 
+
     useEffect(() => {
         if (!selectedTask)
             return
@@ -75,15 +82,17 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
         document.getElementById('priority-option').value = selectedTask.priority
     }, [selectedTask])
 
+
     return (
         <>
             <DialogDemo onAction={onPopupSelect} isOpen={popupOpen} />
             <div
             id="title-option"
-            className="mt-6 bg-blueLight w-[350px] fixed top-0 bottom-0 pt-16 shadow-lg right-0 "
+            className="mt-6 bg-blueLight w-[340px] fixed top-0 bottom-0 pt-16 shadow-lg right-0 "
         >
             {/* <div className="relative"> */}
-                <div className="text-xl flex justify-center">Task Detail</div>
+                <div className="text-2xl font-semibold mx-4">Task Details</div>
+
 
                 {/* <div className="flex items-center justify-between"> */}
                     <input
@@ -96,6 +105,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                         className="w-[300px] mx-4 pl-3 mb-4 mt-4 rounded-md border border-neutral-200 p-1 focus:outline-none focus:ring-1 focus:ring-black focus:bg-white hover:bg-gray-300 transition-colors duration-300 mt-0.5 "
                     />
                 {/* </div> */}
+
 
                 <Label htmlFor="description-box" className="sr-only">Task Description</Label>
                 <textarea
@@ -111,7 +121,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                     <Label htmlFor="projects-option">Project: </Label>
                     <select
                         id="projects-option"
-                        className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
+                        className="w-[206px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         defaultValue={selectedProject ? selectedProject.id : ''}
                     >
                         {projects
@@ -129,7 +139,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                     <input
                         id="date-option"
                         type="date"
-                        className=" w-[263px] mr-6 flex h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
+                        className=" w-[206px] mr-6 flex h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
                     >
                     </input>
                 </div>
@@ -137,7 +147,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                     <Label htmlFor="priority-option">Priority: </Label>
                     <select
                         id="priority-option"
-                        className="w-[263px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
+                        className="w-[206px] p-2 mr-6 border bg-white rounded focus:outline-none focus:ring-1 focus:ring-black"
                         defaultValue={'2'}
                     >
                         <option value="1">Low</option>
@@ -147,7 +157,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                     </select>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 flex flex-row-reverse gap-4 mb-8 mx-4 mt-auto">
-                    <Button variant="default" onClick={addEditTask}>{selectedTask ? 'Save Changes' : 'Add New Task'}</Button>
+                    <Button variant="default_w_border" onClick={addEditTask}>{selectedTask ? 'Save Changes' : 'Add New Task'}</Button>
                     {selectedTask
                         ? <Button variant="outline_destructive" onClick={() => setPopupOpen(true)}>Delete Task</Button>
                         : <></>
