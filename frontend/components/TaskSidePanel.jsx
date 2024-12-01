@@ -9,6 +9,14 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
     const [popupOpen, setPopupOpen] = useState(false)
     const [taskTitle, setTaskTitle] = useState(selectedTask ? selectedTask.name : 'New Task')
 
+    function taskFormSubmit(e){
+        // Prevent default submit/page reload
+        e.preventDefault()
+
+        // Add/edit task function as normal
+        addEditTask()
+    }
+
     const getTask = () => {
         return {
             name:           taskTitle,
@@ -78,15 +86,18 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
     return (
         <>
             <DialogDemo onAction={onPopupSelect} isOpen={popupOpen} />
-            <div
+            <form
+            onSubmit={e => taskFormSubmit(e)}
             id="title-option"
-            className="mt-6 bg-blueLight w-[350px] fixed top-0 bottom-0 pt-16 shadow-lg right-0 "
+            className="mt-6 z-10 bg-blueLight w-[350px] fixed top-0 bottom-0 pt-16 shadow-lg right-0 "
         >
             {/* <div className="relative"> */}
                 <div className="text-xl flex justify-center">Task Detail</div>
 
                 {/* <div className="flex items-center justify-between"> */}
                     <input
+                        required
+                        maxLength={96}
                         id="task-title"
                         type="text"
                         value={taskTitle}
@@ -99,6 +110,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
 
                 <Label htmlFor="description-box" className="sr-only">Task Description</Label>
                 <textarea
+                    maxLength={512}
                     id="description-box"
                     placeholder="Description"
                     spellCheck='false'
@@ -127,6 +139,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                 <div className="flex content-center justify-between items-center gap-2 mx-4 mb-4">
                     <Label htmlFor="date-option">Due Date: </Label>
                     <input
+                        required
                         id="date-option"
                         type="date"
                         className=" w-[263px] mr-6 flex h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
@@ -147,14 +160,15 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                     </select>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 flex flex-row-reverse gap-4 mb-8 mx-4 mt-auto">
-                    <Button variant="default" onClick={addEditTask}>{selectedTask ? 'Save Changes' : 'Add New Task'}</Button>
+                    {/* Button submits form instead of calling addEditTask directly (needed for required inputs to work) */}
+                    <Button type="submit" variant="default" >{selectedTask ? 'Save Changes' : 'Add New Task'}</Button>
                     {selectedTask
                         ? <Button variant="outline_destructive" onClick={() => setPopupOpen(true)}>Delete Task</Button>
                         : <></>
                     }
                 </div>
             {/* </div> */}
-        </div>
+        </form>
         </>
     )
 }
