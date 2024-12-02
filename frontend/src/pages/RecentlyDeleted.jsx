@@ -6,6 +6,7 @@ import { taskColumns } from "@/components/TaskColumns";
 import {DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer.jsx";
 
 import PageTitle from "@/components/PageTitle";
+import {taskColumnsDeleted} from "@/components/TaskColumnsDeleted.jsx";
 
 const priorityOrder = {
     1: 'Low',
@@ -142,7 +143,7 @@ export default function RecentlyDeleted() {
                         </h1>
                     </div>
                     <section>
-                        <TaskTable columns={taskColumns} projects={projects}
+                        <TaskTable columns={taskColumnsDeleted} projects={projects}
                                    data={tasks}/>
                     </section>
                 </div>

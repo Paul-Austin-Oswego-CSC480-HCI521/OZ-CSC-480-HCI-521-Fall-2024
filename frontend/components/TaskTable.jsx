@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table"
 
 import { Checkbox } from "@/components/ui/checkbox.jsx"
+import {Button} from "@/components/ui/button.jsx";
 
 export function TaskTable({
                               columns,
@@ -36,6 +37,10 @@ export function TaskTable({
     })
 
     async function handleCheckChange(checked, taskId) {
+        let status = 0;
+        if (checked === true) {
+            status = 1;
+        }
         try {
             const taskResponse = await fetch(`/tasks/${taskId}`);
 
@@ -46,7 +51,7 @@ export function TaskTable({
             const taskToUpdate = await taskResponse.json();
             const updatedTask = {
                 ...taskToUpdate,
-                status: checked ? 1 : 0
+                status: status
             };
 
             await fetch(`/tasks/${taskId}`, {
@@ -64,6 +69,34 @@ export function TaskTable({
         return checked;
     }
 
+    // async function handleRestore(taskId) {
+    //     try {
+    //         const taskResponse = await fetch(`/tasks/${taskId}`);
+    //
+    //         if (!taskResponse.ok) {
+    //             console.error(`Failed to fetch task ${taskId}.`);
+    //             return;
+    //         }
+    //         const taskToUpdate = await taskResponse.json();
+    //         const updatedTask = {
+    //             ...taskToUpdate,
+    //             status: checked ? 1 : 0
+    //         };
+    //
+    //         await fetch(`/tasks/restore/${taskId}`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(updatedTask),
+    //         });
+    //     } catch (error) {
+    //         console.error("Error updating task completion status:", error);
+    //     }
+    //     // TEMP FIX; ACCESS FETCHTASK() IN TASKPAGE SOMEHOW
+    //     window.location.reload();
+    // }
+
 
     function CellContent({ cellContent, cell, taskid }) {
         if (cell.column.columnDef.accessorKey === "completed") {
@@ -74,13 +107,26 @@ export function TaskTable({
                   className="w-5 h-5"
                   defaultChecked={cellContent === true}
                   onClick={(e) => e.stopPropagation()}
-                  onCheckedChange={(checked) => handleCheckChange(checked, taskid)} // Pass taskid here
+                  onCheckedChange={(checked) => handleCheckChange(checked, taskid)}
               />,
               cell.getContext()
           )}
         </span>
             )
         }
+
+        // if (cell.column.columnDef.accessorKey === "recover") {
+        //     return (
+        //         <span className="">
+        //         {flexRender(
+        //             <Button onClick={handleRestore(taskid)} className="w-14.5 h-8 m-0 border-0">
+        //                 Recover
+        //             </Button>
+        //         )}
+        //     </span>
+        //     );
+        // }
+
         if (cell.column.columnDef.accessorKey === "dueDate") {
             const dateArray = cellContent.split("-")
             const newDate = dateArray[1] + " / " + dateArray[2] + " / " + dateArray[0]
