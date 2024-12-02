@@ -13,7 +13,6 @@ const priorityOrder = {
     3: 'High',
 };
 
-
 const initialTasks = [
     {
         id: "task-1",
