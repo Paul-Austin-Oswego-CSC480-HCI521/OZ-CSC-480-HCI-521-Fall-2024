@@ -6,6 +6,7 @@ import {
     getSortedRowModel,
 } from "@tanstack/react-table"
 
+
 import {
     Table,
     TableBody,
@@ -15,20 +16,20 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
+
 import { Checkbox } from "@/components/ui/checkbox.jsx"
 import {Button} from "@/components/ui/button.jsx";
 
 
-
 export function TaskTable({
-    columns,
-    data,
-    onTaskSelect,
-    projects,
-    selectedTask,
-  }) {
+                              columns,
+                              data,
+                              onTaskSelect,
+                              selectedTask,
+                          }) {
     const [sorting, setSorting] = React.useState([])
     const [highlightedTask, setSelectedTask] = React.useState(selectedTask);
+
 
     const table = useReactTable({
         data,
@@ -41,6 +42,7 @@ export function TaskTable({
         },
     })
 
+
     async function handleCheckChange(checked, taskId) {
         let status = 0;
         if (checked === true) {
@@ -49,7 +51,7 @@ export function TaskTable({
         try {
             let taskResponse = await fetch(`/tasks/${taskId}`);
 
-    function handleCheckChange(checked){
+
             if (!taskResponse.ok) {
                 console.error(`Failed to fetch task ${taskId}.`);
                 return;
@@ -59,6 +61,7 @@ export function TaskTable({
                 ...taskToUpdate,
                 status: status
             };
+
 
             await fetch(`/tasks/${taskId}`, {
                 method: 'PUT',
@@ -75,6 +78,7 @@ export function TaskTable({
         return checked;
     }
 
+
     const handleRestore = async (taskId) => {
         try {
             await fetch(`/tasks/restore/${taskId}`, {
@@ -89,6 +93,8 @@ export function TaskTable({
         // WORKAROUND; ACCESS FETCHTASK() IN TASKPAGE SOMEHOW
         window.location.reload();
     }
+
+
 
 
     function CellContent({ cellContent, cell, taskid }) {
@@ -108,6 +114,7 @@ export function TaskTable({
             )
         }
 
+
         if (cell.column.columnDef.accessorKey === "recover") {
             return (
                 <span className="">
@@ -120,6 +127,7 @@ export function TaskTable({
             );
         }
 
+
         if (cell.column.columnDef.accessorKey === "dueDate") {
             const dateArray = cellContent.split("-")
             const newDate = dateArray[1] + " / " + dateArray[2] + " / " + dateArray[0]
@@ -131,6 +139,7 @@ export function TaskTable({
       </span>
         )
     }
+
 
     return (
         <div className={" mr-[340px]"}>
@@ -157,14 +166,16 @@ export function TaskTable({
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
-                               key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    setSelectedTask(row.id);
-                    onTaskSelect(row.original.id);
-                  }}
-                  className={`cursor-pointer hover:bg-gray-100 ${highlightedTask === row.id ? 'bg-gray-100' : ''}`}
-                >
+                                key={row.id}
+                                data-state={row.getIsSelected() && "selected"}
+                                onClick={() => {
+                                setSelectedTask(row.id);
+                                onTaskSelect(row.original.id);
+                                  }}
+                                className={`cursor-pointer hover:bg-gray-100 ${highlightedTask === row.id ? 'bg-gray-100' : ''}`}
+
+
+                            >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>
                                         <CellContent
