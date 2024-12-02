@@ -18,12 +18,17 @@ import {
 import { Checkbox } from "@/components/ui/checkbox.jsx"
 import {Button} from "@/components/ui/button.jsx";
 
+
+
 export function TaskTable({
-                              columns,
-                              data,
-                              onTaskSelect,
-                          }) {
+    columns,
+    data,
+    onTaskSelect,
+    projects,
+    selectedTask,
+  }) {
     const [sorting, setSorting] = React.useState([])
+    const [highlightedTask, setSelectedTask] = React.useState(selectedTask);
 
     const table = useReactTable({
         data,
@@ -44,6 +49,7 @@ export function TaskTable({
         try {
             let taskResponse = await fetch(`/tasks/${taskId}`);
 
+    function handleCheckChange(checked){
             if (!taskResponse.ok) {
                 console.error(`Failed to fetch task ${taskId}.`);
                 return;
@@ -151,11 +157,14 @@ export function TaskTable({
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
-                                key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
-                                onClick={() => onTaskSelect(row.original.id)}
-                                className="cursor-pointer hover:bg-gray-100"
-                            >
+                               key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  onClick={() => {
+                    setSelectedTask(row.id);
+                    onTaskSelect(row.original.id);
+                  }}
+                  className={`cursor-pointer hover:bg-gray-100 ${highlightedTask === row.id ? 'bg-gray-100' : ''}`}
+                >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>
                                         <CellContent

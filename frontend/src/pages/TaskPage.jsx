@@ -138,6 +138,7 @@ export const TaskPage = ({projectId}) => {
                                    data={formatTasks(tasks, projects, isPresent(projectId) ? selectedProject : null)
                                             .filter(task => (activeTab === "upcoming" ? !task.completed : task.completed))}
                                    onTaskSelect={handleTaskSelect}
+                                   selectedTask={lastSelectedTask}
                                    />
                     </section>
                 </div>
