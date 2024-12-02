@@ -65,7 +65,7 @@ export const TaskPage = ({projectId}) => {
             return
         if (projects.length === 0)
             return createDefaultProject()
-        
+
         if (isPresent(projectId)) {
             const p = projects.find(project => project.id === projectId)
             if (p) {
@@ -88,7 +88,7 @@ export const TaskPage = ({projectId}) => {
     return (
         <>
             <PageTitle title={`${pageTitle} | Checkmate`}></PageTitle>
-            
+
             {/* <DrawerContent className={`max-w-[417px] bg-blueLight fixed bottom-0 right-0 ml-auto h-full pt-20 pl-4 ${isDrawerOpen ? 'block' : 'hidden'}`}> */}
                 {/* <DrawerHeader>
                     <DrawerTitle>Task Details</DrawerTitle>
