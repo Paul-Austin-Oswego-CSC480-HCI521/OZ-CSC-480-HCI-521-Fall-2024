@@ -2,6 +2,7 @@ package rest.resource;
 
 import dao.ProjectDAO;
 import dao.UserDAO;
+import dao.TaskDAO;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -21,6 +22,8 @@ public class ProjectResource {
     private ProjectDAO projectDAO;
     @Inject
     private UserDAO userDAO;
+    @Inject
+    private TaskDAO taskDAO;
 
     @Inject
     private JsonWebToken jwt;
@@ -97,6 +100,7 @@ public class ProjectResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         projectDAO.trashProject(projectId, user.getEmail());
+        taskDAO.projectTrash(projectId, user.getEmail());
         return Response.noContent().build();
     }
 
@@ -109,6 +113,7 @@ public class ProjectResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         projectDAO.restoreProject(projectId, user.getEmail());
+        taskDAO.projectRestore(projectId, user.getEmail());
         return Response.noContent().build();
     }
 }

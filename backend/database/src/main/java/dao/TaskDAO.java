@@ -82,7 +82,7 @@ public class TaskDAO {
 
     // Read all tasks
     public List<Task> getAllUserTasks(String userEmail) {
-        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority, trash FROM tasks WHERE user_email = ?";
+        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority, trash FROM tasks WHERE user_email = ? AND trash = 0";
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -99,7 +99,7 @@ public class TaskDAO {
     
     // Read all project tasks
     public List<Task> getAllProjectTasks(int projectId, String userEmail) {
-        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority, trash WHERE project_id = ? AND user_email = ?";
+        String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority, trash WHERE project_id = ? AND user_email = ? AND trash = 0";
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
