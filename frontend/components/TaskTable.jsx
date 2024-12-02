@@ -53,8 +53,8 @@ export function TaskTable({
     function CellContent({cellContent, cell}){
         if(cell.column.columnDef.accessorKey==="completed"){
             return(
-                <span className="pl-16 pr-0">
-                    { flexRender(<Checkbox defaultChecked={cellContent===true} onCheckedChange={(checked)=>handleCheckChange(checked)}/>, cell.getContext()) }
+                <span className="pl-16 pr-0 flex">
+                    { flexRender(<Checkbox className="w-5 h-5" defaultChecked={cellContent===true} onClick={(e)=>e.stopPropagation()} onCheckedChange={(checked)=>handleCheckChange(checked)}/>, cell.getContext()) }
                 </span>
             )
         }

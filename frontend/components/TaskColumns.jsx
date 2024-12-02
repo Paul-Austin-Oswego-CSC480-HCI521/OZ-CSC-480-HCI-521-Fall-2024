@@ -18,7 +18,7 @@ export const taskColumns = [
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Task Name</TaskHeaderButton>
             )
           },
-        sortingFns: "alphanumeric",
+        sortingFns: "alphanumericCaseSensitive",
     },
     {
         accessorKey: "project",
@@ -27,7 +27,7 @@ export const taskColumns = [
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Project</TaskHeaderButton>
             )
           },
-        sortingFns: "alphanumeric",
+        sortingFns: "alphanumericCaseSensitive",
     },
     {
         accessorKey: "dueDate",
