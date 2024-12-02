@@ -7,7 +7,7 @@ import { priorityToValue } from '@/lib/taskProjectUtils'
 // Columns for TaskTable, accessorKey needs to match ket used in initialTasks/task data
 export const taskColumnsDeleted = [
     {
-        accessorKey: "completed",
+        accessorKey: "padding-left",
         header: "",
         sortingFns: "basic",
     },

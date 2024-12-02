@@ -42,7 +42,7 @@ export function TaskTable({
             status = 1;
         }
         try {
-            const taskResponse = await fetch(`/tasks/${taskId}`);
+            let taskResponse = await fetch(`/tasks/${taskId}`);
 
             if (!taskResponse.ok) {
                 console.error(`Failed to fetch task ${taskId}.`);
@@ -69,33 +69,20 @@ export function TaskTable({
         return checked;
     }
 
-    // async function handleRestore(taskId) {
-    //     try {
-    //         const taskResponse = await fetch(`/tasks/${taskId}`);
-    //
-    //         if (!taskResponse.ok) {
-    //             console.error(`Failed to fetch task ${taskId}.`);
-    //             return;
-    //         }
-    //         const taskToUpdate = await taskResponse.json();
-    //         const updatedTask = {
-    //             ...taskToUpdate,
-    //             status: checked ? 1 : 0
-    //         };
-    //
-    //         await fetch(`/tasks/restore/${taskId}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(updatedTask),
-    //         });
-    //     } catch (error) {
-    //         console.error("Error updating task completion status:", error);
-    //     }
-    //     // TEMP FIX; ACCESS FETCHTASK() IN TASKPAGE SOMEHOW
-    //     window.location.reload();
-    // }
+    const handleRestore = async (taskId) => {
+        try {
+            await fetch(`/tasks/restore/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        } catch (error) {
+            console.error("Error updating task completion status:", error);
+        }
+        // WORKAROUND; ACCESS FETCHTASK() IN TASKPAGE SOMEHOW
+        window.location.reload();
+    }
 
 
     function CellContent({ cellContent, cell, taskid }) {
@@ -115,17 +102,17 @@ export function TaskTable({
             )
         }
 
-        // if (cell.column.columnDef.accessorKey === "recover") {
-        //     return (
-        //         <span className="">
-        //         {flexRender(
-        //             <Button onClick={handleRestore(taskid)} className="w-14.5 h-8 m-0 border-0">
-        //                 Recover
-        //             </Button>
-        //         )}
-        //     </span>
-        //     );
-        // }
+        if (cell.column.columnDef.accessorKey === "recover") {
+            return (
+                <span className="">
+                {flexRender(
+                    <Button onClick={() => handleRestore(taskid)}  className="w-14.5 h-8 m-0 border-0">
+                        Recover
+                    </Button>
+                )}
+            </span>
+            );
+        }
 
         if (cell.column.columnDef.accessorKey === "dueDate") {
             const dateArray = cellContent.split("-")
