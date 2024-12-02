@@ -65,7 +65,7 @@ export const TaskPage = ({projectId}) => {
             return
         if (projects.length === 0)
             return createDefaultProject()
-        
+
         if (isPresent(projectId)) {
             const p = projects.find(project => project.id === projectId)
             if (p) {
