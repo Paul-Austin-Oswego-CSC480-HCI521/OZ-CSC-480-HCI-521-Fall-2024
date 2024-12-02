@@ -35,27 +35,35 @@ export function TaskTable({
         },
     })
 
-    const handleCheckChange = async (checked, taskID) => {
-        let updatedVal = 0;
-        if (checked === true) {
-            updatedVal = 1;
-        }
+    async function handleCheckChange(checked, taskId) {
         try {
-            const response = await fetch(`/tasks/${taskID}`, {
+            const taskResponse = await fetch(`/tasks/${taskId}`);
+
+            if (!taskResponse.ok) {
+                console.error(`Failed to fetch task ${taskId}.`);
+                return;
+            }
+            const taskToUpdate = await taskResponse.json();
+            const updatedTask = {
+                ...taskToUpdate,
+                status: checked ? 1 : 0
+            };
+
+            await fetch(`/tasks/${taskId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({status: updatedVal}),
+                body: JSON.stringify(updatedTask),
             });
-
-            if (response.ok) {
-                console.log("ok")
-            }
         } catch (error) {
             console.error("Error updating task completion status:", error);
         }
+        // TEMP FIX; ACCESS FETCHTASK() IN TASKPAGE SOMEHOW
+        window.location.reload();
+        return checked;
     }
+
 
     function CellContent({ cellContent, cell, taskid }) {
         if (cell.column.columnDef.accessorKey === "completed") {
