@@ -18,7 +18,11 @@ export const taskColumnsDeleted = [
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Task Name</TaskHeaderButton>
             )
         },
-        sortingFns: "alphanumericCaseSensitive",
+        sortingFn: (rowA, rowB) => {
+            const nameA = rowA.getValue('title').toLowerCase();
+            const nameB = rowB.getValue('title').toLowerCase();
+            return nameA.localeCompare(nameB);
+        },
     },
     {
         accessorKey: "project",
