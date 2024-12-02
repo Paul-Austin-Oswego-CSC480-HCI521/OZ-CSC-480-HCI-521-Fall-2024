@@ -2,6 +2,7 @@ package rest.resource;
 
 import dao.ProjectDAO;
 import dao.UserDAO;
+import dao.TaskDAO;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -21,6 +22,8 @@ public class ProjectResource {
     private ProjectDAO projectDAO;
     @Inject
     private UserDAO userDAO;
+    @Inject
+    private TaskDAO taskDAO;
 
     @Inject
     private JsonWebToken jwt;
@@ -86,5 +89,31 @@ public class ProjectResource {
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @PUT
+    @Path("/trash/{projectId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response trashProject(@PathParam("projectId") int projectId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        projectDAO.trashProject(projectId, user.getEmail());
+        taskDAO.projectTrash(projectId, user.getEmail());
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/restore/{projectId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response restoreProject(@PathParam("projectId") int projectId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        projectDAO.restoreProject(projectId, user.getEmail());
+        taskDAO.projectRestore(projectId, user.getEmail());
+        return Response.noContent().build();
     }
 }

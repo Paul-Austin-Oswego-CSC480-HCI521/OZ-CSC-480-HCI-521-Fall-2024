@@ -124,18 +124,6 @@ public class TaskResource {
         return Response.noContent().build();
     }
 
-    //Delete a task by ID
-    @DELETE
-    @Path("/{taskId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteTrashTask(@PathParam("taskId") int taskId) {
-        User user = userDAO.getUserByEmail(jwt.getSubject());
-        if (user == null)
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        taskDAO.deleteTrashTask(taskId, user.getEmail());
-        return Response.noContent().build();
-    }
-
     @GET
     @Path("/trash")
     @Produces(MediaType.APPLICATION_JSON)
