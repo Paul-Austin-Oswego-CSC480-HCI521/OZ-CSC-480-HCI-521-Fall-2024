@@ -213,17 +213,21 @@ class CheckmateAutomationTest {
         Thread.sleep(2000);
         assertTrue(driver.getCurrentUrl().endsWith("/"),
             "Failed to redirect to homepage after clicking login");
+
+        driver.navigate().refresh();
     }
 
     // Creates a project for i amount of times.
     @Test
     @Order(11)
     void createProject() throws InterruptedException {
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[contains(@class, 'inline-flex') and contains(@class, 'items-center') and contains(@class, 'justify-center')]")));
-
-        for (int i = 0; i < 2; i++) {
-            button.click();
+        // Locate the button using the provided CSS selector
+        WebElement projectButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("#root > div > header > nav > ul > li:nth-child(5) > menu > div > div > div.relative.flex > button")));
+    
+        // Click the button i amount of times with a delay in between
+        for (int i = 0; i < 3; i++) {
+            projectButton.click();
             Thread.sleep(2000);
         }
     }
@@ -244,22 +248,18 @@ class CheckmateAutomationTest {
 
     // Function to create a task
     void createTask(String taskName, String description, String projectName, String dueDate, String priority) {
-        // Click "Create New Task" button
-        WebElement createNewTaskButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[text()='Create New Task']")));
-        createNewTaskButton.click();
 
         // Fill out task details
         WebElement taskNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//input[@type='text' and @placeholder='Task Title']")));
             taskNameInput.clear();
-        taskNameInput.sendKeys(taskName, Keys.TAB); // Moves focus to the next element
-        taskNameInput.sendKeys(Keys.ENTER);        // Simulates pressing the Enter key
+        taskNameInput.sendKeys(taskName, Keys.TAB);
         taskNameInput.sendKeys(Keys.TAB);
 
         WebElement descriptionInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//textarea[@placeholder='Description']")));
-        descriptionInput.sendKeys(description);            
+            descriptionInput.clear();
+        descriptionInput.sendKeys(description);         
 
         WebElement projectDropdown = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.id("projects-option")));
@@ -281,7 +281,7 @@ class CheckmateAutomationTest {
         priorityOption.click();
 
         WebElement saveChangesButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[text()='Save Changes']")));
+            By.xpath("//button[text()='Add New Task']")));
         saveChangesButton.click();
     }
 
@@ -308,34 +308,49 @@ class CheckmateAutomationTest {
     @Test
     @Order(13)
     void createAndVerifyTask1() {
-        createTask("Finish Gift Wrapping", "Wrap the remaining gifts for family and friends.", "Project 1", "12152024", "Low");
-        verifyTask("Finish Gift Wrapping", "Project 1", "12 / 15 / 2024", "Low");
+        createTask("Finish Gift Wrapping", "Wrap the remaining gifts for family and friends.", "Project 3", "12152024", "Low");
+        verifyTask("Finish Gift Wrapping", "Project 3", "12 / 15 / 2024", "Low");
     }
 
     // Creates and verifies "Organize Team Lunch" using "Medium" priority
     @Test
     @Order(14)
     void createAndVerifyTask2() {
-        createTask("Organize Team Lunch", "Book a restaurant and send invites to the team.", "Project 1", "12162024", "Medium");
-        verifyTask("Organize Team Lunch", "Project 1", "12 / 16 / 2024", "Medium");
+        createTask("Organize Team Lunch", "Book a restaurant and send invites to the team.", "Project 2", "12162024", "Medium");
+        verifyTask("Organize Team Lunch", "Project 2", "12 / 16 / 2024", "Medium");
     }
 
     // Creates and verifies "Send Holiday Cards" using "High" priority
     @Test
     @Order(15)
     void createAndVerifyTask3() {
-        createTask("Send Holiday Cards", "Write and mail personalized holiday cards to clients.", "Project 2", "12172024", "High");
-        verifyTask("Send Holiday Cards", "Project 2", "12 / 17 / 2024", "High");
+        createTask("Send Holiday Cards", "Write and mail personalized holiday cards to clients.", "Project 4", "12172024", "High");
+        verifyTask("Send Holiday Cards", "Project 4", "12 / 17 / 2024", "High");
     }
 
-    // // Creates and verifies "Prepare for New Year" using "No Priority"
-    // @Test
-    // @Order(16)
-    // void createAndVerifyTask4() {
-    //     createTask("Prepare for New Year", "Buy decorations and finalize plans for the New Year party.", "Project 2", "12182024", "No Priority");
-    //     verifyTask("Prepare for New Year", "Project 2", "12 / 18 / 2024", "No Priority");
-    // }
+    // Creates and verifies "Prepare for New Year" using "No Priority"
+    @Test
+    @Order(16)
+    void createAndVerifyTask4() {
+        createTask("Prepare for New Year", "Buy decorations and finalize plans for the New Year party.", "Project 3", "12182024", "No Priority");
+        verifyTask("Prepare for New Year", "Project 3", "12 / 18 / 2024", "No Priority");
+    }
 
+    // Creates and verifies "Take Down Holiday Decorations" using "Medium" priority
+    @Test
+    @Order(17)
+    void createAndVerifyTask5() {
+        createTask("Take Down Holiday Decorations", "Remove and organize holiday decorations for storage.", "Project 3", "12262024", "Medium");
+        verifyTask("Take Down Holiday Decorations", "Project 3", "12 / 26 / 2024", "Medium");
+    }
+
+    // Creates and verifies "Deep Clean the Kitchen" using "High" priority
+    @Test
+    @Order(18)
+    void createAndVerifyTask6() {
+        createTask("Deep Clean the Kitchen", "Thoroughly clean the kitchen after holiday meals and parties.", "Project 4", "12272024", "High");
+        verifyTask("Deep Clean the Kitchen", "Project 4", "12 / 27 / 2024", "High");
+    }
 
     // Tears down the WebDriver after all tests complete.
     @AfterAll
