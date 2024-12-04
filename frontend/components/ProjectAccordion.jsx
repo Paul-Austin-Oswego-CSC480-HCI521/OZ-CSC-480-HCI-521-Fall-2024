@@ -71,7 +71,7 @@ function ProjectAccordion() {
                            className="bg-none">
                 <div className="relative">
                     <AccordionTrigger className="hover:no-underline py-3 w-[12rem]">
-                        <span className="pl-3 font-normal">My Projects</span>
+                        <span className="pl-3 font-normal text-sm">My Projects</span>
                         <ChevronDownIcon className="text-gray-500 w-5 h-5 mr-3 fill-black"/>
                     </AccordionTrigger>
                     {/* added onclick to button */}
