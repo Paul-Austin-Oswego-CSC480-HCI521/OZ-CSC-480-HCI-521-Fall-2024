@@ -4,6 +4,6 @@ import { TaskPage } from "./TaskPage";
 export default function ProjectPage() {
     let {projectID} = useParams();
     return (
-        <TaskPage projectId={+projectID} />
+        <TaskPage variant={'project'} projectId={+projectID} />
     )
 }

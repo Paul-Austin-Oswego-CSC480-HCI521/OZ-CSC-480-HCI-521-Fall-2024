@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const fetchWithJson = async (endpoint, method, payload) => {
     return await fetch(endpoint, {
         method,
@@ -24,15 +26,16 @@ export const fetchProjects = async setProjectsFn => {
 
 export const authAndFetchProjects = async setProjectsFn => {
     if (!(await fetch('/auth')).ok) {
-        window.location.replace('/login')
+        if (window.location.pathname !== '/login')
+            window.location.replace('/login')
         return;
     }
     fetchProjects(setProjectsFn)
 }
 
-export const fetchTasks = async setTasksFn => {
+export const fetchTasks = async (setTasksFn, trash) => {
     try {
-        const response = await fetch('/tasks');
+        const response = await fetch(trash ? '/tasks/trash' : '/tasks');
         if (!response.ok)
             throw new Error(`[${response.status}]: ${response.statusText}`)
         const tasks = await response.json();
@@ -73,3 +76,5 @@ export const formatTasks = (taskMap, projects, selectedProject) => {
         }
     })
 }
+
+export const ProjectContext = React.createContext(null)
