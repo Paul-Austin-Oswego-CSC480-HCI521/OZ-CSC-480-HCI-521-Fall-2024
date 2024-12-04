@@ -149,14 +149,11 @@ export function TaskTable({
                         <TableRow className={"border-b-transparent"} key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
                                 return (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} className="text-left pl-2">
                                         {header.isPlaceholder
                                             ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </TableHead>
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead> 
                                 )
                             })}
                         </TableRow>
@@ -177,13 +174,13 @@ export function TaskTable({
 
                             >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
-                                        <CellContent
-                                            cellContent={cell.getValue()}
-                                            cell={cell}
-                                            taskid={row.original.id}
-                                        />
-                                    </TableCell>
+                                    <TableCell key={cell.id} className="pl-2 pr-2">
+                                    <CellContent
+                                        cellContent={cell.getValue()}
+                                        cell={cell}
+                                        taskid={row.original.id}
+                                    />
+                                </TableCell>
                                 ))}
                             </TableRow>
                         ))

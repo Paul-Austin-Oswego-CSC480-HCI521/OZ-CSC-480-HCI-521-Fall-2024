@@ -23,6 +23,10 @@ export const TaskPage = ({projectId}) => {
     const [lastSelectedTask, setLastSelectedTask] = useState(null)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
+    //Use a ref to track wether a default project has been created or not 
+    const [isDefaultProjectCreated, setIsDefaultProjectCreated] = useState(false)
+
+
     const createDefaultProject = async () => {
         try {
             const response = await fetch('/projects', {
@@ -37,11 +41,13 @@ export const TaskPage = ({projectId}) => {
             const project = await response.json()
             setProjects([project])
             setSelectedProject(project)
+            setIsDefaultProjectCreated(true); // Mark default project as created
         } catch (e) {
             console.error('Error creating default project: ', error)
         }
     }
 
+    
     const handleTaskSelect = (taskId) => {
         setIsDrawerOpen(true);
         console.log("Task clicked:", taskId);
@@ -63,7 +69,7 @@ export const TaskPage = ({projectId}) => {
     useEffect(() => {
         if (projects == null)
             return
-        if (projects.length === 0)
+        if (projects.length === 0 && !isDefaultProjectCreated)
             return createDefaultProject()
 
         if (isPresent(projectId)) {
@@ -80,7 +86,7 @@ export const TaskPage = ({projectId}) => {
         fetchTasks(setTasks)
     }, [projects, projectId])
 
-    const resetTaskFields = async () => {
+    const resetTaskFields = () => {
         setIsDrawerOpen(true);
         setLastSelectedTask(null);
     };
