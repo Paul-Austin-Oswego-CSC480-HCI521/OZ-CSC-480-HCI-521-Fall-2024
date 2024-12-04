@@ -304,6 +304,23 @@ class CheckmateAutomationTest {
         assertEquals(priority, actualPriority, "Priority does not match");
     }
 
+    // Verifies a task is present in the table with correct details.
+    void verifyProjectTask(String taskName, String dueDate, String priority) {
+        // Wait for the task table to contain the new task with the provided details
+        WebElement taskRow = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//tr[contains(@class, 'border-b') and .//span[text()='" + taskName + "']]")));
+        
+        // Extract details from the located row
+        String actualTaskName = taskRow.findElement(By.xpath(".//span[text()='" + taskName + "']")).getText();
+        String actualDueDate = taskRow.findElement(By.xpath(".//span[text()='" + dueDate + "']")).getText();
+        String actualPriority = taskRow.findElement(By.xpath(".//span[text()='" + priority + "']")).getText();
+
+        // Assertions to verify details match
+        assertEquals(taskName, actualTaskName, "Task name does not match");
+        assertEquals(dueDate, actualDueDate, "Due date does not match");
+        assertEquals(priority, actualPriority, "Priority does not match");
+    }
+
     // Creates and verifies "Finish Gift Wrapping" using "Low" priority
     @Test
     @Order(13)
@@ -350,6 +367,130 @@ class CheckmateAutomationTest {
     void createAndVerifyTask6() {
         createTask("Deep Clean the Kitchen", "Thoroughly clean the kitchen after holiday meals and parties.", "Project 4", "12272024", "High");
         verifyTask("Deep Clean the Kitchen", "Project 4", "12 / 27 / 2024", "High");
+    }
+
+    @Test
+    @Order(19)
+    void verifyProject2Tasks() {
+    
+        // Locate and click the "Project 2" link using its href
+        WebElement project2Button = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href='/project/2']")));
+        project2Button.click();
+    
+        // Verify tasks for Project 2
+        verifyProjectTask("Organize Team Lunch", "12 / 16 / 2024", "Medium");
+    }
+    
+    @Test
+    @Order(20)
+    void verifyProject3Tasks() {
+
+        // Locate and click the "Project 3" link using its href
+        WebElement project3Button = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href='/project/3']")));
+        project3Button.click();
+    
+        // Verify tasks for Project 3
+        verifyProjectTask("Finish Gift Wrapping", "12 / 15 / 2024", "Low");
+        verifyProjectTask("Take Down Holiday Decorations", "12 / 26 / 2024", "Medium");
+        verifyProjectTask("Prepare for New Year", "12 / 18 / 2024", "No Priority");
+    }
+    
+    @Test
+    @Order(21)
+    void verifyProject4Tasks() {
+
+        // Locate and click the "Project 4" link using its href
+        WebElement project4Button = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href='/project/4']")));
+        project4Button.click();
+    
+        // Verify tasks for Project 4
+        verifyProjectTask("Deep Clean the Kitchen", "12 / 27 / 2024", "High");
+        verifyProjectTask("Send Holiday Cards", "12 / 17 / 2024", "High");
+    }
+
+    @Test
+    @Order(22)
+    void myTasksButton() {
+        // Wait until the 'My Tasks' button is clickable
+        WebElement myTasksButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[normalize-space(text())='My Tasks']")));
+        
+        // Click the 'My Tasks' button
+        myTasksButton.click();
+        
+        // Verify that the current URL contains the expected endpoint "/"
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.endsWith("/"), "The URL should end with '/' after clicking 'My Tasks'");
+    }
+    
+    
+
+    void editTask(String oldTaskName, String newTaskName, String newDescription, String newProjectName, String newDueDate, String newPriority) {
+        // Locate the task to be edited by its old name
+        WebElement taskElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//span[text()='" + oldTaskName + "']")));
+        taskElement.click();
+    
+        // Wait for the task details to load (this depends on how your app behaves)
+        WebElement taskNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//input[@type='text' and @placeholder='Task Title']")));
+        taskNameInput.clear();
+        taskNameInput.sendKeys(newTaskName, Keys.TAB);  // Edit task name
+    
+        WebElement descriptionInput = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//textarea[@placeholder='Description']")));
+        descriptionInput.clear();
+        descriptionInput.sendKeys(newDescription);  // Edit task description
+    
+        WebElement projectDropdown = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.id("projects-option")));
+        projectDropdown.click();
+        WebElement projectOption = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//option[text()='" + newProjectName + "']")));
+        projectOption.click();  // Select the new project
+    
+        WebElement dueDateInput = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.id("date-option")));
+        dueDateInput.clear();
+        dueDateInput.sendKeys(newDueDate);  // Edit due date
+    
+        WebElement priorityDropdown = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.id("priority-option")));
+        priorityDropdown.click();
+        WebElement priorityOption = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//option[text()='" + newPriority + "']")));
+        priorityOption.click();  // Select the new priority
+    
+        // Click on the "Save Changes" button
+        WebElement saveChangesButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[text()='Save Changes']")));
+        saveChangesButton.click();  // Save the changes to the task
+    }    
+
+    @Test
+    @Order(23)
+    void editTask1() {
+        editTask("Finish Gift Wrapping", "Finish Gift Wrapping - Updated", "Wrap the remaining gifts for family and friends, including some last-minute additions.", "Project 3", "12152024", "Low");
+        verifyTask("Finish Gift Wrapping - Updated", "Project 3", "12 / 15 / 2024", "Low");
+    }
+    
+    
+    @Test
+    @Order(24)
+    void editTask2() {
+        editTask("Organize Team Lunch", "Organize Team Lunch - Urgent", "Book a restaurant and send invites to the team ASAP.", "Project 2", "12162024", "Medium");
+        verifyTask("Organize Team Lunch - Urgent", "Project 2", "12 / 16 / 2024", "Medium");
+    }
+    
+
+    @Test
+    @Order(25)
+    void editTask3() {
+        editTask("Send Holiday Cards", "Send Holiday Cards - Final Call", "Write and mail personalized holiday cards to clients, with a final reminder.", "Project 4", "12172024", "High");
+        verifyTask("Send Holiday Cards - Final Call", "Project 4", "12 / 17 / 2024", "High");
     }
 
     // Tears down the WebDriver after all tests complete.
