@@ -39,7 +39,7 @@ export const TaskPage = ({variant, projectId}) => {
         else
             return formatted.filter(task => (activeTab === "upcoming") ? !task.completed : task.completed)
     }, [isProject, isTrash, projectId, tasks, activeTab])
-
+    
     const handleTaskSelect = (taskId) => {
         setIsDrawerOpen(true);
         console.log("Task clicked:", taskId);
@@ -76,7 +76,7 @@ export const TaskPage = ({variant, projectId}) => {
         fetchTasks(setTasks, isTrash)
     }, [projects, projectId])
 
-    const resetTaskFields = async () => {
+    const resetTaskFields = () => {
         setIsDrawerOpen(true);
         setLastSelectedTask(null);
     };
