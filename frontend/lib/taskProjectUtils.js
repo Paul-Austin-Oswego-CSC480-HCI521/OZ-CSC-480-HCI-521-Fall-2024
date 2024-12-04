@@ -33,9 +33,9 @@ export const authAndFetchProjects = async setProjectsFn => {
     fetchProjects(setProjectsFn)
 }
 
-export const fetchTasks = async setTasksFn => {
+export const fetchTasks = async (setTasksFn, trash) => {
     try {
-        const response = await fetch('/tasks');
+        const response = await fetch(trash ? '/tasks/trash' : '/tasks');
         if (!response.ok)
             throw new Error(`[${response.status}]: ${response.statusText}`)
         const tasks = await response.json();
