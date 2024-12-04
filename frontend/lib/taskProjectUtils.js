@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const fetchWithJson = async (endpoint, method, payload) => {
     return await fetch(endpoint, {
         method,
@@ -24,7 +26,8 @@ export const fetchProjects = async setProjectsFn => {
 
 export const authAndFetchProjects = async setProjectsFn => {
     if (!(await fetch('/auth')).ok) {
-        window.location.replace('/login')
+        if (window.location.pathname !== '/login')
+            window.location.replace('/login')
         return;
     }
     fetchProjects(setProjectsFn)
@@ -73,3 +76,5 @@ export const formatTasks = (taskMap, projects, selectedProject) => {
         }
     })
 }
+
+export const ProjectContext = React.createContext(null)

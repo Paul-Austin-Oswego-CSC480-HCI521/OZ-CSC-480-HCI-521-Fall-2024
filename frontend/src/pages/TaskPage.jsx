@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { authAndFetchProjects, fetchTasks, formatTasks } from '@/lib/taskProjectUtils'
+import React, { useContext, useEffect, useState } from 'react'
+import { fetchTasks, formatTasks, ProjectContext } from '@/lib/taskProjectUtils'
 
 import { Button } from '@/components/ui/button'
 import { TaskTable } from '@/components/TaskTable'
@@ -17,30 +17,11 @@ const isPresent = num => !!num || num === 0
 export const TaskPage = ({projectId}) => {
     const [pageTitle, setPageTitle] = useState(isPresent(projectId) ? 'Project' : 'My Tasks')
     const [tasks, setTasks] = useState({})
-    const [projects, setProjects] = useState(null)
+    const { projects } = useContext(ProjectContext)
     const [selectedProject, setSelectedProject] = useState(null)
     const [activeTab, setActiveTab] = useState("upcoming")
     const [lastSelectedTask, setLastSelectedTask] = useState(null)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-
-    const createDefaultProject = async () => {
-        try {
-            const response = await fetch('/projects', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({name: 'Default Project', description: ''})
-            })
-            if (!response.ok)
-                throw new error(`[${response.status}] ${response.statusText}`)
-            const project = await response.json()
-            setProjects([project])
-            setSelectedProject(project)
-        } catch (e) {
-            console.error('Error creating default project: ', error)
-        }
-    }
 
     const handleTaskSelect = (taskId) => {
         setIsDrawerOpen(true);
@@ -57,15 +38,9 @@ export const TaskPage = ({projectId}) => {
     }
 
     useEffect(() => {
-        authAndFetchProjects(setProjects)
-    }, []);
-
-    useEffect(() => {
-        if (projects == null)
+        if (projects == null || projects.length === 0)
             return
-        if (projects.length === 0)
-            return createDefaultProject()
-
+        
         if (isPresent(projectId)) {
             const p = projects.find(project => project.id === projectId)
             if (p) {
@@ -74,7 +49,7 @@ export const TaskPage = ({projectId}) => {
             }
             else
                 console.error('TODO: replace this with a 404 page')
-        } else
+        } else if (!selectedProject || projects.find(p => selectedProject.id === p.id) == undefined)
             setSelectedProject(projects[0])
 
         fetchTasks(setTasks)
