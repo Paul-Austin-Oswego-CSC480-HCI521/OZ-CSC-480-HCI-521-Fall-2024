@@ -10,7 +10,8 @@ public class Task {
     private int projectId;
     private String userEmail;
     private LocalDate dueDate;
-    private int priority;  
+    private int priority;
+    private int trash;
 
     // Getters and setters
     public int getId() { return id; }
@@ -36,4 +37,7 @@ public class Task {
 
     public int getPriority() { return priority; }
     public void setPriority(int priority) { this.priority = priority; }
+
+    public int getTrash() { return trash; }
+    public void setTrash(int trash) { this.trash = trash; }
 }

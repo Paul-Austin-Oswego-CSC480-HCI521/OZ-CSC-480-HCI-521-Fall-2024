@@ -207,14 +207,18 @@ class CheckmateAutomationTest {
             By.xpath("//button[@type='submit' and text()='Log in']")));
         
         loginButton.click();
+
+        // Workaround bc things be breakin and shi
+        Thread.sleep(3000);
+        driver.navigate().refresh();
+        Thread.sleep(3000);
+        driver.navigate().refresh();
         
         // Edit this below - may want to use something different to wait for...
         wait.until(ExpectedConditions.urlContains("/"));
         Thread.sleep(2000);
         assertTrue(driver.getCurrentUrl().endsWith("/"),
             "Failed to redirect to homepage after clicking login");
-
-        driver.navigate().refresh();
     }
 
     // Creates a project for i amount of times.
@@ -424,9 +428,7 @@ class CheckmateAutomationTest {
         // Verify that the current URL contains the expected endpoint "/"
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.endsWith("/"), "The URL should end with '/' after clicking 'My Tasks'");
-    }
-    
-    
+    } 
 
     void editTask(String oldTaskName, String newTaskName, String newDescription, String newProjectName, String newDueDate, String newPriority) {
         // Locate the task to be edited by its old name
@@ -493,99 +495,121 @@ class CheckmateAutomationTest {
         verifyTask("Send Holiday Cards - Final Call", "Project 4", "12 / 17 / 2024", "High");
     }
 
+    void checkOffTask(String taskName) throws InterruptedException {
+    // Wait for the task's checkbox button to be available and clickable
+    WebElement taskCheckbox = wait.until(ExpectedConditions.elementToBeClickable(
+        By.xpath("//tr[td//span[normalize-space(text())='" + taskName + "']]//button[@role='checkbox']")));
+    
+        // Click the checkbox button to mark the task as checked
+        taskCheckbox.click();
+
+        Thread.sleep(3000);
+    }
+    
+    @Test
+    @Order(26)
+    void checkOffTask() throws InterruptedException {
+        // Check off task
+        checkOffTask("Finish Gift Wrapping - Updated");
+    }
+
+    @Test
+    @Order(27)
+    void verifyCheckOffTask() {
+
+        // Wait for the "Completed" button to be clickable and click it
+        WebElement completedButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[text()='Completed']")));
+        completedButton.click();
+    
+        // Verify the task is now marked as completed
+        verifyTask("Finish Gift Wrapping - Updated", "Project 3", "12 / 15 / 2024", "Low");
+
+        // Wait until the 'Upcoming' button is clickable
+        WebElement upcomingButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[normalize-space(text())='Upcoming']")));
+        
+        // Click the 'Upcoming' button
+        upcomingButton.click();
+    }
+
+    void deleteTask(String TaskName) {
+        // Locate the task to be edited by its old name
+        WebElement taskElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//span[text()='" + TaskName + "']")));
+        taskElement.click();
+    
+        // Click on the "Delete Task" button
+        WebElement deleteTaskButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[text()='Delete Task']")));
+        deleteTaskButton.click();
+
+        // Wait for the confirmation "Delete" button to be clickable
+        WebElement confirmDeleteButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[text()='Delete']")));
+
+        // Click the confirmation "Delete" button
+        confirmDeleteButton.click();
+    }
+
+    @Test
+    @Order(28)
+    void deleteAndVerifyTask1() {
+        // Delete "Prepare for New Year"
+        deleteTask("Prepare for New Year");
+        
+        // Verify the task is no longer visible
+        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Prepare for New Year']")));
+        assertTrue(isTaskInvisible, "Task 'Prepare for New Year' should not be displayed.");
+    }
+    
+    @Test
+    @Order(29)
+    void deleteAndVerifyTask2() {
+        // Delete "Take Down Holiday Decorations"
+        deleteTask("Take Down Holiday Decorations");
+        
+        // Verify the task is no longer visible
+        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Take Down Holiday Decorations']")));
+        assertTrue(isTaskInvisible, "Task 'Take Down Holiday Decorations' should not be displayed.");
+    }
+    
+    @Test
+    @Order(30)
+    void deleteAndVerifyTask3() {
+        // Delete "Deep Clean the Kitchen"
+        deleteTask("Deep Clean the Kitchen");
+        
+        // Verify the task is no longer visible
+        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Deep Clean the Kitchen']")));
+        assertTrue(isTaskInvisible, "Task 'Deep Clean the Kitchen' should not be displayed.");
+    }
+
+    // Logs out by clicking the logout button and verifies redirection to the login page.
+    @Test
+    @Order(31)
+    void logoutButton() {
+        // Locate the logout button using the visible text "Log out"
+        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//a[text()='Log out']")));
+        
+        logoutButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("/login"));
+        assertTrue(driver.getCurrentUrl().endsWith("/login"),
+            "Failed to redirect to login page after clicking logout");
+    }
+
     // Tears down the WebDriver after all tests complete.
     @AfterAll
     static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
-        System.out.println("CheckMate testing completed successfully!");
+
+        System.out.println("Thank you for testing CheckMate!");
     }
 }
-
-// ---------- GIHTHUB LOGIN PIECES ----------
-
-    // // Verifies that the "Log in with GitHub" button redirects to GitHub.
-    // @Test
-    // @Order(4)
-    // void loginWithGitHubButton() {
-    //     WebElement githubLoginButton = wait.until(ExpectedConditions.elementToBeClickable(
-    //         By.xpath("//button[contains(., 'Log in with GitHub')]")));
-        
-    //     githubLoginButton.click();
-        
-    //     wait.until(ExpectedConditions.urlContains("github.com"));
-    //     assertTrue(driver.getCurrentUrl().contains("github.com"), 
-    //     "Failed to redirect to GitHub login page");
-    // }
-
-    // // Clicks the Sign-In button and verifies successful login or error.
-    // @Test
-    // @Order(7)
-    // void clickSignInButton() {
-    //     WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(
-    //         By.xpath("//input[@type='submit' and @value='Sign in']")));
-        
-    //     signInButton.click();
-        
-    //     try {
-    //         wait.until(ExpectedConditions.or(
-    //             ExpectedConditions.urlContains("/"),
-    //             ExpectedConditions.presenceOfElementLocated(By.className("flash-error"))
-    //         ));
-    //     } catch (Exception e) {
-    //         fail("Sign in process did not complete - no redirect or error message detected");
-    //     }
-    // }
-
-    // // Handles authorization if required and verifies redirection to the home page.
-    // @Test
-    // @Order(8)
-    // void handleAuthorizeButton() {
-    //     try {
-    //         WebElement authorizeButton = wait.until(ExpectedConditions.elementToBeClickable(
-    //             By.xpath("//button[@name='authorize' and @value='1']")));
-    //         authorizeButton.click();
-    //     } catch (org.openqa.selenium.TimeoutException e) {
-    //         System.out.println("Authorization step skipped - already authorized");
-    //     }
-
-    //     wait.until(ExpectedConditions.urlMatches(".*/"));
-    //     assertTrue(driver.getCurrentUrl().endsWith("/"),
-    //         "Failed to redirect to home page after authorization");
-    // }
-
-    // // Logs out by clicking the logout button and verifies redirection to the login page.
-    // @Test
-    // @Order(9)
-    // void logoutButton() {
-    //     WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
-    //         By.xpath("//a[@href='/Login']")));
-        
-    //     logoutButton.click();
-        
-    //     wait.until(ExpectedConditions.urlContains("/Login"));
-    //     assertTrue(driver.getCurrentUrl().endsWith("/Login"),
-    //         "Failed to redirect to login page after clicking logout");
-    // }
-
-    // // Verifies that the GitHub login button is visible after logging out and verifies redirection.
-    // @Test
-    // @Order(10)
-    // void verifyLogout() {
-    //     WebElement githubLoginButton = wait.until(ExpectedConditions.presenceOfElementLocated(
-    //         By.xpath("//button[contains(., 'Log in with GitHub')]")));
-        
-    //     assertTrue(githubLoginButton.isDisplayed(),
-    //         "GitHub login button not visible after logout");
-        
-    //     githubLoginButton.click();
-        
-    //     wait.until(ExpectedConditions.urlContains("github.com"));
-        
-    //     WebElement signInButton = wait.until(ExpectedConditions.presenceOfElementLocated(
-    //         By.xpath("//input[@type='submit' and @name='commit' and @value='Sign in']")));
-        
-    //     assertTrue(signInButton.isDisplayed(),
-    //         "Not properly logged out - GitHub sign in page not showing");
-    // }

@@ -32,6 +32,7 @@ public class ProjectDAO {
                 name TEXT NOT NULL,
                 description TEXT,
                 user_email TEXT,
+                trash INTEGER DEFAULT 0,
                 FOREIGN KEY (user_email) REFERENCES users(email)
             );
             """;
@@ -71,7 +72,7 @@ public class ProjectDAO {
 
     // Read all projects
     public List<Project> getAllUserProjects(String userEmail) {
-        String sql = "SELECT id, name, user_email, description FROM projects WHERE user_email = ?";
+        String sql = "SELECT id, name, user_email, description, trash FROM projects WHERE user_email = ?";
         List<Project> projects = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
@@ -85,6 +86,7 @@ public class ProjectDAO {
                 project.setName(rs.getString("name"));
                 project.setDescription(rs.getString("description"));
                 project.setUserEmail(rs.getString("user_email"));
+                project.setTrash(rs.getInt("trash"));
                 projects.add(project);
             }
 
@@ -98,7 +100,7 @@ public class ProjectDAO {
 
     // Retrieve project by ID
     public Project getProjectById(int projectId, String userEmail) {
-        String sql = "SELECT id, name, description, user_email FROM projects WHERE id = ? AND user_email = ?";
+        String sql = "SELECT id, name, description, user_email, trash FROM projects WHERE id = ? AND user_email = ?";
         Project project = null;
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
@@ -114,6 +116,7 @@ public class ProjectDAO {
                 project.setName(rs.getString("name"));
                 project.setDescription(rs.getString("description"));
                 project.setUserEmail(rs.getString("user_email"));
+                project.setTrash(rs.getInt("trash"));
             }
 
         } catch (SQLException e) {
@@ -154,6 +157,40 @@ public class ProjectDAO {
             System.out.println("Project with ID " + project_id + " updated successfully.");
         } catch (SQLException e) {
             System.out.println("Error updating project: " + e.getMessage());
+        }
+    }
+
+    // Trash a project by ID
+    public void trashProject(int projectId, String userEmail) {
+        String sql = "UPDATE projects SET trash = 1 WHERE id = ? AND user_email = ?";
+
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, projectId);
+            pstmt.setString(2, userEmail);
+            pstmt.executeUpdate();
+
+            System.out.println("Project with ID " + projectId + " trashed.");
+        } catch (SQLException e) {
+            System.out.println("Error trashing project: " + e.getMessage());
+        }
+    }
+
+    // Restore a project by ID
+    public void restoreProject(int projectId, String userEmail) {
+        String sql = "UPDATE projects SET trash = 0 WHERE id = ? AND user_email = ?";
+
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, projectId);
+            pstmt.setString(2, userEmail);
+            pstmt.executeUpdate();
+
+            System.out.println("Project with ID " + projectId + " restored.");
+        } catch (SQLException e) {
+            System.out.println("Error restoring project: " + e.getMessage());
         }
     }
 }

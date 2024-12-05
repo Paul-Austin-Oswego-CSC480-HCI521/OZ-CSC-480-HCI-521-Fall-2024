@@ -26,6 +26,8 @@ export function TaskTable({
                               data,
                               onTaskSelect,
                               selectedTask,
+                              tasks,
+                              setTasks
                           }) {
     const [sorting, setSorting] = React.useState([])
     const [highlightedTask, setSelectedTask] = React.useState(selectedTask);
@@ -49,19 +51,11 @@ export function TaskTable({
             status = 1;
         }
         try {
-            let taskResponse = await fetch(`/tasks/${taskId}`);
-
-
-            if (!taskResponse.ok) {
-                console.error(`Failed to fetch task ${taskId}.`);
-                return;
-            }
-            const taskToUpdate = await taskResponse.json();
+            let taskToUpdate = tasks[taskId]
             const updatedTask = {
                 ...taskToUpdate,
                 status: status
             };
-
 
             await fetch(`/tasks/${taskId}`, {
                 method: 'PUT',
@@ -70,11 +64,14 @@ export function TaskTable({
                 },
                 body: JSON.stringify(updatedTask),
             });
+            setTasks(tasks => {
+                const newTasks = structuredClone(tasks)
+                newTasks[taskToUpdate.id] = updatedTask
+                return newTasks
+            })
         } catch (error) {
             console.error("Error updating task completion status:", error);
         }
-        // TEMP FIX; ACCESS FETCHTASK() IN TASKPAGE SOMEHOW
-        window.location.reload();
         return checked;
     }
 
@@ -90,8 +87,10 @@ export function TaskTable({
         } catch (error) {
             console.error("Error updating task completion status:", error);
         }
-        // WORKAROUND; ACCESS FETCHTASK() IN TASKPAGE SOMEHOW
-        window.location.reload();
+        setTasks(tasks => {
+            const {[taskId]: _, ...rest} = tasks
+            return rest
+        })
     }
 
 
@@ -149,14 +148,11 @@ export function TaskTable({
                         <TableRow className={"border-b-transparent"} key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
                                 return (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} className="text-left pl-2">
                                         {header.isPlaceholder
                                             ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </TableHead>
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead> 
                                 )
                             })}
                         </TableRow>
@@ -177,13 +173,13 @@ export function TaskTable({
 
                             >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
-                                        <CellContent
-                                            cellContent={cell.getValue()}
-                                            cell={cell}
-                                            taskid={row.original.id}
-                                        />
-                                    </TableCell>
+                                    <TableCell key={cell.id} className="pl-2 pr-2">
+                                    <CellContent
+                                        cellContent={cell.getValue()}
+                                        cell={cell}
+                                        taskid={row.original.id}
+                                    />
+                                </TableCell>
                                 ))}
                             </TableRow>
                         ))

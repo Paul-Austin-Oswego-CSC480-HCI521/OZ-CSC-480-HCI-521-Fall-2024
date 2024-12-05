@@ -5,16 +5,15 @@ import {TaskPage} from "@/src/pages/TaskPage.jsx";
 import {Register} from './pages/Registration'
 import PageLayout from './pages/Layout'
 import ProjectPage from './pages/ProjectPage';
-import {SidePanel} from "@/components/SidePanel.jsx";
-import {Sidebar} from "@/components/ui/sidebar.jsx";
 import RecentlyDeleted from "@/src/pages/RecentlyDeleted.jsx";
+import ProjectProvider from "@/components/ProjectProvider";
 
 export default function Component() {
     return (
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<PageLayout/>}>
+                    <Route path="/" element={<ProjectProvider><PageLayout/></ProjectProvider>}>
                         <Route index element={<TaskPage/>}/>
                         <Route path="deleted" element={<RecentlyDeleted/>}/>
                         {/*<Route path="project" element={<ProjectPage/>}/>*/}

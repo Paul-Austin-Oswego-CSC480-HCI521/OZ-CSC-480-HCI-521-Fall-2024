@@ -89,6 +89,10 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
         document.getElementById('priority-option').value = selectedTask.priority
     }, [selectedTask])
 
+    useEffect(() => {
+        if (selectedProject)
+            document.getElementById('projects-option').value = selectedProject.id
+    }, [selectedProject])
 
     return (
         <>
