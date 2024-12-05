@@ -90,14 +90,6 @@ public class ProjectDAO {
                 projects.add(project);
             }
 
-            if (projects.isEmpty()) {
-                Project project = new Project();
-                project.setUserEmail(userEmail);
-                project.setName("Default Project");
-                createProject(project);
-                projects.add(project);
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error retrieving projects: " + e.getMessage());
