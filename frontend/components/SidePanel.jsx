@@ -17,12 +17,7 @@ export function SidePanel() {
                             Recently Deleted
                     </NavButton>
                 </li>
-                <li className="flex flex-col mr-4">
-                    <NavButton href="/shared">
-                            Shared with Me
-                    </NavButton>
-                </li>
-                <hr className="w-[11rem] ml-1 my-5 border-neutral-300"/>
+                <hr className="w-[11rem] ml-1 my-3 border-neutral-400"/>
                 <li>
                     <menu className="flex flex-col items-start">
                         <ProjectAccordion/>
