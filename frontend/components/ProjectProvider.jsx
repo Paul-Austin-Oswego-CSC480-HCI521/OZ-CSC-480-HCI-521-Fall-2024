@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 export default function ProjectProvider({children}) {
     const [projects, setProjects] = useState(null)
+    const [trashedProjects, setTrashedProjects] = useState(null);
     const location = useLocation()
 
     const createDefaultProject = async () => {
@@ -19,7 +20,7 @@ export default function ProjectProvider({children}) {
     }
 
     useEffect(() => {
-        authAndFetchProjects(setProjects)
+        authAndFetchProjects(setProjects, setTrashedProjects)
     }, [location])
 
     useEffect(() => {
@@ -57,8 +58,52 @@ export default function ProjectProvider({children}) {
         }
     };
 
+    const trashProject = async projectID => {
+        try {
+            const response = await fetch(`/projects/trash/${projectID}`, { method: 'PUT' });
+            if (response.ok) {
+                const trashedProject = projects.find(project => project.id === projectID);
+                
+                setProjects(prevProjects => prevProjects.filter(project => project.id !== projectID));
+                
+                if (trashedProject) {
+                    setTrashedProjects(prevTrashed => [...prevTrashed, trashedProject]);
+                }
+    
+                if (window.location.pathname === `/project/${projectID}`) {
+                    window.location.replace('/');
+                }
+            } else {
+                console.log(`Error trashing project ${projectID}`);
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
+    };
+
+    const restoreProject = async projectID => {
+        try {
+            const response = await fetch(`/projects/restore/${projectID}`, { method: 'PUT' });
+            if (response.ok) {
+                const restoredProject = trashedProjects.find(project => project.id === projectID);
+
+                setTrashedProjects(prevTrashed => prevTrashed.filter(project => project.id !== projectID));
+
+                if (restoredProject) {
+                    setProjects(prevProjects => [...prevProjects, restoredProject]);
+                }
+
+                //remove from trashed list
+            } else {
+                console.log(`Error restoring project ${projectID}`);
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
+    };
+
     return (
-        <ProjectContext.Provider value={{ projects, deleteProject, addProject }}>
+        <ProjectContext.Provider value={{ projects, deleteProject, addProject, trashProject, restoreProject }}>
             {children}
         </ProjectContext.Provider>
     )

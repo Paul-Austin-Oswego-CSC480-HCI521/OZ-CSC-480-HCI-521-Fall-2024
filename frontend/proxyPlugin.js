@@ -118,6 +118,10 @@ export default function proxyPlugin(authRoot, apiRoot) {
     app.put('/projects/:projectId', proxyPut())
     // delete a given project
     app.delete('/projects/:projectId', proxyDelete())
+    // trash given project
+    app.put('/projects/trash/:projectId', proxyPut())
+    // restore given project
+    app.put('/projects/restore/:projectId', proxyPut())
 
     // ****** task routes ******
     // get all accessable tasks

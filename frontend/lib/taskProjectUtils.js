@@ -12,9 +12,9 @@ export const fetchWithJson = async (endpoint, method, payload) => {
 export const post = async (endpoint, payload) => await fetchWithJson(endpoint, 'POST', payload)
 export const put = async (endpoint, payload) => await fetchWithJson(endpoint, 'PUT', payload)
 
-export const fetchProjects = async setProjectsFn => {
+export const fetchProjects = async (setProjectsFn, trash) => {
     try {
-        const response = await fetch('/projects');
+        const response = await fetch(trash ? '/projects/trash' : '/projects');
         if (!response.ok)
             throw new Error(`[${response.status}]: ${response.statusText}`)
         const projects = await response.json();
@@ -24,13 +24,14 @@ export const fetchProjects = async setProjectsFn => {
     }
 }
 
-export const authAndFetchProjects = async setProjectsFn => {
+export const authAndFetchProjects = async (setProjectsFn, setTrashedProjectsFn) => {
     if (!(await fetch('/auth')).ok) {
         if (window.location.pathname !== '/login')
             window.location.replace('/login')
         return;
     }
     fetchProjects(setProjectsFn)
+    fetchProjects(setTrashedProjectsFn)
 }
 
 export const fetchTasks = async (setTasksFn, trash) => {
