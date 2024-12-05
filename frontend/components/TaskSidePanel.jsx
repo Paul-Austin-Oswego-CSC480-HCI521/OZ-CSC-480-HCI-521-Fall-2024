@@ -80,13 +80,11 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
 
 
     useEffect(() => {
-        if (!selectedTask)
-            return
         setTaskTitle(selectedTask ? selectedTask.name : 'New Task')
-        document.getElementById('description-box').value = selectedTask.description
-        document.getElementById('projects-option').value = selectedTask.projectId
-        document.getElementById('date-option').value = selectedTask.dueDate
-        document.getElementById('priority-option').value = selectedTask.priority
+        document.getElementById('description-box').value = selectedTask ? selectedTask.description : ''
+        document.getElementById('projects-option').value = selectedTask ? selectedTask.projectId   : selectedProject.id
+        document.getElementById('date-option').value     = selectedTask ? selectedTask.dueDate     : ''
+        document.getElementById('priority-option').value = selectedTask ? selectedTask.priority    : '2'
     }, [selectedTask])
 
     useEffect(() => {
