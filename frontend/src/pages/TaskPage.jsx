@@ -14,7 +14,7 @@ import { Drawer, Drawer as DrawerPrimative } from 'vaul'
 import { faL } from '@fortawesome/free-solid-svg-icons'
 
 export const TaskPage = ({variant, projectId}) => {
-    const isProject = useMemo(() => variant === 'project', variant)
+    const isProject = useMemo(() => variant === 'project', [variant])
     const [pageTitle, setPageTitle] = useState(isProject ? 'Project' : 'My Tasks')
     const [tasks, setTasks] = useState({})
     const { projects } = useContext(ProjectContext)
