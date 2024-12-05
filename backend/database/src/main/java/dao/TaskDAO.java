@@ -46,7 +46,6 @@ public class TaskDAO {
         try (Connection conn = DriverManager.getConnection(sqlPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
-            System.out.println("Table 'tasks' created or already exist.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -54,7 +53,7 @@ public class TaskDAO {
 
     // Create a new task
     public Task createTask(Task task) {
-        String insertTaskSql = "INSERT INTO tasks (name, desc, status, project_id, user_email, due_date, priority, trash) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String insertTaskSql = "INSERT INTO tasks (name, desc, status, project_id, user_email, due_date, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmtInsert = conn.prepareStatement(insertTaskSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -66,7 +65,6 @@ public class TaskDAO {
             pstmtInsert.setString(5, task.getUserEmail());
             pstmtInsert.setString(6, task.getDueDate().toString()); 
             pstmtInsert.setInt(7, task.getPriority());
-            pstmtInsert.setInt(8, task.getTrash());
             pstmtInsert.executeUpdate();
 
             ResultSet rs = pstmtInsert.getGeneratedKeys();
