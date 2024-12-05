@@ -118,6 +118,8 @@ export default function proxyPlugin(authRoot, apiRoot) {
     app.put('/projects/:projectId', proxyPut())
     // delete a given project
     app.delete('/projects/:projectId', proxyDelete())
+    // get all trashed projects
+    app.get('/projects/trash', proxyGet())
     // trash given project
     app.put('/projects/trash/:projectId', proxyPut())
     // restore given project
