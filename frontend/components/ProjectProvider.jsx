@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 export default function ProjectProvider({children}) {
     const [projects, setProjects] = useState(null)
+    const [trashedProjects, setTrashedProjects] = useState([])
     const location = useLocation()
 
     const createDefaultProject = async () => {
@@ -19,7 +20,7 @@ export default function ProjectProvider({children}) {
     }
 
     useEffect(() => {
-        authAndFetchProjects(setProjects)
+        authAndFetchProjects(setProjects, setTrashedProjects)
     }, [location])
 
     useEffect(() => {
@@ -58,7 +59,7 @@ export default function ProjectProvider({children}) {
     };
 
     return (
-        <ProjectContext.Provider value={{ projects, deleteProject, addProject }}>
+        <ProjectContext.Provider value={{ projects, trashedProjects, deleteProject, addProject }}>
             {children}
         </ProjectContext.Provider>
     )
