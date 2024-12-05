@@ -4,7 +4,7 @@
     <featureManager>
         <feature>servlet-4.0</feature> <!-- Enables static file serving for React -->
         <feature>jakartaee-10.0</feature> <!-- Jakarta EE -->
-        <feature>jsp-2.3</feature> <!-- Optional, if needed for server-side rendering or JSP -->
+        <feature>jsp-2.3</feature>  <!--<Optional, if needed for server-side rendering or JSP -->
         <feature>jaxrs-2.1</feature> <!-- Optional, if your frontend communicates with a RESTful service -->
         <feature>mpRestClient-3.0</feature> <!-- Optional, if your frontend uses MicroProfile RestClient -->
     </featureManager>
@@ -19,9 +19,8 @@
     <!-- Frontend React Application -->
     <!-- Serving static files directly from the 'frontend/dist' folder -->
     <!-- Update this location to where your Vite build output (dist folder) is stored -->
-    <webApplication contextRoot="/" location="frontend/target/frontend.war" />
+    <webApplication contextRoot="/" location="frontend/dist/"" />
 
     <!-- Optionally, you could also deploy a WAR file if you decide to package it that way -->
-    <!-- <webApplication contextRoot="/" location="frontend/target/frontend.war" /> -->
-
+    <!-- <webApplication contextRoot="/frontend" location="frontend/target/frontend.war" /> -->
 </server>

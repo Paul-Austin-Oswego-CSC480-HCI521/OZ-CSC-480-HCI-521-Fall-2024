@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "/frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -51,3 +52,4 @@
     "vite": "^5.4.1"
   }
 }
+

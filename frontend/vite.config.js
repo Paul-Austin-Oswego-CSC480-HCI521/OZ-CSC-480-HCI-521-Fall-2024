@@ -1,12 +1,13 @@
-import { defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-  
+  const env = loadEnv(mode, process.cwd(), '');
+
   return {
+    base: '/frontend/', // Align this with the contextRoot in OpenLiberty's server.xml
     plugins: [
       react(),
     ],
@@ -16,16 +17,14 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     server: {
-      port: env.VITE_FRONTEND_PORT,
-      // Open Liberty will serve static files, but if you need hot-reloading locally during development,
-      // you can leave the server settings in place. However, make sure it doesn't conflict with the server.
+      port: env.VITE_FRONTEND_PORT || 3000, // Ensure it doesn't conflict with OpenLiberty
     },
     build: {
-      outDir: 'dist',  // You can change this to where you want the output files to go
-      assetsDir: 'static', // Optional: Control the assets directory within the dist folder
+      outDir: 'dist',  // Output folder for the build
+      assetsDir: 'static', // Directory for assets (e.g., JS, CSS) within dist
       rollupOptions: {
-        input: path.resolve(__dirname, 'index.html'), // You can change this if your main HTML file is in a different location
+        input: path.resolve(__dirname, 'index.html'), // Main entry point for your app
       }
     }
-  }
-})
+  };
+});
