@@ -6,28 +6,9 @@ export default function ProjectProvider({children}) {
     const [projects, setProjects] = useState(null)
     const location = useLocation()
 
-    const createDefaultProject = async () => {
-        try {
-            const response = await post('/projects', {name: 'Default Project' })
-            if (!response.ok)
-                throw new Error(`[${response.status}] ${response.statusText}`)
-            const project = await response.json()
-            setProjects([project])
-        } catch (e) {
-            console.error('Error creating default project: ', e)
-        }
-    }
-
     useEffect(() => {
         authAndFetchProjects(setProjects)
     }, [location])
-
-    useEffect(() => {
-        if (projects == null)
-            return
-        if (projects.length === 0)
-            createDefaultProject()
-    }, [projects])
 
     const addProject = async projectName => {
         const nextId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1
