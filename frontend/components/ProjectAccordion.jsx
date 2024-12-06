@@ -12,7 +12,7 @@ import { ProjectContext } from "@/lib/taskProjectUtils";
 import {Trash2Icon} from "lucide-react";
 
 function ProjectAccordion() {
-    const { projects, deleteProject, addProject } = useContext(ProjectContext);
+    const { projects, trashProject, addProject } = useContext(ProjectContext);
 
     return (
         <Accordion defaultValue="projects" type="single" collapsible>
@@ -52,7 +52,7 @@ function ProjectAccordion() {
 
                                 {/* Trash Icon with Absolute Position */}
                                 <button
-                                    onClick={() => deleteProject(project.id)}
+                                    onClick={() => trashProject(project.id)}
                                     className="absolute right-5 p-1 rounded-full hover:bg-gray-200 flex justify-center items-center">
                                     <TrashIcon className="text-gray-500"/>
                                 </button>

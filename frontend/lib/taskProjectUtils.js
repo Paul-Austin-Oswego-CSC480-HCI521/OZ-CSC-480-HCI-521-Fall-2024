@@ -31,7 +31,7 @@ export const authAndFetchProjects = async (setProjectsFn, setTrashedProjectsFn) 
         return;
     }
     fetchProjects(setProjectsFn)
-    fetchProjects(setTrashedProjectsFn)
+    fetchProjects(setTrashedProjectsFn, true)
 }
 
 export const fetchTasks = async (setTasksFn, trash) => {
@@ -80,6 +80,43 @@ export const formatTasks = (taskMap, projects, activeTab, selectedProject) => {
         return tableFormatted.filter(task => (activeTab === 'upcoming') != task.completed)
     else
         return tableFormatted
+}
+
+export const setTaskChecked = async (tasks, setTasks, taskId, checked) => {
+    try {
+        const updatedTask = {
+            ...tasks[taskId],
+            status: +checked
+        }
+
+        if ((await put(`/tasks/${taskId}`, updatedTask)).ok) {
+            setTasks(tasks => {
+                const newTasks = structuredClone(tasks)
+                newTasks[taskToUpdate.id] = updatedTask
+                return newTasks
+            })
+        }
+    } catch (error) {
+        console.error("Error updating task completion status:", error);
+    }
+}
+
+export const restoreTask = async (setTasks, taskId) => {
+    if ((await fetch(`/tasks/restore/${taskId}`, { method: 'PUT'})).ok) {
+        setTasks(tasks => {
+            const {[taskId]: _, ...rest} = tasks
+            return rest
+        })
+    }
+}
+
+export const deleteTask = async (setTasks, taskId) => {
+    if ((await fetch(`/tasks/${taskId}`,{ method: 'DELETE' })).ok) {
+        setTasks(tasks => {
+            const {[taskId]: _, ...rest} = tasks
+            return rest
+        })
+    }
 }
 
 export const ProjectContext = React.createContext(null)
