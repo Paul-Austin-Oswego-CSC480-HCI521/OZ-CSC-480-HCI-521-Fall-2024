@@ -37,7 +37,6 @@ public class UserDAO {
         try (Connection conn = DriverManager.getConnection(sqlPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
-            System.out.println("Table 'users' Created or Already Exists.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -127,8 +126,6 @@ public class UserDAO {
         String sql = "SELECT username, email, password FROM users WHERE session_id = ?";
         User user = null;
 
-        System.out.println("getting user by session id");
-
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, sessionId);
@@ -157,7 +154,6 @@ public class UserDAO {
             pstmt.setString(1, ses);
             pstmt.setString(2, email);
             pstmt.executeUpdate();
-            System.out.println("User '" + email + "' given sessionId: " + ses);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -81,7 +81,10 @@ public class TaskResource {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         task.setUserEmail(user.getEmail());
         task = taskDAO.createTask(task);
-        return Response.status(Response.Status.CREATED).entity(task).build();
+        if (task != null)
+            return Response.status(Response.Status.CREATED).entity(task).build();
+        else
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
 
 
