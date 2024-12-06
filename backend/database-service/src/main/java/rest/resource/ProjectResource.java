@@ -60,6 +60,7 @@ public class ProjectResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         projectDAO.updateProject(projectId, updated, user.getEmail());
+        updated.setId(projectId);
         return Response.ok(updated).build();
     }
 
@@ -115,5 +116,15 @@ public class ProjectResource {
         projectDAO.restoreProject(projectId, user.getEmail());
         taskDAO.projectRestore(projectId, user.getEmail());
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/trash")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTrashedProjects() {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.ok(projectDAO.getAllTrashedProjects(user.getEmail())).build();
     }
 }

@@ -5,9 +5,9 @@ import { TaskHeaderButton } from '@/components/TaskHeaderButton'
 import { priorityToValue } from '@/lib/taskProjectUtils'
 
 // Columns for TaskTable, accessorKey needs to match ket used in initialTasks/task data
-export const taskColumns = [
+export const taskColumnsDeleted = [
     {
-        accessorKey: "completed",
+        accessorKey: "padding-left",
         header: "",
         sortingFns: "basic",
     },
@@ -17,11 +17,11 @@ export const taskColumns = [
             return (
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Task Name</TaskHeaderButton>
             )
-          },
+        },
         sortingFn: (rowA, rowB) => {
-          const nameA = rowA.getValue('title').toLowerCase();
-          const nameB = rowB.getValue('title').toLowerCase();
-          return nameA.localeCompare(nameB);
+            const nameA = rowA.getValue('title').toLowerCase();
+            const nameB = rowB.getValue('title').toLowerCase();
+            return nameA.localeCompare(nameB);
         },
     },
     {
@@ -30,7 +30,7 @@ export const taskColumns = [
             return (
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Project</TaskHeaderButton>
             )
-          },
+        },
         sortingFns: "alphanumericCaseSensitive",
     },
     {
@@ -39,7 +39,7 @@ export const taskColumns = [
             return (
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Due Date</TaskHeaderButton>
             )
-          },
+        },
         sortingFns: "datetime"
     },
     {
@@ -48,11 +48,19 @@ export const taskColumns = [
             return (
                 <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Priority</TaskHeaderButton>
             )
-          },
+        },
         sortingFn: (
             rowA, rowB, columnId
         ) => {
             return priorityToValue[rowA.getValue(columnId)] - priorityToValue[rowB.getValue(columnId)];
         }
+    },
+    {
+        accessorKey: "recover",
+        header: "",
+    },
+    {
+        accessorKey: "delete",
+        header: "",
     },
 ]

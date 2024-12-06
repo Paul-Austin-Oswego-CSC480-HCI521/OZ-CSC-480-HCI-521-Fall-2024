@@ -17,9 +17,22 @@ export function Register() {
     const [checkPasswordClass, setCheckPasswordClass] = useState('bg-white');
     const [isCheckPasswordDirty, setIsCheckPasswordDirty] = useState(false);
 
+    function validatePass(passData){
+        if(isCheckPasswordDirty){
+            if (passData === checkPassword) {
+                setShowErrorMessage(false);
+                setCheckPasswordClass('border-green-500')
+            } else {
+                setShowErrorMessage(true)
+                setCheckPasswordClass('border-red-500')
+            }
+        }
+    }
+
     // Handle password data from input component
     const handlePasswordFromChild = (data) => {
         setPassword(data)
+        validatePass(data)
     }
     // Handle password data from password check input component
     const handlePasswordCheckFromChild = (data) => {
@@ -68,15 +81,7 @@ export function Register() {
 
     useEffect(() => {
         // Check if password check field has been modified and change input styles based on state
-        if (isCheckPasswordDirty) {
-            if (password === checkPassword) {
-                setShowErrorMessage(false);
-                setCheckPasswordClass('border-green-500')
-            } else {
-                setShowErrorMessage(true)
-                setCheckPasswordClass('border-red-500')
-            }
-        }
+        validatePass(password)
     }, [checkPassword])
 
     return (

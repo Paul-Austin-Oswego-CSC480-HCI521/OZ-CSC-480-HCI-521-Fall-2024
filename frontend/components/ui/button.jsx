@@ -10,6 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90",
+        default_w_border: "bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90 border border-neutral-700 dark:border-neutral-300",
         default2:"bg-[#152A3E] text-white hover:bg-[#0F1F29] dark:bg-[#152A3E] dark:text-white dark:hover:bg-[#0F1F29]", //just a different color (very dark blue-ish..)
         destructive:
           "bg-red-500 text-neutral-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-neutral-50 dark:hover:bg-red-900/90",
@@ -21,6 +22,8 @@ const buttonVariants = cva(
           "bg-neutral-100 text-neutral-900 hover:bg-neutral-100/80 dark:bg-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-800/80",
         ghost: "hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50",
         link: "text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50",
+        cancel: "bg-white text-black border border-gray-300 hover:bg-gray-100 dark:bg-gray-600 dark:text-white dark:border-gray-500 dark:hover:bg-gray-500",
+        delete: "bg-[#152A3E] text-white hover:bg-red-500 dark:bg-[#152A3E] dark:text-white dark:hover:bg-red-500",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -72,7 +72,35 @@ public class ProjectDAO {
 
     // Read all projects
     public List<Project> getAllUserProjects(String userEmail) {
-        String sql = "SELECT id, name, user_email, description, trash FROM projects WHERE user_email = ?";
+        String sql = "SELECT id, name, user_email, description, trash FROM projects WHERE user_email = ? AND trash = 0";
+        List<Project> projects = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userEmail);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Project project = new Project();
+                project.setId(rs.getInt("id"));
+                project.setName(rs.getString("name"));
+                project.setDescription(rs.getString("description"));
+                project.setUserEmail(rs.getString("user_email"));
+                project.setTrash(rs.getInt("trash"));
+                projects.add(project);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error retrieving projects: " + e.getMessage());
+        }
+
+        return projects;
+    }
+
+    // read all trashed projects
+    public List<Project> getAllTrashedProjects(String userEmail) {
+        String sql = "SELECT id, name, user_email, description, trash FROM projects WHERE user_email = ? AND trash = 1";
         List<Project> projects = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(sqlPath);

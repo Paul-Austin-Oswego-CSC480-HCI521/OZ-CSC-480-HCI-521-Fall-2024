@@ -1,155 +1,76 @@
-import React, {useEffect, useState} from "react";
-import {DialogDemo} from "@/components/Dialog.jsx";
-
-import {TaskTable} from '@/components/TaskTable'
-import { taskColumns } from "@/components/TaskColumns";
-import {DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer.jsx";
-
-import PageTitle from "@/components/PageTitle";
-
-const priorityOrder = {
-    1: 'Low',
-    2: 'Medium',
-    3: 'High',
-};
-
-
-const initialTasks = [
-    {
-        id: "task-1",
-        completed: 0,
-        title: "Complete report",
-        projectId: "1",
-        dueDate: "2024-10-20",
-        priority: 1,
-    }
-];
-
-const initialProjects = [
-    {
-        description: "this description just got updated",
-        id: 1,
-        name: "Not my first rodeo"
-    }
-];
+import { useContext, useEffect, useState } from 'react'
+import { TaskPageContent } from './TaskPage'
+import { deleteTask, fetchTasks, formatTasks, ProjectContext, restoreTask } from '@/lib/taskProjectUtils'
+import PageTitle from '@/components/PageTitle'
+import { TaskTable } from '@/components/TaskTable'
+import { taskColumnsDeleted } from '@/components/TaskColumnsDeleted'
+import { TaskHeaderButton } from '@/components/TaskHeaderButton'
 
 export default function RecentlyDeleted() {
-    const [tasks, setTasks] = useState(initialTasks);
-    const [projects, setProjects] = useState(initialProjects);
-    const [sortConfig, setSortConfig] = useState({key: null, direction: "asc"});
-    const [currentTaskTitle, setCurrentTaskTitle] = useState("Task Title");
-    const [editMode, isEditMode] = useState(false);
-    const [deletePopup, setDeletePopup] = useState({isOpen: false, taskId: null});
-    const [activeTab, setActiveTab] = useState("upcoming");
-
-    // console.log(tasks);
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-    };
-
-    const getProjectName = (projectId) => {
-        const project = projects.find(project => project.id === projectId);
-        return project ? project.name : 'Unknown Project';
-    };
-
-
-    const handleDeletePopup = (action, taskId) => {
-        setDeletePopup({isOpen: false, taskId: null});
-        if (action === "delete") {
-            deleteTask(taskId);
-        }
-    };
-    const fetchTasks = async () => {
-        try {
-            if (!(await fetch('/auth')).ok) {
-                window.location.replace('/login');
-                return;
-            }
-
-            const response = await fetch(`/tasks/trash/`);
-            if (response.ok) {
-                const data = await response.json();
-                const formattedTasks = data.map(task => ({
-                    id: task.id,
-                    completed: task.status === 1,
-                    title: task.name,
-                    project: getProjectName(task.projectId),
-                    dueDate: task.dueDate || 'No Due Date',
-                    priority: priorityOrder[task.priority]
-                }));
-                setTasks(formattedTasks);
-            } else {
-                console.error('Failed to fetch tasks:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error fetching tasks:', error);
-        }
-    };
-
-    const fetchProjects = async () => {
-        try {
-            const response = await fetch('/projects');
-            if (response.ok) {
-                const projectData = await response.json();
-                setProjects(projectData);
-            } else {
-                console.error("Failed to fetch projects:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error fetching projects:", error);
-        }
-    };
-
+    const { projects, trashedProjects, restoreProject, deleteProject } = useContext(ProjectContext)
+    const [trashedTasks, setTrashedTasks] = useState({})
 
     useEffect(() => {
-        fetchProjects();
-    }, []);
-
-    useEffect(() => {
-        if (projects.length > 0) {
-            fetchTasks();
-            fetchProjects();
-        }
-    }, [projects.length]);
-
-    const deleteTask = async (taskId) => {
-        try {
-            const response = await fetch(`/tasks/${taskId}`, {method: 'DELETE'});
-            if (response.ok) {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-            } else {
-                console.log(`Error deleting task ${taskId}`);
-            }
-        } catch (e) {
-            console.error(e.message);
-        }
-    };
-
+        if (projects == null || projects.length === 0)
+            return
+        fetchTasks(setTrashedTasks, true)
+    }, [projects])
 
     return (
         <>
-            <PageTitle title={"Recently Deleted | Checkmate"}></PageTitle>
-            <DialogDemo
-                onAction={(action) => handleDeletePopup(action, deletePopup.taskId)}
-                isOpen={deletePopup.isOpen}
-            />
-
-            {/* Main Content */}
-            <div className="bg-white pt-5 pb-5 w-full">
-                <div className="flex flex-col gap-[32px]">
-                    <div className="flex flex-col gap-[32px]">
-                        <h1 className="text-left text-[48px] font-bold pl-20 pr-20">
-                            Recently Deleted
-                        </h1>
-                    </div>
-                    <section>
-                        <TaskTable columns={taskColumns} projects={projects}
-                                   data={tasks}/>
-                    </section>
-                </div>
-            </div>
+            <PageTitle title={'Recently Deleted | Checkmate'}/>
+            <TaskPageContent pageTitle={'Recently Deleted'}>
+                <TaskTable
+                    columns={taskColumnsDeleted}
+                    data={formatTasks(trashedTasks, projects)}
+                    restoreItem={taskId => restoreTask(setTrashedTasks, taskId)}
+                    deleteItem={taskId => deleteTask(setTrashedTasks, taskId)}
+                />
+                <h3 className='text-left text-[32px] font-bold pl-20 pr-20 pt-20'>Projects</h3>
+                <TaskTable
+                    columns={projectColumns}
+                    data={formatProjects(trashedProjects)}
+                    restoreItem={restoreProject}
+                    deleteItem={deleteProject}
+                />
+            </TaskPageContent>
         </>
-    );
+    )
 }
 
+const projectColumns = [
+    {
+        accessorKey: "padding-left",
+        header: "",
+        sortingFns: "basic",
+    },
+    {
+        accessorKey: "title",
+        header: ({ column }) => {
+            return (
+                <TaskHeaderButton column={column} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Project Name</TaskHeaderButton>
+            )
+        },
+        sortingFn: (rowA, rowB) => {
+            const nameA = rowA.getValue('title').toLowerCase();
+            const nameB = rowB.getValue('title').toLowerCase();
+            return nameA.localeCompare(nameB);
+        },
+    },
+    {
+        accessorKey: "recover",
+        header: "",
+    },
+    {
+        accessorKey: "delete",
+        header: "",
+    },
+]
+
+const formatProjects = projects => projects.map(project => {
+    return {
+        id: project.id,
+        title: project.name,
+    }
+})
 
