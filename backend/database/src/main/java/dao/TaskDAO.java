@@ -80,6 +80,13 @@ public class TaskDAO {
 
     // Read all tasks
     public List<Task> getAllUserTasks(String userEmail) {
+        if (!isSessionValid(userEmail)) {
+            invalidateSessionByEmail(userEmail);
+            throw new RuntimeException("Session expired. Please log in again.");
+        }
+        //update session timestamp if valid
+        userDAO.updateSessionTimestamp(userEmail);
+        
         String sql = "SELECT id, name, desc, status, project_id, user_email, due_date, priority, trash FROM tasks WHERE user_email = ? AND trash = 0";
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -294,5 +301,6 @@ public class TaskDAO {
             System.out.println("Error deleting task: " + e.getMessage());
         }
     }
+    
 }
 

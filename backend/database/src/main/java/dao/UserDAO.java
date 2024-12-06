@@ -30,13 +30,15 @@ public class UserDAO {
                     email TEXT PRIMARY KEY,
                     username TEXT,
                     session_id TEXT,
-                    password TEXT
+                    session_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    password TEXT,
                 );
                 """;
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
              Statement stmt = conn.createStatement()) {
             stmt.execute(createTableSQL);
+            System.out.println("Table 'users' Created or Already Exists.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -122,9 +124,53 @@ public class UserDAO {
             setSessionId(user.getEmail(), null);
     }
 
+    private void invalidateSessionByEmail(String email) {
+        String sql = "UPDATE users SET session_id = NULL, session_timestamp = NULL WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            pstmt.executeUpdate();
+            System.out.println("Session invalidated for user: " + email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public boolean isSessionValid(String email) {
+        String sql = "SELECT session_timestamp FROM users WHERE email = ? AND session_id IS NOT NULL";
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+    
+            if (rs.next()) {
+                Timestamp sessionTime = Timestamp.valueOf(rs.getString("session_timestamp"));
+                long minutesElapsed = (System.currentTimeMillis() - sessionTime.getTime()) / (1000 * 60);
+                return minutesElapsed <= 15;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void updateSessionTimestamp(String email) {
+        String sql = "UPDATE users SET session_timestamp = CURRENT_TIMESTAMP WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection(sqlPath);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
     public User getUserBySessionId(String sessionId) {
         String sql = "SELECT username, email, password FROM users WHERE session_id = ?";
         User user = null;
+
+        System.out.println("getting user by session id");
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -147,15 +193,17 @@ public class UserDAO {
     }
 
     private void setSessionId(String email, UUID sessionId) {
-        String sql = "UPDATE users SET session_id = ? WHERE email = ?";
+        String sql = "UPDATE users SET session_id = ?, session_timestamp = CURRENT_TIMESTAMP WHERE email = ?";
         try (Connection conn = DriverManager.getConnection(sqlPath);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             String ses = sessionId != null ? sessionId.toString() : null;
             pstmt.setString(1, ses);
             pstmt.setString(2, email);
             pstmt.executeUpdate();
+            System.out.println("User '" + email + "' given sessionId: " + ses);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
 }

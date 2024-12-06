@@ -39,9 +39,10 @@ public class TaskResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCompletedTasks() {
         User user = userDAO.getUserByEmail(jwt.getSubject());
-        if (user == null)
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        return Response.ok(taskDAO.getCompletedUserTasks(user.getEmail())).build();
+        if (user == null || !isSessionValid(user)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build("Session expired. Please log in again.").build();
+        }
+        return Response.ok(taskDAO.getAllUserTasks(user.getEmail())).build();
     }
 
     //Read a task by its ID
@@ -81,10 +82,7 @@ public class TaskResource {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         task.setUserEmail(user.getEmail());
         task = taskDAO.createTask(task);
-        if (task != null)
-            return Response.status(Response.Status.CREATED).entity(task).build();
-        else
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        return Response.status(Response.Status.CREATED).entity(task).build();
     }
 
 
@@ -98,7 +96,6 @@ public class TaskResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         taskDAO.updateTask(taskId, task, user.getEmail());
-        task.setId(taskId);
         return Response.ok().entity(task).build();
     }
 
@@ -115,7 +112,7 @@ public class TaskResource {
         return Response.noContent().build();
     }
 
-    // Restore a task by ID
+    // Restore a trashed task by ID
     @PUT
     @Path("/restore/{taskId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -128,6 +125,18 @@ public class TaskResource {
         return Response.noContent().build();
     }
 
+    //Delete a trashed task by ID
+    @DELETE
+    @Path("/{taskId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteTrashTask(@PathParam("taskId") int taskId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        taskDAO.deleteTrashTask(taskId, user.getEmail());
+        return Response.noContent().build();
+    }
+
     @GET
     @Path("/trash")
     @Produces(MediaType.APPLICATION_JSON)
@@ -136,15 +145,5 @@ public class TaskResource {
         if (user == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
         return Response.ok(taskDAO.getTrashedUserTasks(user.getEmail())).build();
-    }
-
-    @DELETE
-    @Path("/{taskId}")
-    public Response deleteTask(@PathParam("taskId") int taskId) {
-        User user = userDAO.getUserByEmail(jwt.getSubject());
-        if (user == null)
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        taskDAO.deleteTask(taskId, user.getEmail());
-        return Response.noContent().build();
     }
 }
