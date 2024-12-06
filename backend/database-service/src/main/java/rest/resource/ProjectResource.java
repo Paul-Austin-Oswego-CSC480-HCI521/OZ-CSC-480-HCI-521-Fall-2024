@@ -117,4 +117,14 @@ public class ProjectResource {
         taskDAO.projectRestore(projectId, user.getEmail());
         return Response.noContent().build();
     }
+
+    @GET
+    @Path("/trash")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTrashedProjects() {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.ok(projectDAO.getAllTrashedProjects(user.getEmail())).build();
+    }
 }
