@@ -10,7 +10,7 @@ import { post, put } from '@/lib/taskProjectUtils'
 export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject}) => {
     const [popupOpen, setPopupOpen] = useState(false)
     const [taskTitle, setTaskTitle] = useState(selectedTask ? selectedTask.name : 'New Task')
-   
+
     function taskFormSubmit(e){
         // Prevent default submit/page reload
         e.preventDefault()
@@ -38,7 +38,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                 response = await put(`/tasks/${selectedTask.id}`, getTask())
             else
                 response = await post('/tasks', getTask())
-               
+
             if (!response.ok)
                 throw new Error(`[${response.status}]: ${response.statusText}`)
             const task = await response.json()
@@ -62,7 +62,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
 
     const deleteTask = async () => {
         if (!selectedTask) {
-            console.error('trying to delete non-existent task')  
+            console.error('trying to delete non-existent task')
             return
         }
         try {

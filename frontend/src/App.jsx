@@ -4,7 +4,6 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {TaskPage} from "@/src/pages/TaskPage.jsx";
 import {Register} from './pages/Registration'
 import PageLayout from './pages/Layout'
-import SharedWithMe from './pages/SharedWithMe'
 import ProjectPage from './pages/ProjectPage';
 import RecentlyDeleted from "@/src/pages/RecentlyDeleted.jsx";
 import ProjectProvider from "@/components/ProjectProvider";
@@ -17,7 +16,7 @@ export default function Component() {
                     <Route path="/" element={<ProjectProvider><PageLayout/></ProjectProvider>}>
                         <Route index element={<TaskPage/>}/>
                         <Route path="deleted" element={<RecentlyDeleted/>}/>
-                        <Route path="shared" element={<SharedWithMe/>}/>
+                        {/*<Route path="project" element={<ProjectPage/>}/>*/}
                         <Route path="project/:projectID" element={<ProjectPage/>}/>
                     </Route>
                     <Route path="/Login" element={<Login/>}/>
