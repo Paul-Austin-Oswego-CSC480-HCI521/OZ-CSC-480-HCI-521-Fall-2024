@@ -92,7 +92,7 @@ export const setTaskChecked = async (tasks, setTasks, taskId, checked) => {
         if ((await put(`/tasks/${taskId}`, updatedTask)).ok) {
             setTasks(tasks => {
                 const newTasks = structuredClone(tasks)
-                newTasks[taskToUpdate.id] = updatedTask
+                newTasks[taskId] = updatedTask
                 return newTasks
             })
         }
