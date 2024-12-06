@@ -31,10 +31,10 @@ export function PasswordInput({id, name, label, onChildPasswordData, inputClassN
                     title = { reveal_pw ?  "Hide password" : "Show password" }
                 >
                 <span className='sr-only'>
-                    { reveal_pw ?  "Hide password" : "Show password" }
+                    { reveal_pw ? "Show password" : "Hide password" }
                 </span>
                 <span>
-                    { reveal_pw ? hideIcon : showIcon }
+                    { reveal_pw ?  showIcon : hideIcon }
                 </span>
                 </Button>
             </div>
