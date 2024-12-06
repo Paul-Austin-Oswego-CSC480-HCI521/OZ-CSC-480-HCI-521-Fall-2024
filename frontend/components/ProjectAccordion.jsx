@@ -28,7 +28,7 @@ function ProjectAccordion() {
                     <Button
                         size="icon"
                         variant="ghost"
-                        onClick={addProject}
+                        onClick={() => addProject()}
                         //added 'flex justify-center items-center'
                         className="absolute z-10 w-10 h-10 top-1  left-28 hover:border hover:border-neutral-200 hover:bg-neutral-50"
                     >
