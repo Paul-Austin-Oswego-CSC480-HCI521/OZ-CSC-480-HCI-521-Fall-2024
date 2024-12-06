@@ -137,4 +137,14 @@ public class TaskResource {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         return Response.ok(taskDAO.getTrashedUserTasks(user.getEmail())).build();
     }
+
+    @DELETE
+    @Path("/{taskId}")
+    public Response deleteTask(@PathParam("taskId") int taskId) {
+        User user = userDAO.getUserByEmail(jwt.getSubject());
+        if (user == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        taskDAO.deleteTask(taskId, user.getEmail());
+        return Response.noContent().build();
+    }
 }

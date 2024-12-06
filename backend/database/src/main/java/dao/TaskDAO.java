@@ -279,7 +279,7 @@ public class TaskDAO {
     }
 
     // Delete a task by ID
-    private void deleteTask(int taskId, String userEmail) {
+    public void deleteTask(int taskId, String userEmail) {
         String sql = "DELETE FROM tasks WHERE id = ? AND user_email = ?";
 
         try (Connection conn = DriverManager.getConnection(sqlPath);
