@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { fetchTasks, formatTasks, ProjectContext } from '@/lib/taskProjectUtils'
+import { fetchTasks, formatTasks, ProjectContext, setTaskChecked } from '@/lib/taskProjectUtils'
 
 import { Button } from '@/components/ui/button'
 import { TaskTable } from '@/components/TaskTable'
@@ -77,8 +77,7 @@ export const TaskPage = () => {
                     data={formatTasks(tasks, projects, activeTab)}
                     onTaskSelect={handleTaskSelect}
                     selectedTask={lastSelectedTask}
-                    tasks={tasks}
-                    setTasks={setTasks}
+                    setChecked={(checked, taskId) => setTaskChecked(tasks, setTasks, taskId, checked)}
                 />
             </TaskPageContent>
         </>

@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 export default function ProjectProvider({children}) {
     const [projects, setProjects] = useState(null)
-    const [trashedProjects, setTrashedProjects] = useState(null)
+    const [trashedProjects, setTrashedProjects] = useState([])
     const location = useLocation()
 
     const createDefaultProject = async () => {

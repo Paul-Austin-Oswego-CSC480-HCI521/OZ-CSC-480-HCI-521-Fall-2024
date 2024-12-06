@@ -58,5 +58,9 @@ export const taskColumnsDeleted = [
     {
         accessorKey: "recover",
         header: "",
-    }
+    },
+    {
+        accessorKey: "delete",
+        header: "",
+    },
 ]

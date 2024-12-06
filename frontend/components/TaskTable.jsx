@@ -26,8 +26,9 @@ export function TaskTable({
                               data,
                               onTaskSelect,
                               selectedTask,
-                              tasks,
-                              setTasks
+                              setChecked,
+                              restoreItem,
+                              deleteItem
                           }) {
     const [sorting, setSorting] = React.useState([])
     const [highlightedTask, setSelectedTask] = React.useState(selectedTask);
@@ -44,59 +45,7 @@ export function TaskTable({
         },
     })
 
-
-    async function handleCheckChange(checked, taskId) {
-        let status = 0;
-        if (checked === true) {
-            status = 1;
-        }
-        try {
-            let taskToUpdate = tasks[taskId]
-            const updatedTask = {
-                ...taskToUpdate,
-                status: status
-            };
-
-            await fetch(`/tasks/${taskId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedTask),
-            });
-            setTasks(tasks => {
-                const newTasks = structuredClone(tasks)
-                newTasks[taskToUpdate.id] = updatedTask
-                return newTasks
-            })
-        } catch (error) {
-            console.error("Error updating task completion status:", error);
-        }
-        return checked;
-    }
-
-
-    const handleRestore = async (taskId) => {
-        try {
-            await fetch(`/tasks/restore/${taskId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-        } catch (error) {
-            console.error("Error updating task completion status:", error);
-        }
-        setTasks(tasks => {
-            const {[taskId]: _, ...rest} = tasks
-            return rest
-        })
-    }
-
-
-
-
-    function CellContent({ cellContent, cell, taskid }) {
+    function CellContent({ cellContent, cell, taskid: taskId }) {
         if (cell.column.columnDef.accessorKey === "completed") {
             return (
                 <span className="pl-16 pr-0 flex">
@@ -105,7 +54,7 @@ export function TaskTable({
                   className="w-5 h-5"
                   defaultChecked={cellContent === true}
                   onClick={(e) => e.stopPropagation()}
-                  onCheckedChange={(checked) => handleCheckChange(checked, taskid)}
+                  onCheckedChange={(checked) => setChecked(checked, taskId)}
               />,
               cell.getContext()
           )}
@@ -118,12 +67,22 @@ export function TaskTable({
             return (
                 <span className="">
                 {flexRender(
-                    <Button onClick={() => handleRestore(taskid)}  className="w-14.5 h-8 m-0 border-0">
+                    <Button onClick={() => restoreItem(taskId)}  className="w-14.5 h-8 m-0 border-0">
                         Recover
                     </Button>
                 )}
             </span>
             );
+        }
+
+        if (cell.column.columnDef.accessorKey === "delete") {
+            return (
+                <span className="">
+                    {flexRender(
+                        <Button onClick={() => deleteItem(taskId)} className="w-14.5 h-8 m-0 border-0">Delete Permanently</Button>
+                    )}
+                </span>
+            )
         }
 
 
@@ -165,9 +124,11 @@ export function TaskTable({
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
                                 onClick={() => {
-                                setSelectedTask(row.id);
-                                onTaskSelect(row.original.id);
-                                  }}
+                                    if (setSelectedTask)
+                                        setSelectedTask(row.id);
+                                    if (onTaskSelect)
+                                        onTaskSelect(row.original.id);
+                                }}
                                 className={`cursor-pointer hover:bg-gray-100 ${highlightedTask === row.id ? 'bg-gray-100' : ''}`}
 
 
