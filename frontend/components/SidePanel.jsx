@@ -6,19 +6,20 @@ import {LogOutIcon} from "lucide-react"
 export function SidePanel() {
     return (
       <nav className="mt-6 bg-blueLight w-[222px] fixed top-0 bottom-0 pt-16">
-            <ul className="flex flex-col h-full">
-                <li className="flex flex-col">
-                    <NavButton href="/">My Tasks</NavButton>
+            <ul className="flex flex-col h-full ml-4">
+                <li className="flex flex-col mr-4">
+                    <NavButton href="/">
+                            My Tasks
+                    </NavButton>
                 </li>
-                <li className="flex flex-col">
-                    <NavButton href="/deleted">Recently Deleted</NavButton>
+                <li className="flex flex-col mr-4">
+                    <NavButton href="/deleted">                      
+                            Recently Deleted
+                    </NavButton>
                 </li>
-                <li className="flex flex-col">
-                    <NavButton href="/shared">Shared with Me</NavButton>
-                </li>
-                <hr className="w-48 mx-auto my-6 border-neutral-400"/>
+                <hr className="w-[11rem] ml-1 my-3 border-neutral-400"/>
                 <li>
-                    <menu className="flex flex-col items-center">
+                    <menu className="flex flex-col items-start">
                         <ProjectAccordion/>
                     </menu>
                 </li>
