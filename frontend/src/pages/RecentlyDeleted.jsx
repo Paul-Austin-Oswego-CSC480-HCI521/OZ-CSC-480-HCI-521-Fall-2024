@@ -26,7 +26,7 @@ export default function RecentlyDeleted() {
                     restoreItem={taskId => restoreTask(setTrashedTasks, taskId)}
                     deleteItem={taskId => deleteTask(setTrashedTasks, taskId)}
                 />
-                <h3 className='text-left text-[32px] font-bold pl-20 pr-20 pt-20'>Projects</h3>
+                <h3 className='text-4xl font-bold ml-20 mb-8 mt-24'>Projects</h3>
                 <TaskTable
                     columns={projectColumns}
                     data={formatProjects(trashedProjects)}
@@ -41,8 +41,13 @@ export default function RecentlyDeleted() {
 const projectColumns = [
     {
         accessorKey: "padding-left",
-        header: "",
+        header: ({}) => {
+            return (
+                <div className='w-3'></div>
+            )
+        },
         sortingFns: "basic",
+        
     },
     {
         accessorKey: "title",
@@ -58,12 +63,38 @@ const projectColumns = [
         },
     },
     {
+        accessorKey: "padding-left",
+        header: ({}) => {
+            return (
+                <div className='w-64'></div>
+            )
+        },
+        sortingFns: "basic",
+    },
+    {
+        accessorKey: "padding-left",
+        header: ({}) => {
+            return (
+                <div className='w-16'></div>
+            )
+        },
+        sortingFns: "basic",
+    },
+    {
         accessorKey: "recover",
-        header: "",
+        header: ({}) => {
+            return (
+                <div className='sr-only'>Recover Project Buttons</div>
+            )
+        },
     },
     {
         accessorKey: "delete",
-        header: "",
+        header: ({}) => {
+            return (
+                <div className='sr-only'>Delete Project Buttons</div>
+            )
+        },
     },
 ]
 
