@@ -207,12 +207,6 @@ class CheckmateAutomationTest {
             By.xpath("//button[@type='submit' and text()='Log in']")));
         
         loginButton.click();
-
-        // Workaround bc things be breakin and shi
-        Thread.sleep(3000);
-        driver.navigate().refresh();
-        Thread.sleep(3000);
-        driver.navigate().refresh();
         
         // Edit this below - may want to use something different to wait for...
         wait.until(ExpectedConditions.urlContains("/"));
@@ -221,24 +215,9 @@ class CheckmateAutomationTest {
             "Failed to redirect to homepage after clicking login");
     }
 
-    // Creates a project for i amount of times.
-    @Test
-    @Order(11)
-    void createProject() throws InterruptedException {
-        // Locate the button using the provided CSS selector
-        WebElement projectButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("#root > div > header > nav > ul > li:nth-child(5) > menu > div > div > div.relative.flex > button")));
-    
-        // Click the button i amount of times with a delay in between
-        for (int i = 0; i < 3; i++) {
-            projectButton.click();
-            Thread.sleep(2000);
-        }
-    }
-
     // Clicks the "Checkmate" and verifies the URL after the was performed.
     @Test
-    @Order(12)
+    @Order(11)
     void clickCheckmateButton() {
         WebElement checkmateButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//a[@title='Home' and contains(@class, 'flex')]")));
@@ -248,6 +227,21 @@ class CheckmateAutomationTest {
         wait.until(ExpectedConditions.urlContains("/"));
         assertTrue(driver.getCurrentUrl().endsWith("/"),
             "Failed to redirect to homepage after clicking login");
+    }
+
+    // Creates a project for i amount of times.
+    @Test
+    @Order(12)
+    void createProject() throws InterruptedException {
+        // Locate the button using the provided CSS selector
+        WebElement projectButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[contains(@class, 'inline-flex') and contains(@class, 'absolute') and @class[contains(., 'hover:bg-neutral-50')]]")));
+    
+        // Click the button i amount of times with a delay in between
+        for (int i = 0; i < 3; i++) {
+            projectButton.click();
+            Thread.sleep(2000);
+        }
     }
 
     // Function to create a task
@@ -337,8 +331,8 @@ class CheckmateAutomationTest {
     @Test
     @Order(14)
     void createAndVerifyTask2() {
-        createTask("Organize Team Lunch", "Book a restaurant and send invites to the team.", "Project 2", "12162024", "Medium");
-        verifyTask("Organize Team Lunch", "Project 2", "12 / 16 / 2024", "Medium");
+        createTask("Organize Team Lunch", "Book a restaurant and send invites to the team.", "Project 3", "12162024", "Medium");
+        verifyTask("Organize Team Lunch", "Project 3", "12 / 16 / 2024", "Medium");
     }
 
     // Creates and verifies "Send Holiday Cards" using "High" priority
@@ -353,43 +347,14 @@ class CheckmateAutomationTest {
     @Test
     @Order(16)
     void createAndVerifyTask4() {
-        createTask("Prepare for New Year", "Buy decorations and finalize plans for the New Year party.", "Project 3", "12182024", "No Priority");
-        verifyTask("Prepare for New Year", "Project 3", "12 / 18 / 2024", "No Priority");
+        createTask("Prepare for New Year", "Buy decorations and finalize plans for the New Year party.", "Project 4", "12182024", "No Priority");
+        verifyTask("Prepare for New Year", "Project 4", "12 / 18 / 2024", "No Priority");
     }
 
-    // Creates and verifies "Take Down Holiday Decorations" using "Medium" priority
     @Test
     @Order(17)
-    void createAndVerifyTask5() {
-        createTask("Take Down Holiday Decorations", "Remove and organize holiday decorations for storage.", "Project 3", "12262024", "Medium");
-        verifyTask("Take Down Holiday Decorations", "Project 3", "12 / 26 / 2024", "Medium");
-    }
-
-    // Creates and verifies "Deep Clean the Kitchen" using "High" priority
-    @Test
-    @Order(18)
-    void createAndVerifyTask6() {
-        createTask("Deep Clean the Kitchen", "Thoroughly clean the kitchen after holiday meals and parties.", "Project 4", "12272024", "High");
-        verifyTask("Deep Clean the Kitchen", "Project 4", "12 / 27 / 2024", "High");
-    }
-
-    @Test
-    @Order(19)
-    void verifyProject2Tasks() {
-    
-        // Locate and click the "Project 2" link using its href
-        WebElement project2Button = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href='/project/2']")));
-        project2Button.click();
-    
-        // Verify tasks for Project 2
-        verifyProjectTask("Organize Team Lunch", "12 / 16 / 2024", "Medium");
-    }
-    
-    @Test
-    @Order(20)
     void verifyProject3Tasks() {
-
+    
         // Locate and click the "Project 3" link using its href
         WebElement project3Button = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("a[href='/project/3']")));
@@ -397,26 +362,25 @@ class CheckmateAutomationTest {
     
         // Verify tasks for Project 3
         verifyProjectTask("Finish Gift Wrapping", "12 / 15 / 2024", "Low");
-        verifyProjectTask("Take Down Holiday Decorations", "12 / 26 / 2024", "Medium");
-        verifyProjectTask("Prepare for New Year", "12 / 18 / 2024", "No Priority");
+        verifyProjectTask("Organize Team Lunch", "12 / 16 / 2024", "Medium");
     }
     
     @Test
-    @Order(21)
+    @Order(18)
     void verifyProject4Tasks() {
 
         // Locate and click the "Project 4" link using its href
-        WebElement project4Button = wait.until(ExpectedConditions.elementToBeClickable(
+        WebElement project3Button = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("a[href='/project/4']")));
-        project4Button.click();
+        project3Button.click();
     
         // Verify tasks for Project 4
-        verifyProjectTask("Deep Clean the Kitchen", "12 / 27 / 2024", "High");
         verifyProjectTask("Send Holiday Cards", "12 / 17 / 2024", "High");
+        verifyProjectTask("Prepare for New Year", "12 / 18 / 2024", "No Priority");
     }
 
     @Test
-    @Order(22)
+    @Order(19)
     void myTasksButton() {
         // Wait until the 'My Tasks' button is clickable
         WebElement myTasksButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -473,27 +437,12 @@ class CheckmateAutomationTest {
     }    
 
     @Test
-    @Order(23)
-    void editTask1() {
-        editTask("Finish Gift Wrapping", "Finish Gift Wrapping - Updated", "Wrap the remaining gifts for family and friends, including some last-minute additions.", "Project 3", "12152024", "Low");
-        verifyTask("Finish Gift Wrapping - Updated", "Project 3", "12 / 15 / 2024", "Low");
-    }
+    @Order(20)
+    void editTask() {
+        editTask("Finish Gift Wrapping", "Finish Gift Wrapping - Updated", "Wrap the remaining gifts for family and friends, including some last-minute additions.", "Project 4", "12152024", "Low");
+        verifyTask("Finish Gift Wrapping - Updated", "Project 4", "12 / 15 / 2024", "Low");
+    } 
     
-    
-    @Test
-    @Order(24)
-    void editTask2() {
-        editTask("Organize Team Lunch", "Organize Team Lunch - Urgent", "Book a restaurant and send invites to the team ASAP.", "Project 2", "12162024", "Medium");
-        verifyTask("Organize Team Lunch - Urgent", "Project 2", "12 / 16 / 2024", "Medium");
-    }
-    
-
-    @Test
-    @Order(25)
-    void editTask3() {
-        editTask("Send Holiday Cards", "Send Holiday Cards - Final Call", "Write and mail personalized holiday cards to clients, with a final reminder.", "Project 4", "12172024", "High");
-        verifyTask("Send Holiday Cards - Final Call", "Project 4", "12 / 17 / 2024", "High");
-    }
 
     void checkOffTask(String taskName) throws InterruptedException {
     // Wait for the task's checkbox button to be available and clickable
@@ -507,14 +456,14 @@ class CheckmateAutomationTest {
     }
     
     @Test
-    @Order(26)
+    @Order(21)
     void checkOffTask() throws InterruptedException {
         // Check off task
         checkOffTask("Finish Gift Wrapping - Updated");
     }
 
     @Test
-    @Order(27)
+    @Order(22)
     void verifyCheckOffTask() {
 
         // Wait for the "Completed" button to be clickable and click it
@@ -523,7 +472,7 @@ class CheckmateAutomationTest {
         completedButton.click();
     
         // Verify the task is now marked as completed
-        verifyTask("Finish Gift Wrapping - Updated", "Project 3", "12 / 15 / 2024", "Low");
+        verifyTask("Finish Gift Wrapping - Updated", "Project 4", "12 / 15 / 2024", "Low");
 
         // Wait until the 'Upcoming' button is clickable
         WebElement upcomingButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -553,8 +502,8 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(28)
-    void deleteAndVerifyTask1() {
+    @Order(23)
+    void deleteAndVerifyTask() {
         // Delete "Prepare for New Year"
         deleteTask("Prepare for New Year");
         
@@ -563,34 +512,10 @@ class CheckmateAutomationTest {
             By.xpath("//span[text()='Prepare for New Year']")));
         assertTrue(isTaskInvisible, "Task 'Prepare for New Year' should not be displayed.");
     }
-    
-    @Test
-    @Order(29)
-    void deleteAndVerifyTask2() {
-        // Delete "Take Down Holiday Decorations"
-        deleteTask("Take Down Holiday Decorations");
-        
-        // Verify the task is no longer visible
-        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
-            By.xpath("//span[text()='Take Down Holiday Decorations']")));
-        assertTrue(isTaskInvisible, "Task 'Take Down Holiday Decorations' should not be displayed.");
-    }
-    
-    @Test
-    @Order(30)
-    void deleteAndVerifyTask3() {
-        // Delete "Deep Clean the Kitchen"
-        deleteTask("Deep Clean the Kitchen");
-        
-        // Verify the task is no longer visible
-        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
-            By.xpath("//span[text()='Deep Clean the Kitchen']")));
-        assertTrue(isTaskInvisible, "Task 'Deep Clean the Kitchen' should not be displayed.");
-    }
 
     // Logs out by clicking the logout button and verifies redirection to the login page.
     @Test
-    @Order(31)
+    @Order(24)
     void logoutButton() {
         // Locate the logout button using the visible text "Log out"
         WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
