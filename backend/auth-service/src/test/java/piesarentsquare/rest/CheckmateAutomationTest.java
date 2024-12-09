@@ -457,15 +457,22 @@ class CheckmateAutomationTest {
     
     @Test
     @Order(21)
-    void checkOffTask() throws InterruptedException {
+    void checkOffTask1() throws InterruptedException {
         // Check off task
         checkOffTask("Finish Gift Wrapping - Updated");
     }
 
     @Test
     @Order(22)
-    void verifyCheckOffTask() {
+    void checkOffTask2() throws InterruptedException {
+        // Check off task
+        checkOffTask("Organize Team Lunch");
+    }
 
+    @Test
+    @Order(23)
+    void verifyCheckOffTask() {
+    
         // Wait for the "Completed" button to be clickable and click it
         WebElement completedButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[text()='Completed']")));
@@ -473,14 +480,20 @@ class CheckmateAutomationTest {
     
         // Verify the task is now marked as completed
         verifyTask("Finish Gift Wrapping - Updated", "Project 4", "12 / 15 / 2024", "Low");
-
+        verifyTask("Organize Team Lunch", "Project 3", "12 / 16 / 2024", "Medium");
+    }
+    
+    @Test
+    @Order(24)
+    void clickUpcomingButton() {
+    
         // Wait until the 'Upcoming' button is clickable
         WebElement upcomingButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[normalize-space(text())='Upcoming']")));
-        
+    
         // Click the 'Upcoming' button
         upcomingButton.click();
-    }
+    }    
 
     void deleteTask(String TaskName) {
         // Locate the task to be edited by its old name
@@ -502,8 +515,8 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(23)
-    void deleteAndVerifyTask() {
+    @Order(25)
+    void deleteAndVerifyTask1() {
         // Delete "Prepare for New Year"
         deleteTask("Prepare for New Year");
         
@@ -513,9 +526,21 @@ class CheckmateAutomationTest {
         assertTrue(isTaskInvisible, "Task 'Prepare for New Year' should not be displayed.");
     }
 
+    @Test
+    @Order(26)
+    void deleteAndVerifyTask2() {
+        // Delete "Send Holiday Cards"
+        deleteTask("Send Holiday Cards");
+        
+        // Verify the task is no longer visible
+        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Send Holiday Cards']")));
+        assertTrue(isTaskInvisible, "Task 'Send Holiday Cards' should not be displayed.");
+    }
+
     // Logs out by clicking the logout button and verifies redirection to the login page.
     @Test
-    @Order(24)
+    @Order(27)
     void logoutButton() {
         // Locate the logout button using the visible text "Log out"
         WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -527,6 +552,12 @@ class CheckmateAutomationTest {
         assertTrue(driver.getCurrentUrl().endsWith("/login"),
             "Failed to redirect to login page after clicking logout");
     }
+
+    // Test for Unchecking Task
+    // Test for Deleting a project
+    // Test for Recently Deleted button
+    // Test for Recovering a Project
+    // test for recovering a delete task
 
     // Tears down the WebDriver after all tests complete.
     @AfterAll
