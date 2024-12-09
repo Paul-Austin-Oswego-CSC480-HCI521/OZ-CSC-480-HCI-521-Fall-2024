@@ -17,13 +17,21 @@ export default function proxyPlugin(authRoot, apiRoot) {
             return null
         const response = await instance.get(authRoot + '/auth/jwt', { headers: { 'Oz-Session-Id': req.cookies.ozSessionID } })
             .catch(error => handleRequestError(error, res, 'getJwt'))
-        return await response.data
+        if (response && response.status == 200)
+            return await response.data
+        else
+            return null
     }
 
     async function authHeaders(req, res, headers) {
         headers = headers ? headers : {}
-        headers['Authorization'] = 'Bearer ' + await getJwt(req, res)
-        return headers
+        const jwt = await getJwt(req, res)
+        if (jwt) {
+            headers['Authorization'] = 'Bearer ' + jwt
+            return headers
+        } else
+            return null
+
     }
 
     async function handleRequestError(error, res, context) {
@@ -43,7 +51,10 @@ export default function proxyPlugin(authRoot, apiRoot) {
     function proxyGet() {
         return async (req, res) => {
             try {
-                const response = await instance.get(apiRoot + req.path, { headers: await authHeaders(req) })
+                const headers = await authHeaders(req)
+                if (!headers)
+                    throw new Error('could not auth')
+                const response = await instance.get(apiRoot + req.path, { headers })
                     .catch(error => handleRequestError(error, res, 'get: ' + req.path))
                 res.send(response.data).end()
             } catch (error) {
@@ -55,12 +66,14 @@ export default function proxyPlugin(authRoot, apiRoot) {
     function proxyPost() {
         return async (req, res) => {
             try {
-                const response = await instance.post(apiRoot + req.path, req.body, {
-                    headers: await authHeaders(req, {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    })
-                }).catch(error => handleRequestError(error, res, 'post: ' + req.path))
+                const headers = await authHeaders(req, {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                })
+                if (!headers)
+                    throw new Error('could not auth')
+                const response = await instance.post(apiRoot + req.path, req.body, { headers })
+                    .catch(error => handleRequestError(error, res, 'post: ' + req.path))
                 res.send(response.data).end()
             } catch (error) {
                 handleRequestError(error, res, 'post: ' + req.path)
@@ -71,12 +84,14 @@ export default function proxyPlugin(authRoot, apiRoot) {
     function proxyPut() {
         return async (req, res) => {
             try {
-                const response = await instance.put(apiRoot + req.path, req.body, {
-                    headers: await authHeaders(req, {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    })
-                }).catch(error => handleRequestError(error, res, 'put: ' + req.path))
+                const headers = await authHeaders(req, {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                })
+                if (!headers)
+                    throw new Error('could not auth')
+                const response = await instance.put(apiRoot + req.path, req.body, { headers })
+                    .catch(error => handleRequestError(error, res, 'put: ' + req.path))
                 res.send(response.data).end()
             } catch (error) {
                 handleRequestError(error, res, 'put: ' + req.path)
@@ -87,7 +102,10 @@ export default function proxyPlugin(authRoot, apiRoot) {
     function proxyDelete() {
         return async (req, res) => {
             try {
-                const response = await instance.delete(apiRoot + req.path, { headers: await authHeaders(req) })
+                const headers = await authHeaders(req)
+                if (!headers)
+                    throw new Error('could not auth')
+                const response = await instance.delete(apiRoot + req.path, { headers })
                     .catch(error => handleRequestError(error, res, 'delete: ' + req.path))
                 res.send(response.data).end()
             } catch (error) {
