@@ -353,12 +353,14 @@ class CheckmateAutomationTest {
 
     @Test
     @Order(17)
-    void verifyProject3Tasks() {
+    void verifyProject3Tasks() throws InterruptedException {
     
         // Locate and click the "Project 3" link using its href
         WebElement project3Button = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("a[href='/project/3']")));
         project3Button.click();
+
+        Thread.sleep(1000);
     
         // Verify tasks for Project 3
         verifyProjectTask("Finish Gift Wrapping", "12 / 15 / 2024", "Low");
@@ -367,12 +369,14 @@ class CheckmateAutomationTest {
     
     @Test
     @Order(18)
-    void verifyProject4Tasks() {
+    void verifyProject4Tasks() throws InterruptedException {
 
         // Locate and click the "Project 4" link using its href
         WebElement project3Button = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("a[href='/project/4']")));
         project3Button.click();
+
+        Thread.sleep(1000);
     
         // Verify tasks for Project 4
         verifyProjectTask("Send Holiday Cards", "12 / 17 / 2024", "High");
@@ -471,7 +475,7 @@ class CheckmateAutomationTest {
 
     @Test
     @Order(23)
-    void verifyCheckOffTask() {
+    void verifyCheckOffTasks1() {
     
         // Wait for the "Completed" button to be clickable and click it
         WebElement completedButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -485,6 +489,20 @@ class CheckmateAutomationTest {
     
     @Test
     @Order(24)
+    void uncheckTask1() throws InterruptedException {
+        // Check off task
+        checkOffTask("Finish Gift Wrapping - Updated");
+    }
+
+    @Test
+    @Order(25)
+    void uncheckTask2() throws InterruptedException {
+        // Check off task
+        checkOffTask("Organize Team Lunch");
+    }
+    
+    @Test
+    @Order(26)
     void clickUpcomingButton() {
     
         // Wait until the 'Upcoming' button is clickable
@@ -493,7 +511,15 @@ class CheckmateAutomationTest {
     
         // Click the 'Upcoming' button
         upcomingButton.click();
-    }    
+    }
+
+    @Test
+    @Order(27)
+    void verifycheckOffTasks2() {
+        // Verify the task is now marked as not completed
+        verifyTask("Finish Gift Wrapping - Updated", "Project 4", "12 / 15 / 2024", "Low");
+        verifyTask("Organize Team Lunch", "Project 3", "12 / 16 / 2024", "Medium");
+    }
 
     void deleteTask(String TaskName) {
         // Locate the task to be edited by its old name
@@ -515,7 +541,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(25)
+    @Order(28)
     void deleteAndVerifyTask1() {
         // Delete "Prepare for New Year"
         deleteTask("Prepare for New Year");
@@ -527,7 +553,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(26)
+    @Order(29)
     void deleteAndVerifyTask2() {
         // Delete "Send Holiday Cards"
         deleteTask("Send Holiday Cards");
@@ -538,9 +564,14 @@ class CheckmateAutomationTest {
         assertTrue(isTaskInvisible, "Task 'Send Holiday Cards' should not be displayed.");
     }
 
+    // Test for Deleting a project
+    // Test for Recently Deleted button
+    // Test for Recovering a Project
+    // test for recovering a delete task
+
     // Logs out by clicking the logout button and verifies redirection to the login page.
     @Test
-    @Order(27)
+    @Order(30)
     void logoutButton() {
         // Locate the logout button using the visible text "Log out"
         WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -552,12 +583,6 @@ class CheckmateAutomationTest {
         assertTrue(driver.getCurrentUrl().endsWith("/login"),
             "Failed to redirect to login page after clicking logout");
     }
-
-    // Test for Unchecking Task
-    // Test for Deleting a project
-    // Test for Recently Deleted button
-    // Test for Recovering a Project
-    // test for recovering a delete task
 
     // Tears down the WebDriver after all tests complete.
     @AfterAll
