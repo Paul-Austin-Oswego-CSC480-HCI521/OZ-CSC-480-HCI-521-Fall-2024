@@ -47,9 +47,7 @@ export default function ProjectProvider({children}) {
         try {
             const response = await fetch(`/projects/${projectID}`, {method: 'DELETE'})
             if (response.ok) {
-                setProjects(prevTasks => prevTasks.filter(projects => projects.id !== projectID))
-                if (window.location.pathname == `/project/${projectID}`)
-                    window.location.replace('/')
+                setTrashedProjects(prevTasks => prevTasks.filter(projects => projects.id !== projectID))
             } else {
                 console.log(`Error deleting task ${projectID}`)
             }
