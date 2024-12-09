@@ -37,6 +37,6 @@ REM start the server in either dev mode or normal depending on the command line 
 if "%~2"=="dev" (
     start mvn -pl %1 liberty:dev ^&^& exit
 ) else (
-    start /b mvn -pl %1 liberty:run < nul >nul 2>&1 ^&^& exit
+    start /b mvn -pl %1 liberty:run < nul ^&^& exit
 )
 goto:eof
