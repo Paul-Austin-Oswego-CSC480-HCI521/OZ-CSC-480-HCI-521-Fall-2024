@@ -7,3 +7,5 @@ auth.env
 backend/database-service/target 2/**
 backend/auth-service/target 2/classes/**
 backend/auth-service/target 2/**
+
+cert/
