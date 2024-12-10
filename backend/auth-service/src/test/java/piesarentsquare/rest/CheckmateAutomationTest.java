@@ -120,7 +120,7 @@ class CheckmateAutomationTest {
 
     // Inputs the email into the registration form and verifies it was entered correctly.
     @Test
-    @Order(4)
+    @Order(3)
     void enterRegistrationEmail() {
         WebElement emailInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.id("email")));
@@ -133,7 +133,7 @@ class CheckmateAutomationTest {
     
     // Inputs the password into the registration form and verifies it was entered correctly.
     @Test
-    @Order(5)
+    @Order(4)
     void enterRegistrationPassword() {
         WebElement passwordInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.id("password")));
@@ -146,7 +146,7 @@ class CheckmateAutomationTest {
     
     // Inputs the confirmation password into the registration form and verifies it was entered correctly.
     @Test
-    @Order(6)
+    @Order(5)
     void enterRegistrationConfirmPassword() {
         WebElement confirmPasswordInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.id("confirmPassword")));
@@ -159,8 +159,8 @@ class CheckmateAutomationTest {
 
     // Clicks the "Sign Up" button and verifies the action was performed.
     @Test
-    @Order(7)
-    void clickSignUpButton() throws InterruptedException {
+    @Order(6)
+    void signUpButton() throws InterruptedException {
         WebElement signUpButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("button[type='submit']")));
         
@@ -174,7 +174,7 @@ class CheckmateAutomationTest {
 
     // Inputs the email into the login form and verifies it was entered correctly.
     @Test
-    @Order(8)
+    @Order(7)
     void enterLoginEmail() {
         
         WebElement emailInput = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -188,7 +188,7 @@ class CheckmateAutomationTest {
     
     // Inputs the password into the login form and verifies it was entered correctly.
     @Test
-    @Order(9)
+    @Order(8)
     void enterLoginPassword() {
         WebElement passwordInput = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.id("password")));
@@ -201,8 +201,8 @@ class CheckmateAutomationTest {
 
     // Clicks the "Log in" button and verifies the action was performed.
     @Test
-    @Order(10)
-    void clickLoginButton() throws InterruptedException {
+    @Order(9)
+    void loginButton() throws InterruptedException {
         WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[@type='submit' and text()='Log in']")));
         
@@ -217,8 +217,8 @@ class CheckmateAutomationTest {
 
     // Clicks the "Checkmate" and verifies the URL after the was performed.
     @Test
-    @Order(11)
-    void clickCheckmateButton() {
+    @Order(10)
+    void checkmateButton() {
         WebElement checkmateButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//a[@title='Home' and contains(@class, 'flex')]")));
         
@@ -231,7 +231,7 @@ class CheckmateAutomationTest {
 
     // Creates a project for i amount of times.
     @Test
-    @Order(12)
+    @Order(11)
     void createProject() throws InterruptedException {
         // Locate the button using the provided CSS selector
         WebElement projectButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -321,7 +321,7 @@ class CheckmateAutomationTest {
 
     // Creates and verifies "Finish Gift Wrapping" using "Low" priority
     @Test
-    @Order(13)
+    @Order(12)
     void createAndVerifyTask1() {
         createTask("Finish Gift Wrapping", "Wrap the remaining gifts for family and friends.", "Project 3", "12152024", "Low");
         verifyTask("Finish Gift Wrapping", "Project 3", "12 / 15 / 2024", "Low");
@@ -329,7 +329,7 @@ class CheckmateAutomationTest {
 
     // Creates and verifies "Organize Team Lunch" using "Medium" priority
     @Test
-    @Order(14)
+    @Order(13)
     void createAndVerifyTask2() {
         createTask("Organize Team Lunch", "Book a restaurant and send invites to the team.", "Project 3", "12162024", "Medium");
         verifyTask("Organize Team Lunch", "Project 3", "12 / 16 / 2024", "Medium");
@@ -337,7 +337,7 @@ class CheckmateAutomationTest {
 
     // Creates and verifies "Send Holiday Cards" using "High" priority
     @Test
-    @Order(15)
+    @Order(14)
     void createAndVerifyTask3() {
         createTask("Send Holiday Cards", "Write and mail personalized holiday cards to clients.", "Project 4", "12172024", "High");
         verifyTask("Send Holiday Cards", "Project 4", "12 / 17 / 2024", "High");
@@ -345,14 +345,14 @@ class CheckmateAutomationTest {
 
     // Creates and verifies "Prepare for New Year" using "No Priority"
     @Test
-    @Order(16)
+    @Order(15)
     void createAndVerifyTask4() {
         createTask("Prepare for New Year", "Buy decorations and finalize plans for the New Year party.", "Project 4", "12182024", "No Priority");
         verifyTask("Prepare for New Year", "Project 4", "12 / 18 / 2024", "No Priority");
     }
 
     @Test
-    @Order(17)
+    @Order(16)
     void verifyProject3Tasks() throws InterruptedException {
     
         // Locate and click the "Project 3" link using its href
@@ -368,7 +368,7 @@ class CheckmateAutomationTest {
     }
     
     @Test
-    @Order(18)
+    @Order(17)
     void verifyProject4Tasks() throws InterruptedException {
 
         // Locate and click the "Project 4" link using its href
@@ -384,7 +384,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(19)
+    @Order(18)
     void myTasksButton() {
         // Wait until the 'My Tasks' button is clickable
         WebElement myTasksButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -441,7 +441,7 @@ class CheckmateAutomationTest {
     }    
 
     @Test
-    @Order(20)
+    @Order(19)
     void editTask() {
         editTask("Finish Gift Wrapping", "Finish Gift Wrapping - Updated", "Wrap the remaining gifts for family and friends, including some last-minute additions.", "Project 4", "12152024", "Low");
         verifyTask("Finish Gift Wrapping - Updated", "Project 4", "12 / 15 / 2024", "Low");
@@ -460,21 +460,21 @@ class CheckmateAutomationTest {
     }
     
     @Test
-    @Order(21)
+    @Order(20)
     void checkOffTask1() throws InterruptedException {
         // Check off task
         checkOffTask("Finish Gift Wrapping - Updated");
     }
 
     @Test
-    @Order(22)
+    @Order(21)
     void checkOffTask2() throws InterruptedException {
         // Check off task
         checkOffTask("Organize Team Lunch");
     }
 
     @Test
-    @Order(23)
+    @Order(22)
     void verifyCheckOffTasks1() {
     
         // Wait for the "Completed" button to be clickable and click it
@@ -488,22 +488,22 @@ class CheckmateAutomationTest {
     }
     
     @Test
-    @Order(24)
+    @Order(23)
     void uncheckTask1() throws InterruptedException {
         // Check off task
         checkOffTask("Finish Gift Wrapping - Updated");
     }
 
     @Test
-    @Order(25)
+    @Order(24)
     void uncheckTask2() throws InterruptedException {
         // Check off task
         checkOffTask("Organize Team Lunch");
     }
     
     @Test
-    @Order(26)
-    void clickUpcomingButton() {
+    @Order(25)
+    void upcomingButton() {
     
         // Wait until the 'Upcoming' button is clickable
         WebElement upcomingButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -514,8 +514,8 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(27)
-    void verifycheckOffTasks2() {
+    @Order(26)
+    void verifyCheckOffTasks2() {
         // Verify the task is now marked as not completed
         verifyTask("Finish Gift Wrapping - Updated", "Project 4", "12 / 15 / 2024", "Low");
         verifyTask("Organize Team Lunch", "Project 3", "12 / 16 / 2024", "Medium");
@@ -541,7 +541,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(28)
+    @Order(27)
     void deleteAndVerifyTask1() {
         // Delete "Prepare for New Year"
         deleteTask("Prepare for New Year");
@@ -553,7 +553,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(29)
+    @Order(28)
     void deleteAndVerifyTask2() {
         // Delete "Send Holiday Cards"
         deleteTask("Send Holiday Cards");
@@ -577,7 +577,7 @@ class CheckmateAutomationTest {
     }
     
     @Test
-    @Order(30)
+    @Order(29)
     void deleteAndVerifyProject1() {
         // Delete the project "Default Project"
         deleteProject("Default Project");
@@ -589,7 +589,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(31)
+    @Order(30)
     void deleteAndVerifyProject2() {
         // Delete the project "Project 3"
         deleteProject("Project 2");
@@ -602,7 +602,7 @@ class CheckmateAutomationTest {
     
 
     @Test
-    @Order(32)
+    @Order(31)
     void recentlyDeletedButton() {
         // Wait until the 'Recently Deleted' button is clickable
         WebElement recentlyDeletedButton = wait.until(ExpectedConditions.elementToBeClickable(
@@ -643,7 +643,7 @@ class CheckmateAutomationTest {
     
 
     @Test
-    @Order(33)
+    @Order(32)
     void deleteAndVerifyTaskPermanently() {
         // Delete the task
         deleteItemPermanently("Prepare for New Year");
@@ -655,7 +655,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(34)
+    @Order(33)
     void deleteAndVerifyProjectPermanently() {
         // Delete the project
         deleteItemPermanently("Project 2");
@@ -668,7 +668,7 @@ class CheckmateAutomationTest {
     
 
     @Test
-    @Order(35)
+    @Order(34)
     void recoverAndVerifyTask() {
         // Recover the task
         recoverItem("Send Holiday Cards");
@@ -692,7 +692,7 @@ class CheckmateAutomationTest {
     }
 
     @Test
-    @Order(36)
+    @Order(35)
     void recoverAndVerifyProject() {
         // Recover the task
         recoverItem("Default Project");
@@ -714,7 +714,7 @@ class CheckmateAutomationTest {
 
     // Logs out by clicking the logout button and verifies redirection to the login page.
     @Test
-    @Order(37)
+    @Order(36)
     void logoutButton() {
         // Locate the logout button using the visible text "Log out"
         WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
