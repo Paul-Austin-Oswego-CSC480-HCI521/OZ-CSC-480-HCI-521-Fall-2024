@@ -564,14 +564,157 @@ class CheckmateAutomationTest {
         assertTrue(isTaskInvisible, "Task 'Send Holiday Cards' should not be displayed.");
     }
 
-    // Test for Deleting a project
-    // Test for Recently Deleted button
-    // Test for Recovering a Project
-    // test for recovering a delete task
+    void deleteProject(String projectName) {
+        // Locate the project by its name
+        WebElement projectElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//span[text()='" + projectName + "']")));
+        projectElement.click();
+    
+        // Locate the delete button next to the project
+        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[@class='w-9 h-9 rounded-md flex items-center justify-center hover:bg-gray-200']")));
+        deleteButton.click();
+    }
+    
+    @Test
+    @Order(30)
+    void deleteAndVerifyProject1() {
+        // Delete the project "Default Project"
+        deleteProject("Default Project");
+    
+        // Verify the project is no longer visible
+        boolean isProjectInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Default Project']")));
+        assertTrue(isProjectInvisible, "Project 'Default Project' should not be displayed.");
+    }
+
+    @Test
+    @Order(31)
+    void deleteAndVerifyProject2() {
+        // Delete the project "Project 3"
+        deleteProject("Project 2");
+    
+        // Verify the project is no longer visible
+        boolean isProjectInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Project 2']")));
+        assertTrue(isProjectInvisible, "Project 'Project 2' should not be displayed.");
+    }
+    
+
+    @Test
+    @Order(32)
+    void recentlyDeletedButton() {
+        // Wait until the 'Recently Deleted' button is clickable
+        WebElement recentlyDeletedButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[normalize-space(text())='Recently Deleted']")));
+        
+        // Click the 'Recently Deleted' button
+        recentlyDeletedButton.click();
+        
+        // Verify that the current URL contains the expected endpoint "/"
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.endsWith("/deleted"), "The URL should end with '/deleted' after clicking 'Recently Deleted'");
+    } 
+
+    void deleteItemPermanently(String itemName) {
+        // Locate the row containing the item name
+        WebElement itemRow = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//span[text()='" + itemName + "']")));
+        itemRow.click();
+    
+        // Wait for the "Delete Permanently" button within the row and click it
+        WebElement deletePermanentlyButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//span[text()='" + itemName + "']/ancestor::tr//button[text()='Delete Permanently']")));
+        deletePermanentlyButton.click();
+    }
+    
+
+    void recoverItem(String itemName) {
+        // Locate the row containing the item name
+        WebElement itemRow = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//span[text()='" + itemName + "']")));
+        itemRow.click();
+    
+        // Locate the "Recover" button within the same row and click it
+        WebElement recoverButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//span[text()='" + itemName + "']/ancestor::tr//button[contains(text(), 'Recover')]")));
+        recoverButton.click();
+    }
+    
+
+    @Test
+    @Order(33)
+    void deleteAndVerifyTaskPermanently() {
+        // Delete the task
+        deleteItemPermanently("Prepare for New Year");
+    
+        // Verify the task is no longer visible in the Recently Deleted section
+        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Prepare for New Year']")));
+        assertTrue(isTaskInvisible, "Task 'Prepare for New Year' should not be displayed in the Recently Deleted section.");
+    }
+
+    @Test
+    @Order(34)
+    void deleteAndVerifyProjectPermanently() {
+        // Delete the project
+        deleteItemPermanently("Project 2");
+    
+        // Verify the project is no longer visible in the Recently Deleted section
+        boolean isTaskInvisible = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.xpath("//span[text()='Project 2']")));
+        assertTrue(isTaskInvisible, "Project 'Project 2' should not be displayed in the Recently Deleted section.");
+    }
+    
+
+    @Test
+    @Order(35)
+    void recoverAndVerifyTask() {
+        // Recover the task
+        recoverItem("Send Holiday Cards");
+    
+        // Wait until the 'My Tasks' button is clickable
+        WebElement myTasksButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//a[normalize-space(text())='My Tasks']")));
+        
+        // Click the 'My Tasks' button
+        myTasksButton.click();
+
+        // Verify Task in 'My Tasks'
+        verifyTask("Send Holiday Cards", "Project 4", "12 / 17 / 2024", "High");
+
+        // Wait until the 'Recently Deleted' button is clickable
+        WebElement recentlyDeletedButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//a[normalize-space(text())='Recently Deleted']")));
+        
+        // Click the 'Recently Deleted' button
+        recentlyDeletedButton.click();
+    }
+
+    @Test
+    @Order(36)
+    void recoverAndVerifyProject() {
+        // Recover the task
+        recoverItem("Default Project");
+    
+        // Wait until the 'My Tasks' button is clickable
+        WebElement myTasksButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//a[normalize-space(text())='My Tasks']")));
+    
+        // Click the 'My Tasks' button
+        myTasksButton.click();
+    
+        // Verify that the project is visible on the screen
+        WebElement projectElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//*[contains(text(), 'Default Project')]")));        
+    
+        // Assert that the project is displayed
+        assertTrue(projectElement.isDisplayed(), "The project is not displayed on the screen.");
+    }
 
     // Logs out by clicking the logout button and verifies redirection to the login page.
     @Test
-    @Order(30)
+    @Order(37)
     void logoutButton() {
         // Locate the logout button using the visible text "Log out"
         WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
