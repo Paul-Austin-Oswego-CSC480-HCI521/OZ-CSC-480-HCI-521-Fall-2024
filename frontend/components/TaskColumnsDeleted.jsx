@@ -8,8 +8,11 @@ import { priorityToValue } from '@/lib/taskProjectUtils'
 export const taskColumnsDeleted = [
     {
         accessorKey: "padding-left",
-        header: "",
-        sortingFns: "basic",
+        header: ({}) => {
+            return (
+                <div className='w-3'></div>
+            )
+        },
     },
     {
         accessorKey: "title",
@@ -57,10 +60,18 @@ export const taskColumnsDeleted = [
     },
     {
         accessorKey: "recover",
-        header: "",
+        header: ({}) => {
+            return (
+                <div className='sr-only'>Recover Project Buttons</div>
+            )
+        },
     },
     {
         accessorKey: "delete",
-        header: "",
+        header: ({}) => {
+            return (
+                <div className='sr-only'>Delete Project Buttons</div>
+            )
+        },
     },
 ]
