@@ -17,7 +17,7 @@ export function DialogDemo({ isOpen, onAction }) {
              Delete this task?
             </DialogTitle>
             <span className='' style={{ color: '#5f6368' }}>
-            This action cannot be undone. This will permanently delete your task and remove your data from our servers.
+            This will move this task to the 'Recently Deleted' page where it will eventually be permanently deleted.
             </span>
           </DialogHeader>
           <div className="gap-4 py-4 flex justify-end">

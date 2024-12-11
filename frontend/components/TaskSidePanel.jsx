@@ -114,7 +114,7 @@ export const TaskSidePanel = ({selectedTask, setTasks, projects, selectedProject
                         onChange={e => {setTaskTitle(e.target.value)}}
                         autoFocus
                         placeholder="Task Title"
-                        className="w-[300px] mx-4 pl-3 mb-4 mt-4 rounded-md border border-neutral-200 p-1 focus:outline-none focus:ring-1 focus:ring-black focus:bg-white hover:bg-gray-300 transition-colors duration-300 mt-0.5 "
+                        className="w-[300px] mx-4 pl-3 mb-4 mt-4 rounded-md border border-neutral-200 p-1 focus:outline-none focus:ring-1 focus:ring-black focus:bg-white hover:bg-gray-300 transition-colors duration-300 "
                     />
                 {/* </div> */}
 
