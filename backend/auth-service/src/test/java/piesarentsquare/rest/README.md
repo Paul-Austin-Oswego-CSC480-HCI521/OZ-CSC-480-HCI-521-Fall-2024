@@ -1,8 +1,8 @@
 # CheckmateAutomationTest Guide
 
-This series of tests created by the QA Team automates testing functionality within the web application, **CheckMate**. The test script navigates through all pages, selecting buttons and entering details to ensure that each aspect of the project functions as intended.
+This series of tests created by the QA Team automates testing functionality within the web application, **CheckMate**.
 
-These tests are hands-free and provide descriptive printouts in the **Debug Console** in **VSCode** to guide the user. Think of it as your personal walkthrough.
+The test script navigates through all pages, selecting buttons and entering details to ensure that each aspect of the project functions as intended. Think of it as your personal walkthrough.
 
 ## Prerequisites
 
@@ -24,11 +24,9 @@ To run this test, ensure the following environment variables are configured corr
 
 1. Note the email and password of the GitHub user you want to use for testing in a preferred text editor.
 
-   **Optional:** If needed, message **Jared Ball** from the **QA Team** on Discord for the credentials for the **QA Test GitHub User**.
-
 2. Define the environment variables on your local machine based on your operating system.
 
-   #### Windows: (Not Tested Yet - Jared)
+   #### Windows:
 
    1. Open the Start menu, search for **Environment Variables**, and select **Edit the system environment variables**.
    2. In the System Properties window, select **Environment Variables**.
@@ -56,7 +54,9 @@ To run this test, ensure the following environment variables are configured corr
 
 ## Running the Tests
 
-For now, a simple and easy way to run the test is to **right-click** the file named **CheckmateAutomationTest.java** and select **Run Tests**.
+A simple and easy way to run the test is to **right-click** the file named **CheckmateAutomationTest.java** and select **Run Tests**.
+
+**Note:** You should view the root **README.md** first before trying to run any of these tests.
 
 Thank you for testing CheckMate!
 
