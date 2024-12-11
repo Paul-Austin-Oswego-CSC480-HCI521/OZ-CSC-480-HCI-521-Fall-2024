@@ -22,7 +22,7 @@ To run this test, ensure the following environment variables are configured corr
 
 ### Setup Instructions:
 
-1. Note the email and password of the GitHub user you want to use for testing in a preferred text editor.
+1. Note the email and password of the user you want to use for testing in a preferred text editor.
 
 2. Define the environment variables on your local machine based on your operating system.
 
