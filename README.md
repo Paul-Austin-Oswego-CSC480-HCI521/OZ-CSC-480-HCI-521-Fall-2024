@@ -41,7 +41,7 @@ In the root directory run:
 
 #### Linux/Mac:
 ```shell
-.\start_website.sh
+./start_website.sh
 ```
 
 the webpage will be served at http://localhost
@@ -61,7 +61,7 @@ if you ctrl+c out of habit you can still run:
 
 #### Linux/Mac:
 ```shell
-.\stop_website.sh
+./stop_website.sh
 ```
 ### Configuration
 
